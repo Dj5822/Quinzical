@@ -13,10 +13,27 @@ public class GameController extends Application {
 	private Stage primaryStage;
 	
 	private MenuView menuView;
+	private PracticeView practiceView;
+	private GameView gameView;
 	
 	// Switches scene to the menu.
 	public void showMenu() {
 		primaryStage.setScene(menuView.getScene());
+	}
+	
+	// Switches scene to the practice view.
+	public void showPracticeView() {
+		primaryStage.setScene(practiceView.getScene());
+	}
+	
+	// Switches scene to the game view.
+	public void showGameView() {
+		primaryStage.setScene(gameView.getScene());
+	}
+	
+	// Ends the game.
+	public void quitGame() {
+		primaryStage.close();
 	}
 	
 	@Override
@@ -25,6 +42,8 @@ public class GameController extends Application {
 		
 		// Setup the views.
 		menuView = new MenuView(this, HEIGHT, HEIGHT);
+		practiceView = new PracticeView(this, HEIGHT, HEIGHT);
+		gameView = new GameView(this, HEIGHT, HEIGHT);
 		
 		// Start at the menu.
 		primaryStage.setTitle("Quinzical");

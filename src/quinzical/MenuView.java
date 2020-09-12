@@ -1,5 +1,7 @@
 package quinzical;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,12 +25,40 @@ public class MenuView {
 		GridPane mainPane = new GridPane();
 		mainMenuScene = new Scene(mainPane, width, height);
 		
+		// Initialize buttons and labels.
 		title = new Label("Quinzical");
 		practiceButton = new Button("Practice");
 		gameButton = new Button("Play Game");
 		quitButton = new Button("Quit");
 		
+		// On practice button activation.
+		practiceButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.showPracticeView();
+			}
+			
+		});
 		
+		// On game button activation.
+		gameButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.showGameView();
+			}
+			
+		});
+		
+		// on quit button activation.
+		quitButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.quitGame();
+			}
+			
+		});
+		
+		// Add buttons and labels to the view.
 		mainPane.add(title, 0, 0);
 		mainPane.add(practiceButton, 0, 1);
 		mainPane.add(gameButton, 0, 2);
