@@ -9,16 +9,16 @@ import javafx.scene.layout.GridPane;
 
 public class GameView {
 
-	private GameController controller;
+	private SceneController sceneController;
 	
 	private Scene mainMenuScene;
 	
 	private Label title;
 	private Button returnToMenuButton;
 	
-	public GameView(GameController controller, int width, int height) {
+	public GameView(SceneController sceneController, GameController controller, int width, int height) {
 		
-		this.controller = controller;
+		this.sceneController = sceneController;
 		
 		GridPane mainPane = new GridPane();
 		mainMenuScene = new Scene(mainPane, width, height);
@@ -31,7 +31,7 @@ public class GameView {
 		returnToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.showMenu();
+				sceneController.showMenu();
 			}
 		});		
 		

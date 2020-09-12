@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 
 public class MenuView {
 	
-	private GameController controller;
+	private SceneController sceneController;
 	
 	private Scene mainMenuScene;
 	
@@ -18,9 +18,9 @@ public class MenuView {
 	private Button gameButton;
 	private Button quitButton;
 	
-	public MenuView(GameController controller, int width, int height) {
+	public MenuView(SceneController sceneController, int width, int height) {
 		
-		this.controller = controller;
+		this.sceneController = sceneController;
 		
 		GridPane mainPane = new GridPane();
 		mainMenuScene = new Scene(mainPane, width, height);
@@ -35,7 +35,7 @@ public class MenuView {
 		practiceButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.showPracticeView();
+				sceneController.showPracticeView();
 			}
 			
 		});
@@ -44,7 +44,7 @@ public class MenuView {
 		gameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.showGameView();
+				sceneController.showGameView();
 			}
 			
 		});
@@ -53,7 +53,7 @@ public class MenuView {
 		quitButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.quitGame();
+				sceneController.quitGame();
 			}
 			
 		});
