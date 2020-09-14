@@ -8,6 +8,9 @@ public class PracticeController {
 		this.sceneController = sceneController;
 	}
 	
+	/**
+	 * Used to go back to the menu scene.
+	 */
 	public void returnToMenu() {
 		sceneController.changeScene("menu");
 	}

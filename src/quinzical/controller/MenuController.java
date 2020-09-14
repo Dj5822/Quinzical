@@ -8,14 +8,23 @@ public class MenuController {
 		this.sceneController = sceneController;
 	}
 	
-	public void showPracticeView() {
-		sceneController.changeScene("practice");
-	}
-	
+	/**
+	 * Switches the scene to the game scene.
+	 */
 	public void showGameView() {
 		sceneController.changeScene("game");
 	}
 	
+	/**
+	 * Switches the scene to the practice scene.
+	 */
+	public void showPracticeView() {
+		sceneController.changeScene("practice");
+	}
+	
+	/**
+	 * Ends the game.
+	 */
 	public void quitGame() {
 		sceneController.quitGame();
 	}
