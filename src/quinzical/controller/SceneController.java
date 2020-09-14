@@ -1,9 +1,12 @@
-package quinzical;
+package quinzical.controller;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import quinzical.ui.GameView;
+import quinzical.ui.MenuView;
+import quinzical.ui.PracticeView;
 
 public class SceneController extends Application {
 	

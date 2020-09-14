@@ -1,4 +1,4 @@
-package quinzical;
+package quinzical.controller;
 
 public class GameController {
 	/**

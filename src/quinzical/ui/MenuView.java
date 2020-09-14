@@ -1,4 +1,4 @@
-package quinzical;
+package quinzical.ui;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import quinzical.controller.SceneController;
 
 public class MenuView {
 	

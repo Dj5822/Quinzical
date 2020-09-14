@@ -1,4 +1,4 @@
-package quinzical;
+package quinzical.ui;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -6,8 +6,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import quinzical.controller.PracticeController;
+import quinzical.controller.SceneController;
 
-public class GameView {
+public class PracticeView {
 
 	private SceneController sceneController;
 	
@@ -16,7 +18,7 @@ public class GameView {
 	private Label title;
 	private Button returnToMenuButton;
 	
-	public GameView(SceneController sceneController, GameController controller, int width, int height) {
+	public PracticeView(SceneController sceneController, PracticeController controller, int width, int height) {
 		
 		this.sceneController = sceneController;
 		
@@ -24,7 +26,7 @@ public class GameView {
 		mainMenuScene = new Scene(mainPane, width, height);
 		
 		// Initialize buttons and labels.
-		title = new Label("Game View");
+		title = new Label("Practice View");
 		returnToMenuButton = new Button("Return to menu");
 		
 		// On return to menu button activation.
@@ -33,7 +35,7 @@ public class GameView {
 			public void handle(ActionEvent arg0) {
 				sceneController.showMenu();
 			}
-		});		
+		});
 		
 		// Add buttons and labels to the view.
 		mainPane.add(title, 0, 0);
