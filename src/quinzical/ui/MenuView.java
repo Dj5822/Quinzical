@@ -15,6 +15,7 @@ public class MenuView {
 	private Label title;
 	private Button practiceButton;
 	private Button gameButton;
+	private Button settingsButton;
 	private Button quitButton;
 	
 	public MenuView(MenuController controller, int width, int height) {
@@ -26,13 +27,15 @@ public class MenuView {
 		title = new Label("Quinzical");
 		practiceButton = new Button("Practice");
 		gameButton = new Button("Play Game");
+		settingsButton = new Button("Settings");
 		quitButton = new Button("Quit");
 		
 		// Add buttons and labels to the view.
 		mainPane.add(title, 0, 0);
 		mainPane.add(practiceButton, 0, 1);
 		mainPane.add(gameButton, 0, 2);
-		mainPane.add(quitButton, 0, 3);
+		mainPane.add(settingsButton, 0, 3);
+		mainPane.add(quitButton, 0, 4);
 		
 		// On practice button activation.
 		practiceButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -47,6 +50,14 @@ public class MenuView {
 			@Override
 			public void handle(ActionEvent arg0) {
 				controller.showGameView();
+			}
+		});
+		
+		// On settings button activation.
+		settingsButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.showSettingsView();
 			}
 		});
 

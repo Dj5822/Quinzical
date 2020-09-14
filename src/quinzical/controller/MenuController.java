@@ -23,6 +23,13 @@ public class MenuController {
 	}
 	
 	/**
+	 * Switches the scene to the settings scene.
+	 */
+	public void showSettingsView() {
+		sceneController.changeScene("settings");
+	}	
+	
+	/**
 	 * Ends the game.
 	 */
 	public void quitGame() {
