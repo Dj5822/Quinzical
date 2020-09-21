@@ -12,6 +12,10 @@ public class PracticeController {
 	
 	private SceneController sceneController;
 	
+	private String question;
+	private String[] answer;
+	private int answerCount;
+	
 	public PracticeController(SceneController sceneController) {
 		this.sceneController = sceneController;
 	}
@@ -63,7 +67,7 @@ public class PracticeController {
 	public String getQuestion(String category) {
 		
 		try {
-			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "./scripts/getRandomQuestion.sh " + category);
+			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "./scripts/getRandomQuestion.sh \"" + category + "\"");
 			
 			Process process = builder.start();
 			InputStream inputStream = process.getInputStream();
@@ -73,7 +77,13 @@ public class PracticeController {
 			int exitStatus = process.waitFor();
 			
 			if (exitStatus == 0) {
-				return inputReader.readLine();
+				String[] output = inputReader.readLine().split("[\\(\\)]", 3);
+				question = output[0];
+				answer = new String[2];
+				answer[0] = output[1];
+				answer[1] = output[2];
+				answerCount = 0;
+				return question;
 			} 
 			else {
 				showErrorMessage("Failed to get a random question", errorReader.readLine());
@@ -86,6 +96,39 @@ public class PracticeController {
 		}
 		
 		return "Failed to get a random question.";
+	}
+	
+	public String checkAnswer(String input) {
+		
+		String hint = "" + answer[1].charAt(1);
+		
+		if (answerCount < 0) {
+			showErrorMessage("Invalid answer count", "Answer count can not be less than 0.");
+		}
+		
+		answerCount ++;
+		
+		// check if answer is correct.
+		System.out.println("Input: " + input.toLowerCase().strip());
+		System.out.println("Answer: " + answer[1].toLowerCase().strip());
+		if (input.toLowerCase().strip().equals(answer[1].toLowerCase().strip())) {
+			return "correct";
+		}
+		
+		// show clue if the user is on the third attempt.
+		if (answerCount >= 3) {
+			return "wrong, correct answer was: " + answer[1] + "\nHint: Answer starts with " + hint;
+		}
+		else if (answerCount >= 2) {
+			return "wrong, you have 1 attempt remaining.\n Hint: Answer starts with: " + hint;
+		}
+		else {
+			return "wrong, you have " + (3-answerCount) + " attempts remaining.";
+		}
+	}
+	
+	public int getAnswerCount() {
+		return answerCount;
 	}
 	
 	/**

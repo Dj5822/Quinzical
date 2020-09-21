@@ -5,12 +5,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import quinzical.controller.PracticeController;
 
@@ -26,6 +24,7 @@ public class PracticeView {
 	private ComboBox<String> categoryCB;
 	
 	private Label answerLabel;
+	private Label hintLabel;
 	private TextArea answerTextBox;
 	private Button checkAnswerButton;
 	
@@ -49,11 +48,13 @@ public class PracticeView {
 		// Setup answer pane.
 		GridPane answerPane = new GridPane();
 		answerLabel = new Label("Question");
+		hintLabel = new Label();
 		answerTextBox = new TextArea();
 		checkAnswerButton = new Button("Check Answer");
 		answerPane.add(answerLabel, 0, 0);
-		answerPane.add(answerTextBox, 0, 1);
-		answerPane.add(checkAnswerButton, 0, 2);
+		answerPane.add(hintLabel, 0, 1);
+		answerPane.add(answerTextBox, 0, 2);
+		answerPane.add(checkAnswerButton, 0, 3);
 		
 		// start at category pane.
 		main = new Scene(categoryPane, width, height);
@@ -67,9 +68,32 @@ public class PracticeView {
 				}
 				else {
 					answerLabel.setText(controller.getQuestion(categoryCB.getValue()));
+					answerTextBox.setVisible(true);
+					answerTextBox.clear();
+					hintLabel.setText("");
 					main.setRoot(answerPane);
+					checkAnswerButton.setText("Check Answer");
 				}
 			}
+		});
+		
+		checkAnswerButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				if (checkAnswerButton.getText() == "Check Answer") {
+					hintLabel.setText(controller.checkAnswer(answerTextBox.getText()));
+					
+					if (controller.getAnswerCount() >= 3 | hintLabel.getText() == "correct") {
+						answerTextBox.setVisible(false);
+						categoryCB.getSelectionModel().clearSelection();
+						checkAnswerButton.setText("Return");
+					}
+				}
+				else {
+					main.setRoot(categoryPane);
+				}
+			}
+			
 		});
 		
 		returnToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
