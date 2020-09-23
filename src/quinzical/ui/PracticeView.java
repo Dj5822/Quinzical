@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import quinzical.controller.PracticeController;
 
@@ -63,37 +65,23 @@ public class PracticeView {
 		showQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				if (categoryCB.getValue() == null) {
-					controller.showErrorMessage("You must select a category", "Please select a category from the combobox.");
-				}
-				else {
-					answerLabel.setText(controller.getQuestion(categoryCB.getValue()));
-					answerTextBox.setVisible(true);
-					answerTextBox.clear();
-					hintLabel.setText("");
-					main.setRoot(answerPane);
-					checkAnswerButton.setText("Check Answer");
-				}
+				showQuestion(controller, answerPane);
 			}
 		});
 		
 		checkAnswerButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				if (checkAnswerButton.getText() == "Check Answer") {
-					hintLabel.setText(controller.checkAnswer(answerTextBox.getText()));
-					
-					if (controller.getAnswerCount() >= 3 | hintLabel.getText() == "correct") {
-						answerTextBox.setVisible(false);
-						categoryCB.getSelectionModel().clearSelection();
-						checkAnswerButton.setText("Return");
-					}
-				}
-				else {
-					main.setRoot(categoryPane);
-				}
+				submitAnswer(controller, categoryPane);
 			}
-			
+		});
+		
+		main.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+		    public void handle(KeyEvent ke) {
+		        if (ke.getCode() == KeyCode.ENTER) {
+		        	submitAnswer(controller, categoryPane);
+		        }
+		    }
 		});
 		
 		returnToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -106,5 +94,35 @@ public class PracticeView {
 	
 	public Scene getScene() {
 		return main;
+	}
+	
+	public void showQuestion(PracticeController controller, GridPane answerPane) {
+		if (categoryCB.getValue() == null) {
+			controller.showErrorMessage("You must select a category", "Please select a category from the combobox.");
+		}
+		else {
+			answerLabel.setText(controller.getQuestion(categoryCB.getValue()));
+			answerTextBox.setVisible(true);
+			answerTextBox.clear();
+			hintLabel.setText("");
+			main.setRoot(answerPane);
+			checkAnswerButton.setText("Check Answer");
+		}
+	}
+	
+	public void submitAnswer(PracticeController controller, GridPane categoryPane) {
+		if (checkAnswerButton.getText() == "Check Answer") {
+			hintLabel.setText(controller.checkAnswer(answerTextBox.getText()));
+			answerTextBox.clear();
+			
+			if (controller.getAnswerCount() >= 3 | hintLabel.getText() == "correct") {
+				answerTextBox.setVisible(false);
+				categoryCB.getSelectionModel().clearSelection();
+				checkAnswerButton.setText("Return");
+			}
+		}
+		else {
+			main.setRoot(categoryPane);
+		}
 	}
 }

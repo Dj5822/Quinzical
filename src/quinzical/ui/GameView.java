@@ -36,7 +36,7 @@ public class GameView {
 		catlabels= new Label[] {catlabel_0,catlabel_1,catlabel_2,catlabel_3,catlabel_4};
 		for(int i=0;i<5;i++) {
 			catlabels[i]=new Label("{category name}");
-		}
+		};
 		cluebtns = new Button[5][5];
 		for(int col=0;col<5;col++) {
 			for (int row=1;row<=5;row++) {

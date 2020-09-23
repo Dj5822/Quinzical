@@ -110,8 +110,10 @@ public class PracticeController {
 		
 		// check if answer is correct.
 		System.out.println("Input: " + input.toLowerCase().strip());
-		System.out.println("Answer: " + answer[1].toLowerCase().strip());
-		if (input.toLowerCase().strip().equals(answer[1].toLowerCase().strip())) {
+		System.out.println("Answer p1: " + answer[0].toLowerCase().strip());
+		System.out.println("Answer p2: " + answer[1].toLowerCase().strip());		
+		
+		if (input.toLowerCase().strip().matches("(" + answer[0].toLowerCase().strip() + " )?" + answer[1].toLowerCase().strip() + "(.*)")) {
 			return "correct";
 		}
 		
