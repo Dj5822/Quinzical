@@ -111,10 +111,14 @@ public class PracticeController {
 		// check if answer is correct.
 		System.out.println("Input: " + input.toLowerCase().strip());
 		System.out.println("Answer p1: " + answer[0].toLowerCase().strip());
-		System.out.println("Answer p2: " + answer[1].toLowerCase().strip());		
+		System.out.println("Answer p2: " + answer[1].toLowerCase().strip());
 		
-		if (input.toLowerCase().strip().matches("(" + answer[0].toLowerCase().strip() + " )?" + answer[1].toLowerCase().strip() + "(.*)")) {
-			return "correct";
+		for (String potentialAnswer : answer[1].split("/")) {
+			String answerRegex = "(" + answer[0].toLowerCase().strip() + " )?" + potentialAnswer.replace(".", "").toLowerCase().strip();
+			
+			if (input.toLowerCase().strip().matches(answerRegex)) {
+				return "correct";
+			}
 		}
 		
 		// show clue if the user is on the third attempt.
