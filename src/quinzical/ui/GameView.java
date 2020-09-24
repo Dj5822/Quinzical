@@ -16,17 +16,15 @@ public class GameView {
 	private Scene main;
 	
 	private Button startbtn;
-	private Label catlabel_0,catlabel_1,catlabel_2,catlabel_3,catlabel_4;
+	private Label winning;
 	private Label[] catlabels;
 	private Button[][] cluebtns;
 	private Label hintlabel;
 	private TextField input;
 	private Button submitbtn,dkbtn;
 	private Button returnToMenuButton;
-	private int colindex,rowindex;
+
 	
-	private String[] categories;
-	private String[][][] questions;
 	public GameView(GameController controller, int width, int height) {
 		
 		GridPane mainPane = new GridPane();
@@ -35,11 +33,10 @@ public class GameView {
 		mainPane.setVgap(20);
 		mainPane.setHgap(20);
 		main = new Scene(mainPane, width, height);
-		categories = new String[5];
-		questions = new String[5][5][3];
 		// Initialize buttons and labels.
 		startbtn = new Button("Start/Reset the game");
-		catlabels= new Label[] {catlabel_0,catlabel_1,catlabel_2,catlabel_3,catlabel_4};
+		winning = new Label("Current Worth: $0");
+		catlabels= new Label[5] ;
 		for(int i=0;i<5;i++) {
 			catlabels[i]=new Label("{Category No: "+i+"}");
 		};
@@ -63,7 +60,8 @@ public class GameView {
 
 		
 		// Add buttons and labels to the view.
-		mainPane.add(startbtn, 2, 0);
+		mainPane.add(startbtn, 0, 0, 2, 1);
+		mainPane.add(winning, 3, 0, 2, 1);
 		for(int i=0;i<5;i++) {
 			mainPane.add(catlabels[i], i, 1);
 		}
@@ -81,9 +79,9 @@ public class GameView {
 		startbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.generatedata(categories,questions);
+				controller.generatedata();
 				for(int i=0;i<5;i++) {
-					catlabels[i].setText(categories[i]);
+					catlabels[i].setText(controller.getcat()[i]);
 				}
 				hintlabel.setVisible(true);
 				for(int i=0;i<5;i++) {
@@ -91,18 +89,42 @@ public class GameView {
 				}
 			}
 		});
-		for(colindex=0;colindex<5;colindex++) {
-			for (rowindex=0;rowindex<5;rowindex++) {
+		for(int colindex=0;colindex<5;colindex++) {
+			for (int rowindex=0;rowindex<5;rowindex++) {
+				cluebtns[colindex][rowindex].setId(Integer.toString(10*(colindex)+rowindex));
 				cluebtns[colindex][rowindex].setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent arg0) {
+						Button x =(Button)arg0.getSource();
+						int colnum = (Integer.parseInt(x.getId())/10);
+						int rownum = (Integer.parseInt(x.getId())%10);
+						System.out.println("Button is clicked on: "+ colnum +"  "+rownum);
 						input.setVisible(true);
 						submitbtn.setVisible(true);
 						dkbtn.setVisible(true);
+						controller.cluebtnclicked(colnum,rownum);
+						int[] btns = controller.getenablebtns();
+						for(int i=0;i<5;i++) {
+							if(i != colnum) {
+								cluebtns[i][btns[i]].setDisable(true);
+							}
+						}
 					}
 				});		
 			}
 		}
+		dkbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				int[] pos = controller.getqspos();
+				cluebtns[pos[0]][pos[1]].setVisible(false);
+				controller.dkbtnclicked();
+				int [] btns = controller.getenablebtns();
+				for(int i=0;i<5;i++) {
+					cluebtns[i][btns[i]].setDisable(false);
+				}
+			}
+		});		
 		returnToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {

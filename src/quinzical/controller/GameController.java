@@ -11,6 +11,15 @@ public class GameController {
 	
 	private SceneController sceneController;
 	
+	private String[] categories;
+	private String[][][] questions;
+	private int[] enablebtns;
+	private int currentwinning;
+	
+	private String question;
+	private String[] answer;
+	private int[] qspos;
+	
 	public GameController(SceneController sceneController) {
 		this.sceneController = sceneController;
 	}
@@ -22,7 +31,10 @@ public class GameController {
 		
 		errorAlert.showAndWait();
 	}
-	public void generatedata(String[] categories, String[][][] questions) {
+	public void generatedata() {
+		categories = new String[5];
+		questions = new String[5][5][3];
+		enablebtns = new int[] {0,0,0,0,0};
 		try {
 			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "ls categories | shuf -n 5");
 			
@@ -76,10 +88,38 @@ public class GameController {
 		}
 		
 	}
+	public void cluebtnclicked(int colindex, int rowindex) {
+		// festival here
+		qspos = new int[2];
+		qspos[0] = colindex;
+		qspos[1] = rowindex;
+		question = questions[colindex][rowindex][0];
+		answer = new String[2];
+		answer[0] = questions[colindex][rowindex][1];
+		answer[1] = questions[colindex][rowindex][2];
+		System.out.println(question);
+	}
+	public void dkbtnclicked() {
+		if(enablebtns[qspos[0]]<4) {
+			enablebtns[qspos[0]]++;
+		}
+	}
 	/**
 	 * Used to go back to the menu scene.
 	 */
 	public void returnToMenu() {
 		sceneController.changeScene("menu");
+	}
+	public String[] getcat() {
+		return categories;
+	}
+	public String[][][] getqs(){
+		return questions;
+	}
+	public int[] getenablebtns() {
+		return enablebtns;
+	}
+	public int[] getqspos() {
+		return qspos;
 	}
 }
