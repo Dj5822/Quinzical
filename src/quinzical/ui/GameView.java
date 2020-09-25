@@ -81,19 +81,7 @@ public class GameView {
 		startbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.generatedata();
-				for(int i=0;i<5;i++) {
-					catlabels[i].setText(controller.getcat()[i]);
-					for(int j=0;j<5;j++) {
-						cluebtns[i][j].setVisible(true);
-						cluebtns[i][j].setDisable(true);
-					}
-					cluebtns[i][0].setDisable(false);
-				}
-				hintlabel.setVisible(true);
-				input.setVisible(false);
-				submitbtn.setVisible(false);
-				dkbtn.setVisible(false);
+				regenerategame(controller);
 			}
 		});
 		for(int colindex=0;colindex<5;colindex++) {
@@ -126,29 +114,47 @@ public class GameView {
 			public void handle(ActionEvent arg0) {
 				submitAnswer(controller);
 				updatebtns(controller);
-				updateqscomponents(controller);
 				winning.setText("Current Worth: $"+Integer.toString(controller.getcurrentwinning()));
+				updateqscomponents(controller);
 			}
 		});
 		dkbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
+				controller.dkbtnclicked();
 				updatebtns(controller);
-				updateqscomponents(controller);
 				hintlabel.setText("Click one of the available buttons above to hear a clue~");
+				updateqscomponents(controller);
 			}
 		});		
 		returnToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
+				regenerategame(controller);
 				controller.returnToMenu();
 			}
 		});		
 	}
+	public void regenerategame(GameController controller) {
+		controller.generatedata();
+		winning.setText("Current Worth: $0");
+		for(int i=0;i<5;i++) {
+			catlabels[i].setText(controller.getcat()[i]);
+			for(int j=0;j<5;j++) {
+				cluebtns[i][j].setVisible(true);
+				cluebtns[i][j].setDisable(true);
+			}
+			cluebtns[i][0].setDisable(false);
+		}
+		hintlabel.setText("Click one of the available buttons above to hear a clue~");
+		hintlabel.setVisible(true);
+		input.setVisible(false);
+		submitbtn.setVisible(false);
+		dkbtn.setVisible(false);
+	}
 	public void updatebtns(GameController controller) {
 		int[] pos = controller.getqspos();
 		cluebtns[pos[0]][pos[1]].setVisible(false);
-		controller.dkbtnclicked();
 		int [] btns = controller.getenablebtns();
 		for(int i=0;i<5;i++) {
 			cluebtns[i][btns[i]].setDisable(false);
@@ -159,6 +165,12 @@ public class GameView {
 		input.setVisible(false);
 		input.setText("Type your answer here: ");
 		dkbtn.setVisible(false);
+		System.out.println(controller.getcount());
+		if(controller.getcount()== 25) {
+			hintlabel.setText("Congrats! All questions completed!! You have a reward of $"
+					+controller.getcurrentwinning()+" . Click restart"
+					+" button to start a new game or return to the menu.");
+		}
 	}
 	public void submitAnswer(GameController controller) {
 		if(controller.checkAnswer(input.getText())) {
