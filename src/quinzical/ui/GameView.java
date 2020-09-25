@@ -39,6 +39,7 @@ public class GameView {
 		catlabels= new Label[5] ;
 		for(int i=0;i<5;i++) {
 			catlabels[i]=new Label("{Category No: "+i+"}");
+			catlabels[i].setMinWidth(150);
 		};
 		cluebtns = new Button[5][5];
 		for(int col=0;col<5;col++) {
@@ -48,6 +49,7 @@ public class GameView {
 			}
 		}
 		hintlabel = new Label("Click one of the available buttons above to hear a clue~");
+		hintlabel.setWrapText(true);
 		hintlabel.setVisible(false);
 		input = new TextField("Type your answer here and click submit!");
 		input.setVisible(false);
@@ -61,7 +63,7 @@ public class GameView {
 		
 		// Add buttons and labels to the view.
 		mainPane.add(startbtn, 0, 0, 2, 1);
-		mainPane.add(winning, 3, 0, 2, 1);
+		mainPane.add(winning, 2, 0, 3, 1);
 		for(int i=0;i<5;i++) {
 			mainPane.add(catlabels[i], i, 1);
 		}
@@ -70,11 +72,11 @@ public class GameView {
 				mainPane.add(cluebtns[col][4-row], col, row+2);
 			}
 		}
-		mainPane.add(hintlabel, 0, 7, 5, 1);
-		mainPane.add(input, 0, 8, 5, 1);
-		mainPane.add(submitbtn, 0, 9, 2, 1);
-		mainPane.add(dkbtn, 2, 9, 2, 1);
-		mainPane.add(returnToMenuButton, 0, 10, 3, 1);
+		mainPane.add(hintlabel, 0, 7, 5, 2);
+		mainPane.add(input, 0, 9, 5, 1);
+		mainPane.add(submitbtn, 0, 10, 2, 1);
+		mainPane.add(dkbtn, 2, 10, 2, 1);
+		mainPane.add(returnToMenuButton, 0, 11, 3, 1);
 		// Button functionality
 		startbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -82,11 +84,16 @@ public class GameView {
 				controller.generatedata();
 				for(int i=0;i<5;i++) {
 					catlabels[i].setText(controller.getcat()[i]);
-				}
-				hintlabel.setVisible(true);
-				for(int i=0;i<5;i++) {
+					for(int j=0;j<5;j++) {
+						cluebtns[i][j].setVisible(true);
+						cluebtns[i][j].setDisable(true);
+					}
 					cluebtns[i][0].setDisable(false);
 				}
+				hintlabel.setVisible(true);
+				input.setVisible(false);
+				submitbtn.setVisible(false);
+				dkbtn.setVisible(false);
 			}
 		});
 		for(int colindex=0;colindex<5;colindex++) {
@@ -95,6 +102,7 @@ public class GameView {
 				cluebtns[colindex][rowindex].setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent arg0) {
+						hintlabel.setText("You can click the button if you want to listen to it again.");
 						Button x =(Button)arg0.getSource();
 						int colnum = (Integer.parseInt(x.getId())/10);
 						int rownum = (Integer.parseInt(x.getId())%10);
@@ -113,16 +121,21 @@ public class GameView {
 				});		
 			}
 		}
+		submitbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				submitAnswer(controller);
+				updatebtns(controller);
+				updateqscomponents(controller);
+				winning.setText("Current Worth: $"+Integer.toString(controller.getcurrentwinning()));
+			}
+		});
 		dkbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				int[] pos = controller.getqspos();
-				cluebtns[pos[0]][pos[1]].setVisible(false);
-				controller.dkbtnclicked();
-				int [] btns = controller.getenablebtns();
-				for(int i=0;i<5;i++) {
-					cluebtns[i][btns[i]].setDisable(false);
-				}
+				updatebtns(controller);
+				updateqscomponents(controller);
+				hintlabel.setText("Click one of the available buttons above to hear a clue~");
 			}
 		});		
 		returnToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -132,7 +145,30 @@ public class GameView {
 			}
 		});		
 	}
-	
+	public void updatebtns(GameController controller) {
+		int[] pos = controller.getqspos();
+		cluebtns[pos[0]][pos[1]].setVisible(false);
+		controller.dkbtnclicked();
+		int [] btns = controller.getenablebtns();
+		for(int i=0;i<5;i++) {
+			cluebtns[i][btns[i]].setDisable(false);
+		}
+	}
+	public void updateqscomponents(GameController controller) {
+		submitbtn.setVisible(false);
+		input.setVisible(false);
+		input.setText("Type your answer here: ");
+		dkbtn.setVisible(false);
+	}
+	public void submitAnswer(GameController controller) {
+		if(controller.checkAnswer(input.getText())) {
+			hintlabel.setText("Correct! You can now continue on the next one~");
+		}else {
+			hintlabel.setText("Wrong. The correct answer was "+controller.getans()
+			+". Click buttons above to hear a new one.");
+		}	
+	}
+
 	public Scene getScene() {
 		return main;
 	}
