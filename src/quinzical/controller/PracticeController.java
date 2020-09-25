@@ -20,6 +20,11 @@ public class PracticeController {
 		this.sceneController = sceneController;
 	}
 	
+	/**
+	 * Used to show error messages.
+	 * @param headerMessage
+	 * @param contentMessage
+	 */
 	public void showErrorMessage(String headerMessage, String contentMessage) {
 		Alert errorAlert = new Alert(AlertType.ERROR);
 		errorAlert.setTitle("Error encountered");
@@ -29,6 +34,11 @@ public class PracticeController {
 		errorAlert.showAndWait();
 	}
 	
+	/**
+	 * Used to initialise the category selection combobox.
+	 * @param categoryOptions
+	 * @return categoryOptions
+	 */
 	public ObservableList<String> updateCategoryOptions(ObservableList<String> categoryOptions) {
 		
 		categoryOptions.clear();
@@ -64,6 +74,11 @@ public class PracticeController {
 		return categoryOptions;
 	}
 	
+	/**
+	 * Used to get a random question.
+	 * @param category
+	 * @return question
+	 */
 	public String getQuestion(String category) {
 		
 		try {
@@ -76,13 +91,18 @@ public class PracticeController {
 			BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
 			int exitStatus = process.waitFor();
 			
-			if (exitStatus == 0) {
+			if (exitStatus == 0) {				
 				String[] output = inputReader.readLine().split("[\\(\\)]", 3);
 				question = output[0];
 				answer = new String[2];
 				answer[0] = output[1];
 				answer[1] = output[2];
 				answerCount = 0;
+				
+				// read out the question.
+				AudioTask task1 = new AudioTask(question);
+				Thread thread1 = new Thread(task1);
+				thread1.start();
 				return question;
 			} 
 			else {
@@ -98,8 +118,14 @@ public class PracticeController {
 		return "Failed to get a random question.";
 	}
 	
+	/**
+	 * Used to check whether the supplied input is a valid answer.
+	 * @param input
+	 * @return "correct" if correct or "wrong" if incorrect.
+	 */
 	public String checkAnswer(String input) {
 		
+		String output = "";
 		String hint = "" + answer[1].charAt(1);
 		
 		if (answerCount < 0) {
@@ -117,22 +143,35 @@ public class PracticeController {
 			String answerRegex = "(" + answer[0].toLowerCase().strip() + " )?" + potentialAnswer.replace(".", "").toLowerCase().strip();
 			
 			if (input.toLowerCase().strip().matches(answerRegex)) {
-				return "correct";
+				output = "correct";
 			}
 		}
 		
-		// show clue if the user is on the third attempt.
-		if (answerCount >= 3) {
-			return "wrong, correct answer was: " + answer[1] + "\nHint: Answer starts with " + hint;
+		if (output == "") {
+			if (answerCount >= 3) {
+				// show clue and answer if the user has no attempts remaining.
+				output = "wrong, correct answer was: " + answer[1] + "\nHint: Answer starts with " + hint;
+			}
+			else if (answerCount >= 2) {
+				// show clue if the user is on the third attempt.
+				output = "wrong, you have 1 attempt remaining.\n Hint: Answer starts with: " + hint;
+			}
+			else {
+				output = "wrong, you have " + (3-answerCount) + " attempts remaining.";
+			}
 		}
-		else if (answerCount >= 2) {
-			return "wrong, you have 1 attempt remaining.\n Hint: Answer starts with: " + hint;
-		}
-		else {
-			return "wrong, you have " + (3-answerCount) + " attempts remaining.";
-		}
+		
+		// read out and show the output.
+		AudioTask task1 = new AudioTask(output);
+		Thread thread1 = new Thread(task1);
+		thread1.start();
+		return output;
 	}
 	
+	/**
+	 * A count of the number of times the user has attempted the current question.
+	 * @return answerCount
+	 */
 	public int getAnswerCount() {
 		return answerCount;
 	}
