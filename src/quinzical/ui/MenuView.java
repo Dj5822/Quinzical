@@ -2,10 +2,14 @@ package quinzical.ui;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import quinzical.controller.MenuController;
 
 public class MenuView {
@@ -29,6 +33,26 @@ public class MenuView {
 		gameButton = new Button("Play Game");
 		settingsButton = new Button("Settings");
 		quitButton = new Button("Quit");
+		
+		// mainPane settings
+		mainPane.setVgap(height/30);
+		mainPane.setAlignment(Pos.CENTER);
+		
+		// Label settings
+		title.setTextAlignment(TextAlignment.CENTER);
+		title.setAlignment(Pos.CENTER);
+		title.setFont(new Font(height/9));
+		title.setPadding(new Insets(0, width/20, 0, width/20));
+
+		// Button sizes.
+		practiceButton.setPrefHeight(height/9);
+		gameButton.setPrefHeight(height/9);
+		settingsButton.setPrefHeight(height/9);
+		quitButton.setPrefHeight(height/9);
+		practiceButton.setPrefWidth(width/3);
+		gameButton.setPrefWidth(width/3);
+		settingsButton.setPrefWidth(width/3);
+		quitButton.setPrefWidth(width/3);
 		
 		// Add buttons and labels to the view.
 		mainPane.add(title, 0, 0);
