@@ -99,6 +99,19 @@ public class GameController {
 		answer[1] = questions[colindex][rowindex][2];
 		System.out.println(question);
 	}
+	public boolean checkAnswer(String text) {
+		for (String potentialAnswer : answer[1].split("/")) {
+			String answerRegex = "(" + answer[0].toLowerCase().strip() + " )?" + potentialAnswer.replace(".", "").toLowerCase().strip();
+			
+			if (text.toLowerCase().strip().matches(answerRegex)) {
+				System.out.println(qspos[1]);
+				currentwinning+= (qspos[1]+1)*100;
+				return true;
+			}
+		}
+		return false;
+		
+	}
 	public void dkbtnclicked() {
 		if(enablebtns[qspos[0]]<4) {
 			enablebtns[qspos[0]]++;
@@ -122,4 +135,11 @@ public class GameController {
 	public int[] getqspos() {
 		return qspos;
 	}
+	public String getans() {
+		return answer[1];
+	}
+	public int getcurrentwinning() {
+		return currentwinning;
+	}
+
 }
