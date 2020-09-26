@@ -19,6 +19,7 @@ public class GameController {
 	private String question;
 	private String[] answer;
 	private int[] qspos;
+	private int count;
 	
 	public GameController(SceneController sceneController) {
 		this.sceneController = sceneController;
@@ -35,6 +36,8 @@ public class GameController {
 		categories = new String[5];
 		questions = new String[5][5][3];
 		enablebtns = new int[] {0,0,0,0,0};
+		currentwinning = 0;
+		count=0;
 		try {
 			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "ls categories | shuf -n 5");
 			
@@ -97,14 +100,20 @@ public class GameController {
 		answer = new String[2];
 		answer[0] = questions[colindex][rowindex][1];
 		answer[1] = questions[colindex][rowindex][2];
+		AudioTask task1 = new AudioTask(question);
+		Thread thread1 = new Thread(task1);
+		thread1.start();
 		System.out.println(question);
 	}
 	public boolean checkAnswer(String text) {
+		count++;
+		if(enablebtns[qspos[0]]<4) {
+			enablebtns[qspos[0]]++;
+		}
 		for (String potentialAnswer : answer[1].split("/")) {
 			String answerRegex = "(" + answer[0].toLowerCase().strip() + " )?" + potentialAnswer.replace(".", "").toLowerCase().strip();
 			
 			if (text.toLowerCase().strip().matches(answerRegex)) {
-				System.out.println(qspos[1]);
 				currentwinning+= (qspos[1]+1)*100;
 				return true;
 			}
@@ -113,6 +122,7 @@ public class GameController {
 		
 	}
 	public void dkbtnclicked() {
+		count++;
 		if(enablebtns[qspos[0]]<4) {
 			enablebtns[qspos[0]]++;
 		}
@@ -141,5 +151,7 @@ public class GameController {
 	public int getcurrentwinning() {
 		return currentwinning;
 	}
-
+	public int getcount() {
+		return count;
+	}
 }

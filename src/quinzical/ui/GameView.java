@@ -19,6 +19,7 @@ public class GameView {
 	private Label winning;
 	private Label[] catlabels;
 	private Button[][] cluebtns;
+	private Label endinglabel;
 	private Label hintlabel;
 	private TextField input;
 	private Button submitbtn,dkbtn;
@@ -48,6 +49,8 @@ public class GameView {
 				cluebtns[col][row-1].setDisable(true);				
 			}
 		}
+		endinglabel = new Label("");
+		endinglabel.setVisible(false);
 		hintlabel = new Label("Click one of the available buttons above to hear a clue~");
 		hintlabel.setWrapText(true);
 		hintlabel.setVisible(false);
@@ -72,6 +75,7 @@ public class GameView {
 				mainPane.add(cluebtns[col][4-row], col, row+2);
 			}
 		}
+		mainPane.add(endinglabel, 0, 2, 5, 2);
 		mainPane.add(hintlabel, 0, 7, 5, 2);
 		mainPane.add(input, 0, 9, 5, 1);
 		mainPane.add(submitbtn, 0, 10, 2, 1);
@@ -81,19 +85,7 @@ public class GameView {
 		startbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.generatedata();
-				for(int i=0;i<5;i++) {
-					catlabels[i].setText(controller.getcat()[i]);
-					for(int j=0;j<5;j++) {
-						cluebtns[i][j].setVisible(true);
-						cluebtns[i][j].setDisable(true);
-					}
-					cluebtns[i][0].setDisable(false);
-				}
-				hintlabel.setVisible(true);
-				input.setVisible(false);
-				submitbtn.setVisible(false);
-				dkbtn.setVisible(false);
+				regenerategame(controller);
 			}
 		});
 		for(int colindex=0;colindex<5;colindex++) {
@@ -126,29 +118,48 @@ public class GameView {
 			public void handle(ActionEvent arg0) {
 				submitAnswer(controller);
 				updatebtns(controller);
-				updateqscomponents(controller);
 				winning.setText("Current Worth: $"+Integer.toString(controller.getcurrentwinning()));
+				updateqscomponents(controller);
 			}
 		});
 		dkbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
+				controller.dkbtnclicked();
 				updatebtns(controller);
+				hintlabel.setText("The correct answer was:"+controller.getans()+". Click one of the available buttons above to hear a clue~");
 				updateqscomponents(controller);
-				hintlabel.setText("Click one of the available buttons above to hear a clue~");
 			}
 		});		
 		returnToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
+				regenerategame(controller);
 				controller.returnToMenu();
 			}
 		});		
 	}
+	public void regenerategame(GameController controller) {
+		controller.generatedata();
+		winning.setText("Current Worth: $0");
+		for(int i=0;i<5;i++) {
+			catlabels[i].setText(controller.getcat()[i]);
+			for(int j=0;j<5;j++) {
+				cluebtns[i][j].setVisible(true);
+				cluebtns[i][j].setDisable(true);
+			}
+			cluebtns[i][0].setDisable(false);
+		}
+		endinglabel.setVisible(false);
+		hintlabel.setText("Click one of the available buttons above to hear a clue~");
+		hintlabel.setVisible(true);
+		input.setVisible(false);
+		submitbtn.setVisible(false);
+		dkbtn.setVisible(false);
+	}
 	public void updatebtns(GameController controller) {
 		int[] pos = controller.getqspos();
 		cluebtns[pos[0]][pos[1]].setVisible(false);
-		controller.dkbtnclicked();
 		int [] btns = controller.getenablebtns();
 		for(int i=0;i<5;i++) {
 			cluebtns[i][btns[i]].setDisable(false);
@@ -159,12 +170,19 @@ public class GameView {
 		input.setVisible(false);
 		input.setText("Type your answer here: ");
 		dkbtn.setVisible(false);
+		System.out.println(controller.getcount());
+		if(controller.getcount()== 25) {
+			endinglabel.setText("Congrats! All questions completed!! You have a reward of $"
+					+controller.getcurrentwinning()+" . Click restart"
+					+" button to start a new game or return to the menu.");
+			endinglabel.setVisible(true);
+		}
 	}
 	public void submitAnswer(GameController controller) {
 		if(controller.checkAnswer(input.getText())) {
 			hintlabel.setText("Correct! You can now continue on the next one~");
 		}else {
-			hintlabel.setText("Wrong. The correct answer was "+controller.getans()
+			hintlabel.setText("Wrong. The correct answer was:"+controller.getans()
 			+". Click buttons above to hear a new one.");
 		}	
 	}
