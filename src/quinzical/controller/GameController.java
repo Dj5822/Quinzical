@@ -103,7 +103,7 @@ public class GameController {
 		answer = new String[2];
 		answer[0] = questions[colindex][rowindex][1];
 		answer[1] = questions[colindex][rowindex][2];
-		AudioTask task1 = new AudioTask(question);
+		AudioTask task1 = new AudioTask(question, 1);
 		Thread thread1 = new Thread(task1);
 		thread1.start();
 		System.out.println("{For test condition:"+question);

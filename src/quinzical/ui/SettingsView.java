@@ -1,5 +1,7 @@
 package quinzical.ui;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -28,10 +30,17 @@ public class SettingsView {
 		// Initialize buttons and labels.
 		title = new Label("Settings");
 		speechSpeedLabel = new Label("Speech speed: ");
-		speechSpeedSlider = new Slider();
+		speechSpeedSlider = new Slider(0.1, 3, 1);
+		speechSpeedSlider.setShowTickMarks(true);
+		speechSpeedSlider.setShowTickLabels(true);
+		speechSpeedSlider.setMajorTickUnit(1f);
+		speechSpeedSlider.setBlockIncrement(0.1f);
 		testLabel = new Label(controller.getTestText());
 		testButton = new Button("Test");
 		returnToMenuButton = new Button("Return to menu");
+		
+		// Set component sizes.
+		speechSpeedSlider.setPrefWidth(width/2);
 		
 		// Add buttons and labels to the view.
 		mainPane.add(title, 0, 0, 2, 1);
@@ -40,6 +49,15 @@ public class SettingsView {
 		mainPane.add(speechSpeedLabel, 0, 2);
 		mainPane.add(speechSpeedSlider, 1, 2);
 		mainPane.add(returnToMenuButton, 0, 3, 2, 1);
+		
+		speechSpeedSlider.valueProperty().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				controller.setSpeed(arg0.getValue().doubleValue());
+			}
+			
+		});
 		
 		// Button functionality
 		testButton.setOnAction(new EventHandler<ActionEvent>() {

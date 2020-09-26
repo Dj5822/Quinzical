@@ -11,13 +11,15 @@ import javafx.scene.control.Alert.AlertType;
 public class PracticeController {
 	
 	private SceneController sceneController;
+	private SettingsController settingsController;
 	
 	private String question;
 	private String[] answer;
 	private int answerCount;
 	
-	public PracticeController(SceneController sceneController) {
+	public PracticeController(SceneController sceneController, SettingsController settingsController) {
 		this.sceneController = sceneController;
+		this.settingsController = settingsController;
 	}
 	
 	/**
@@ -100,7 +102,7 @@ public class PracticeController {
 				answerCount = 0;
 				
 				// read out the question.
-				AudioTask task1 = new AudioTask(question);
+				AudioTask task1 = new AudioTask(question, settingsController.getSpeed());
 				Thread thread1 = new Thread(task1);
 				thread1.start();
 				return question;
@@ -162,7 +164,7 @@ public class PracticeController {
 		}
 		
 		// read out and show the output.
-		AudioTask task1 = new AudioTask(output);
+		AudioTask task1 = new AudioTask(output, settingsController.getSpeed());
 		Thread thread1 = new Thread(task1);
 		thread1.start();
 		return output;

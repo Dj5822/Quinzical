@@ -25,7 +25,7 @@ public class Main extends Application {
 		MenuController menuController = new MenuController(sceneController);
 		GameController gameController = new GameController(sceneController);
 		SettingsController settingsController = new SettingsController(sceneController);
-		PracticeController practiceController = new PracticeController(sceneController);
+		PracticeController practiceController = new PracticeController(sceneController, settingsController);
 		
 		// Initialise views.
 		MenuView menuView = new MenuView(menuController, WIDTH, HEIGHT);
