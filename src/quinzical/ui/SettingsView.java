@@ -20,7 +20,7 @@ public class SettingsView {
 	private Slider speechSpeedSlider;
 	private Label testLabel;
 	private Button testButton;
-	private Button returnToMenuButton;
+	private Button returnButton;
 	
 	public SettingsView(SettingsController controller, int width, int height) {
 		
@@ -37,7 +37,7 @@ public class SettingsView {
 		speechSpeedSlider.setBlockIncrement(0.1f);
 		testLabel = new Label(controller.getTestText());
 		testButton = new Button("Test");
-		returnToMenuButton = new Button("Return to menu");
+		returnButton = new Button("Return");
 		
 		// Set component sizes.
 		speechSpeedSlider.setPrefWidth(width/2);
@@ -48,7 +48,7 @@ public class SettingsView {
 		mainPane.add(testButton, 1, 1);
 		mainPane.add(speechSpeedLabel, 0, 2);
 		mainPane.add(speechSpeedSlider, 1, 2);
-		mainPane.add(returnToMenuButton, 0, 3, 2, 1);
+		mainPane.add(returnButton, 0, 3, 2, 1);
 		
 		speechSpeedSlider.valueProperty().addListener(new ChangeListener<Number>() {
 
@@ -66,8 +66,7 @@ public class SettingsView {
 				controller.testSpeech();
 			}
 		});		
-		
-		returnToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
+		returnButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				controller.returnToLastScene();
