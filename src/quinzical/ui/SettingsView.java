@@ -55,7 +55,6 @@ public class SettingsView {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				controller.setSpeed(arg0.getValue().doubleValue());
-				
 			}
 			
 		});
