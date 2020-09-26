@@ -67,10 +67,8 @@ public class GameView {
 		// Add buttons and labels to the view.
 		mainPane.add(startbtn, 0, 0, 2, 1);
 		mainPane.add(winning, 2, 0, 3, 1);
-		for(int i=0;i<5;i++) {
-			mainPane.add(catlabels[i], i, 1);
-		}
 		for(int col=0;col<5;col++) {
+			mainPane.add(catlabels[col], col, 1);
 			for (int row=0;row<5;row++) {
 				mainPane.add(cluebtns[col][4-row], col, row+2);
 			}
@@ -88,6 +86,7 @@ public class GameView {
 				regenerategame(controller);
 			}
 		});
+		//set up all clue buttons here
 		for(int colindex=0;colindex<5;colindex++) {
 			for (int rowindex=0;rowindex<5;rowindex++) {
 				cluebtns[colindex][rowindex].setId(Integer.toString(10*(colindex)+rowindex));
@@ -98,7 +97,6 @@ public class GameView {
 						Button x =(Button)arg0.getSource();
 						int colnum = (Integer.parseInt(x.getId())/10);
 						int rownum = (Integer.parseInt(x.getId())%10);
-						System.out.println("Button is clicked on: "+ colnum +"  "+rownum);
 						input.setVisible(true);
 						submitbtn.setVisible(true);
 						dkbtn.setVisible(true);
@@ -119,7 +117,7 @@ public class GameView {
 				submitAnswer(controller);
 				updatebtns(controller);
 				winning.setText("Current Worth: $"+Integer.toString(controller.getcurrentwinning()));
-				updateqscomponents(controller);
+				updateQscomponents(controller);
 			}
 		});
 		dkbtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -128,7 +126,7 @@ public class GameView {
 				controller.dkbtnclicked();
 				updatebtns(controller);
 				hintlabel.setText("The correct answer was:"+controller.getans()+". Click one of the available buttons above to hear a clue~");
-				updateqscomponents(controller);
+				updateQscomponents(controller);
 			}
 		});		
 		returnToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -139,6 +137,10 @@ public class GameView {
 			}
 		});		
 	}
+	/*
+	 * This method is used to regenerate all the components and send notice
+	 * for the game controller to to initialize the game data.
+	 */
 	public void regenerategame(GameController controller) {
 		controller.generatedata();
 		winning.setText("Current Worth: $0");
@@ -157,6 +159,9 @@ public class GameView {
 		submitbtn.setVisible(false);
 		dkbtn.setVisible(false);
 	}
+	/*
+	 * This method is used to update the view of clickable buttons
+	 */
 	public void updatebtns(GameController controller) {
 		int[] pos = controller.getqspos();
 		cluebtns[pos[0]][pos[1]].setVisible(false);
@@ -165,12 +170,15 @@ public class GameView {
 			cluebtns[i][btns[i]].setDisable(false);
 		}
 	}
-	public void updateqscomponents(GameController controller) {
+	/*
+	 * This method is used to update the question showing label and 
+	 * visibility of submit and dont know buttons
+	 */
+	public void updateQscomponents(GameController controller) {
 		submitbtn.setVisible(false);
 		input.setVisible(false);
 		input.setText("Type your answer here: ");
 		dkbtn.setVisible(false);
-		System.out.println(controller.getcount());
 		if(controller.getcount()== 25) {
 			endinglabel.setText("Congrats! All questions completed!! You have a reward of $"
 					+controller.getcurrentwinning()+" . Click restart"
@@ -178,12 +186,16 @@ public class GameView {
 			endinglabel.setVisible(true);
 		}
 	}
+	/*
+	 * This method is used to send request to the game controller and
+	 * check if the user's answer is correct
+	 */
 	public void submitAnswer(GameController controller) {
 		if(controller.checkAnswer(input.getText())) {
 			hintlabel.setText("Correct! You can now continue on the next one~");
 		}else {
 			hintlabel.setText("Wrong. The correct answer was:"+controller.getans()
-			+". Click buttons above to hear a new one.");
+			+". Click availabel buttons above to continue.");
 		}	
 	}
 

@@ -91,8 +91,11 @@ public class GameController {
 		}
 		
 	}
+	/*
+	 * This methode deals with the event when one of the clue
+	 * buttons are clicked.
+	 */
 	public void cluebtnclicked(int colindex, int rowindex) {
-		// festival here
 		qspos = new int[2];
 		qspos[0] = colindex;
 		qspos[1] = rowindex;
@@ -103,7 +106,7 @@ public class GameController {
 		AudioTask task1 = new AudioTask(question, 1);
 		Thread thread1 = new Thread(task1);
 		thread1.start();
-		System.out.println(question);
+		System.out.println("{For test condition:"+question);
 	}
 	public boolean checkAnswer(String text) {
 		count++;
@@ -123,6 +126,7 @@ public class GameController {
 	}
 	public void dkbtnclicked() {
 		count++;
+		//udate positions of clickable buttons
 		if(enablebtns[qspos[0]]<4) {
 			enablebtns[qspos[0]]++;
 		}
