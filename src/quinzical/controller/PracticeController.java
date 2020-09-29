@@ -5,8 +5,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
 
 public class PracticeController {
 	
@@ -34,6 +40,40 @@ public class PracticeController {
 		errorAlert.setContentText(contentMessage);
 		
 		errorAlert.showAndWait();
+	}
+	
+	public void showQuestion(PracticeController controller, Scene main, GridPane answerPane, 
+			ComboBox<String> categoryCB, Label answerLabel, TextArea answerTextBox, Label hintLabel, 
+			Button checkAnswerButton) {
+		if (categoryCB.getValue() == null) {
+			controller.showErrorMessage("You must select a category", "Please select a category from the combobox.");
+		}
+		else {
+			answerLabel.setText(getQuestion(categoryCB.getValue().toString()));
+			answerTextBox.setVisible(true);
+			answerTextBox.clear();
+			hintLabel.setText("");
+			main.setRoot(answerPane);
+			checkAnswerButton.setText("Check Answer");
+		}
+	}
+	
+	public void submitAnswer(PracticeController controller, Scene main, GridPane categoryPane,
+			Button checkAnswerButton, Label hintLabel, TextArea answerTextBox, 
+			ComboBox<String> categoryCB) {
+		if (checkAnswerButton.getText() == "Check Answer") {
+			hintLabel.setText(controller.checkAnswer(answerTextBox.getText()));
+			answerTextBox.clear();
+			
+			if (controller.getAnswerCount() >= 3 | hintLabel.getText() == "correct") {
+				answerTextBox.setVisible(false);
+				categoryCB.getSelectionModel().clearSelection();
+				checkAnswerButton.setText("Return");
+			}
+		}
+		else {
+			main.setRoot(categoryPane);
+		}
 	}
 	
 	/**

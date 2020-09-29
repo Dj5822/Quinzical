@@ -138,7 +138,8 @@ public class GameView {
 				clueButtons[colindex][rowindex].setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent arg0) {
-						controller.clueButtonPressed(arg0, hintLabel, inputField, submitButton, dontKnowButton, clueButtons);
+						controller.clueButtonPressed(arg0, 
+								hintLabel, inputField, submitButton, dontKnowButton, clueButtons);
 					}
 				});		
 			}
