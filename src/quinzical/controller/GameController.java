@@ -18,7 +18,7 @@ public class GameController {
 	private SettingsController settingsController;
 	
 	private String[] categories;
-	private String[][][] questions;
+	private Clue[][] clues;
 	private int[] enablebtns;
 	private int currentwinning;
 	
@@ -45,7 +45,7 @@ public class GameController {
 	 */
 	public void generatedata() {
 		categories = new String[5];
-		questions = new String[5][5][3];
+		clues = new Clue[5][5];
 		enablebtns = new int[] {0,0,0,0,0};
 		currentwinning = 0;
 		count=0;
@@ -84,13 +84,11 @@ public class GameController {
 				int qexitStatus = qprocess.waitFor();			
 				if (qexitStatus == 0) {
 					String line;
-					int qno=0;
+					int qsno=0;
 					while ((line = qinputReader.readLine()) != null) {
 						String[] output = line.split("[\\(\\)]", 3);
-						questions[catno][qno][0] = output[0];
-						questions[catno][qno][1] = output[1];
-						questions[catno][qno][2] = output[2];
-						qno++;
+						clues[catno][qsno] = new Clue(output[0],output[1],output[2]);
+						qsno++;
 					}	
 				} 
 				else {
@@ -112,10 +110,10 @@ public class GameController {
 		qspos = new int[2];
 		qspos[0] = colindex;
 		qspos[1] = rowindex;
-		question = questions[colindex][rowindex][0];
+		question = clues[colindex][rowindex].getquestion();
 		answer = new String[2];
-		answer[0] = questions[colindex][rowindex][1];
-		answer[1] = questions[colindex][rowindex][2];
+		answer[0] = clues[colindex][rowindex].getans_1();
+		answer[1] = clues[colindex][rowindex].getans_2();		
 		AudioTask task1 = new AudioTask(question, settingsController.getSpeed());
 		Thread thread1 = new Thread(task1);
 		thread1.start();
@@ -167,9 +165,6 @@ public class GameController {
 	}
 	public String[] getcat() {
 		return categories;
-	}
-	public String[][][] getqs(){
-		return questions;
 	}
 	public int[] getenablebtns() {
 		return enablebtns;
