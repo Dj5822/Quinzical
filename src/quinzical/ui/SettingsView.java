@@ -1,5 +1,7 @@
 package quinzical.ui;
 
+import java.io.File;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -33,6 +35,10 @@ public class SettingsView {
 		mainPane.setAlignment(Pos.CENTER);
 		main = new Scene(mainPane, width, height);
 		
+		File styleFile = new File("./src/quinzical/style.css");
+		main.getStylesheets().clear();
+		main.getStylesheets().add("file:///" + styleFile.getAbsolutePath().replace("\\", "/"));
+		
 		// Initialize buttons and labels.
 		title = new Label("Settings");
 		speechSpeedLabel = new Label("Speech speed: ");
@@ -62,6 +68,8 @@ public class SettingsView {
 		GridPane.setHalignment(testLabel, HPos.LEFT);
 		GridPane.setHalignment(testButton, HPos.RIGHT);
 		GridPane.setHalignment(returnButton, HPos.CENTER);
+		testButton.setFocusTraversable(false);
+		returnButton.setFocusTraversable(false);
 		
 		// Add buttons and labels to the view.
 		mainPane.add(title, 0, 0, 2, 1);

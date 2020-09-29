@@ -18,7 +18,7 @@ public class Main extends Application {
 	private final int WIDTH = 1000;
 	
 	@Override
-	public void start(Stage primaryStage) throws Exception {	
+	public void start(Stage primaryStage) throws Exception {
 		
 		// Initialise controllers.
 		SceneController sceneController = new SceneController(primaryStage);

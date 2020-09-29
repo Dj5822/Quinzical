@@ -1,5 +1,7 @@
 package quinzical.ui;
 
+import java.io.File;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -61,7 +63,8 @@ public class GameView {
 				// Creating 5x5 grid clue buttons.
 				clueButtons[col][row-1]=new Button(Integer.toString(row*100));
 				clueButtons[col][row-1].setId(Integer.toString(10*(col)+row+1));
-				clueButtons[col][row-1].setDisable(true);				
+				clueButtons[col][row-1].setDisable(true);
+				clueButtons[col][row-1].setFocusTraversable(false);
 			}
 		}
 		
@@ -75,6 +78,11 @@ public class GameView {
 		returnToMenuButton.setPrefWidth(200);
 		settingsButton = new Button("Voice speed setting");
 		settingsButton.setPrefWidth(200);
+		startButton.setFocusTraversable(false);
+		submitButton.setFocusTraversable(false);
+		dontKnowButton.setFocusTraversable(false);
+		returnToMenuButton.setFocusTraversable(false);
+		settingsButton.setFocusTraversable(false);
 		
 		// Add buttons and labels to the view.
 		mainPane.add(startButton, 0, 0, 2, 1);
@@ -94,6 +102,11 @@ public class GameView {
 		}
 		
 		main = new Scene(mainPane, width, height);
+		
+		// Makes everything look prettier.
+		File styleFile = new File("./src/quinzical/style.css");
+		main.getStylesheets().clear();
+		main.getStylesheets().add("file:///" + styleFile.getAbsolutePath().replace("\\", "/"));
 		
 		// Button functionality
 		startButton.setOnAction(new EventHandler<ActionEvent>() {

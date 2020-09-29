@@ -1,5 +1,7 @@
 package quinzical.ui;
 
+import java.io.File;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -71,6 +73,8 @@ public class PracticeView {
 		GridPane.setHalignment(categoryCB, HPos.CENTER);
 		GridPane.setHalignment(showQuestionButton, HPos.CENTER);
 		GridPane.setHalignment(returnToMenuButton, HPos.CENTER);
+		returnToMenuButton.setFocusTraversable(false);
+		showQuestionButton.setFocusTraversable(false);
 		
 		// add components to category pane.
 		categoryPane.add(title, 0, 0, 2, 1);
@@ -104,6 +108,7 @@ public class PracticeView {
 		GridPane.setHalignment(answerLabel, HPos.CENTER);
 		GridPane.setHalignment(hintLabel, HPos.CENTER);
 		GridPane.setHalignment(checkAnswerButton, HPos.CENTER);
+		checkAnswerButton.setFocusTraversable(false);
 		
 		// add components to answer pane.
 		answerPane.add(answerLabel, 0, 0);
@@ -113,6 +118,11 @@ public class PracticeView {
 		
 		// start at category pane.
 		main = new Scene(categoryPane, width, height);
+		
+		// Makes everything look prettier.
+		File styleFile = new File("./src/quinzical/style.css");
+		main.getStylesheets().clear();
+		main.getStylesheets().add("file:///" + styleFile.getAbsolutePath().replace("\\", "/"));
 		
 		// Button functionality.
 		showQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
