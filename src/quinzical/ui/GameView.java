@@ -19,199 +19,132 @@ public class GameView {
 	
 	private Scene main;
 	
-	private Button startbtn;
-	private Label winninglabel;
-	private Label[] catlabels;
-	private Button[][] cluebtns;
-	private Label endinglabel;
-	private Label hintlabel;
-	private TextField input;
-	private Button submitbtn,dkbtn;
+	private Button startButton;
+	private Button submitButton;
+	private Button dontKnowButton;
 	private Button returnToMenuButton;
-	private Button settingsbtn;
+	private Button settingsButton;
 
+	private Label winningLabel;
+	private Label endingLabel;
+	private Label hintLabel;
+	
+	private Label[] categoryLabels;
+	private Button[][] clueButtons;
+	private TextField inputField;
 	
 	public GameView(GameController controller, int width, int height) {
+		
 		// Setup main pane.		
 		GridPane mainPane = new GridPane();
 		mainPane.setPadding(new Insets(20,20,20,20));
 		mainPane.setAlignment(Pos.CENTER);
 		mainPane.setVgap(20);
 		mainPane.setHgap(20);
-		main = new Scene(mainPane, width, height);
+		
 		// Initialize buttons and labels.
-		startbtn = new Button("Start/Reset the game");
-		winninglabel = new Label("Current Worth: $0");
-		catlabels= new Label[5] ;
-		cluebtns = new Button[5][5];
-		//Creating 5 categories labels and 5x5 grid clue buttons
+		startButton = new Button("Start/Reset the game");
+		winningLabel = new Label("Current Worth: $0");
+		categoryLabels= new Label[5] ;
+		clueButtons = new Button[5][5];
+		endingLabel = new Label(""); // label to notify the user all questions are completed
+		hintLabel = new Label("Click one of the available buttons above to hear a clue~"); // instruction label set up
+		inputField = new TextField();
+		submitButton = new Button("Submit my answer!");
+		dontKnowButton = new Button("don't know");
+		returnToMenuButton = new Button("Return to menu");
 		for(int col=0;col<5;col++) {
-			catlabels[col]=new Label("{Category No: "+col+"}");
-			catlabels[col].setMinWidth(150);
+			// Creating 5 categories labels.
+			categoryLabels[col]=new Label("{Category No: "+col+"}");
+			categoryLabels[col].setMinWidth(150);
 			for (int row=1;row<=5;row++) {
-				cluebtns[col][row-1]=new Button(Integer.toString(row*100));
-				cluebtns[col][row-1].setDisable(true);				
+				// Creating 5x5 grid clue buttons.
+				clueButtons[col][row-1]=new Button(Integer.toString(row*100));
+				clueButtons[col][row-1].setId(Integer.toString(10*(col)+row+1));
+				clueButtons[col][row-1].setDisable(true);				
 			}
 		}
-		// label to notify the user all questions are completed
-		endinglabel = new Label("");
-		endinglabel.setVisible(false);
-		// instruction label set up
-		hintlabel = new Label("Click one of the available buttons above to hear a clue~");
-		hintlabel.setWrapText(true);
-		hintlabel.setVisible(false);
-		input = new TextField("Type your answer here and click submit!");
-		input.setVisible(false);
-		submitbtn = new Button("Submit my answer!");
-		submitbtn.setVisible(false);
-		dkbtn = new Button("don't know");
-		dkbtn.setVisible(false);
-		returnToMenuButton = new Button("Return to menu");
+		
+		// set component visibility.
+		endingLabel.setVisible(false);
+		hintLabel.setWrapText(true);
+		hintLabel.setVisible(false);
+		inputField.setVisible(false);
+		submitButton.setVisible(false);
+		dontKnowButton.setVisible(false);
 		returnToMenuButton.setPrefWidth(200);
-		settingsbtn = new Button("Voice speed setting");
-		settingsbtn.setPrefWidth(200);
+		settingsButton = new Button("Voice speed setting");
+		settingsButton.setPrefWidth(200);
 		
 		// Add buttons and labels to the view.
-		mainPane.add(startbtn, 0, 0, 2, 1);
-		mainPane.add(winninglabel, 2, 0, 2, 1);
-		for(int col=0;col<5;col++) {
-			mainPane.add(catlabels[col], col, 1);
-			for (int row=0;row<5;row++) {
-				mainPane.add(cluebtns[col][4-row], col, row+2);
-			}
-		}
-		mainPane.add(endinglabel, 0, 2, 5, 2);
-		mainPane.add(hintlabel, 0, 7, 5, 2);
-		mainPane.add(input, 0, 9, 5, 1);
-		mainPane.add(submitbtn, 0, 10, 2, 1);
-		mainPane.add(dkbtn, 2, 10, 2, 1);
+		mainPane.add(startButton, 0, 0, 2, 1);
+		mainPane.add(winningLabel, 2, 0, 2, 1);
+		mainPane.add(endingLabel, 0, 2, 5, 2);
+		mainPane.add(hintLabel, 0, 7, 5, 2);
+		mainPane.add(inputField, 0, 9, 5, 1);
+		mainPane.add(submitButton, 0, 10, 2, 1);
+		mainPane.add(dontKnowButton, 2, 10, 2, 1);
 		mainPane.add(returnToMenuButton, 0, 11, 3, 1);
-		mainPane.add(settingsbtn, 3, 11, 2, 1);
-		// Button functionality
-		startbtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				regenerategame(controller);
-			}
-		});
-		//set up all clue buttons here
-		for(int colindex=0;colindex<5;colindex++) {
-			for (int rowindex=0;rowindex<5;rowindex++) {
-				cluebtns[colindex][rowindex].setId(Integer.toString(10*(colindex)+rowindex));
-				cluebtns[colindex][rowindex].setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent arg0) {
-						hintlabel.setText("You can click the button if you want to listen to it again.");
-						Button x =(Button)arg0.getSource();
-						int colnum = (Integer.parseInt(x.getId())/10);
-						int rownum = (Integer.parseInt(x.getId())%10);
-						input.setVisible(true);
-						submitbtn.setVisible(true);
-						dkbtn.setVisible(true);
-						controller.cluebtnclicked(colnum,rownum);
-						int[] btns = controller.getenablebtns();
-						for(int i=0;i<5;i++) {
-							if(i != colnum) {
-								cluebtns[i][btns[i]].setDisable(true);
-							}
-						}
-					}
-				});		
+		mainPane.add(settingsButton, 3, 11, 2, 1);
+		for(int col=0;col<5;col++) {
+			mainPane.add(categoryLabels[col], col, 1);
+			for (int row=0;row<5;row++) {
+				mainPane.add(clueButtons[col][4-row], col, row+2);
 			}
 		}
-		submitbtn.setOnAction(new EventHandler<ActionEvent>() {
+		
+		main = new Scene(mainPane, width, height);
+		
+		// Button functionality
+		startButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				submitAnswer(controller);
-				updatebtns(controller);
-				winninglabel.setText("Current Worth: $"+Integer.toString(controller.getcurrentwinning()));
-				updateQscomponents(controller);
+				controller.startButtonPressed(controller, winningLabel, categoryLabels,
+						clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton);
 			}
 		});
-		dkbtn.setOnAction(new EventHandler<ActionEvent>() {
+		
+		submitButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.dkbtnclicked();
-				updatebtns(controller);
-				hintlabel.setText("The correct answer was:"+controller.getans()+". Click one of the available buttons above to hear a clue~");
-				updateQscomponents(controller);
+				controller.submitButtonPressed(inputField, hintLabel, clueButtons,
+						winningLabel, submitButton, dontKnowButton, endingLabel);
+			}
+		});
+		
+		dontKnowButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.dontKnowButtonPressed(clueButtons, hintLabel,
+						submitButton, inputField, dontKnowButton, endingLabel);
 			}
 		});		
 		returnToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				regenerategame(controller);
 				controller.returnToMenu();
 			}
 		});		
-		settingsbtn.setOnAction(new EventHandler<ActionEvent>() {
+		settingsButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				controller.goToSettings();
 			}
-		});		
-	}
-	/*
-	 * This method is used to regenerate all the components and send notice
-	 * for the game controller to to initialize the game data.
-	 */
-	public void regenerategame(GameController controller) {
-		controller.generatedata();
-		winninglabel.setText("Current Worth: $0");
-		for(int i=0;i<5;i++) {
-			catlabels[i].setText(controller.getcat()[i]);
-			for(int j=0;j<5;j++) {
-				cluebtns[i][j].setVisible(true);
-				cluebtns[i][j].setDisable(true);
+		});
+
+		//set up all clue buttons here
+		for(int colindex=0;colindex<5;colindex++) {
+			for (int rowindex=0;rowindex<5;rowindex++) {
+				clueButtons[colindex][rowindex].setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent arg0) {
+						controller.clueButtonPressed(arg0, hintLabel, inputField, submitButton, dontKnowButton, clueButtons);
+					}
+				});		
 			}
-			cluebtns[i][0].setDisable(false);
-		}
-		endinglabel.setVisible(false);
-		hintlabel.setText("Click one of the available buttons above to hear a clue~");
-		hintlabel.setVisible(true);
-		input.setVisible(false);
-		submitbtn.setVisible(false);
-		dkbtn.setVisible(false);
-	}
-	/*
-	 * This method is used to update the view of clickable buttons
-	 */
-	public void updatebtns(GameController controller) {
-		int[] pos = controller.getqspos();
-		cluebtns[pos[0]][pos[1]].setVisible(false);
-		int [] btns = controller.getenablebtns();
-		for(int i=0;i<5;i++) {
-			cluebtns[i][btns[i]].setDisable(false);
 		}
 	}
-	/*
-	 * This method is used to update the question showing label and 
-	 * visibility of submit and dont know buttons
-	 */
-	public void updateQscomponents(GameController controller) {
-		submitbtn.setVisible(false);
-		input.setVisible(false);
-		input.setText("Type your answer here: ");
-		dkbtn.setVisible(false);
-		if(controller.getcount()== 25) {
-			endinglabel.setText("Congrats! All questions completed!! You have a reward of $"
-					+controller.getcurrentwinning()+" . Click restart"
-					+" button to start a new game or return to the menu.");
-			endinglabel.setVisible(true);
-		}
-	}
-	/*
-	 * This method is used to send request to the game controller and
-	 * check if the user's answer is correct
-	 */
-	public void submitAnswer(GameController controller) {
-		if(controller.checkAnswer(input.getText())) {
-			hintlabel.setText("Correct! You can now continue on the next one~");
-		}else {
-			hintlabel.setText("Wrong. The correct answer was:"+controller.getans()
-			+". Click availabel buttons above to continue.");
-		}	
-	}
+	
 	public Scene getScene() {
 		return main;
 	}
