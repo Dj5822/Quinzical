@@ -11,12 +11,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import quinzical.controller.GameController;
 
+/**
+ * This class manage the view of game mode of quinzical.
+ * Contains method to change the view when users are playing.
+ */
 public class GameView {
 	
 	private Scene main;
 	
 	private Button startbtn;
-	private Label winning;
+	private Label winninglabel;
 	private Label[] catlabels;
 	private Button[][] cluebtns;
 	private Label endinglabel;
@@ -24,10 +28,11 @@ public class GameView {
 	private TextField input;
 	private Button submitbtn,dkbtn;
 	private Button returnToMenuButton;
+	private Button settingsbtn;
 
 	
 	public GameView(GameController controller, int width, int height) {
-		
+		// Setup main pane.		
 		GridPane mainPane = new GridPane();
 		mainPane.setPadding(new Insets(20,20,20,20));
 		mainPane.setAlignment(Pos.CENTER);
@@ -36,21 +41,22 @@ public class GameView {
 		main = new Scene(mainPane, width, height);
 		// Initialize buttons and labels.
 		startbtn = new Button("Start/Reset the game");
-		winning = new Label("Current Worth: $0");
+		winninglabel = new Label("Current Worth: $0");
 		catlabels= new Label[5] ;
-		for(int i=0;i<5;i++) {
-			catlabels[i]=new Label("{Category No: "+i+"}");
-			catlabels[i].setMinWidth(150);
-		};
 		cluebtns = new Button[5][5];
+		//Creating 5 categories labels and 5x5 grid clue buttons
 		for(int col=0;col<5;col++) {
+			catlabels[col]=new Label("{Category No: "+col+"}");
+			catlabels[col].setMinWidth(150);
 			for (int row=1;row<=5;row++) {
 				cluebtns[col][row-1]=new Button(Integer.toString(row*100));
 				cluebtns[col][row-1].setDisable(true);				
 			}
 		}
+		// label to notify the user all questions are completed
 		endinglabel = new Label("");
 		endinglabel.setVisible(false);
+		// instruction label set up
 		hintlabel = new Label("Click one of the available buttons above to hear a clue~");
 		hintlabel.setWrapText(true);
 		hintlabel.setVisible(false);
@@ -62,11 +68,12 @@ public class GameView {
 		dkbtn.setVisible(false);
 		returnToMenuButton = new Button("Return to menu");
 		returnToMenuButton.setPrefWidth(200);
-
+		settingsbtn = new Button("Voice speed setting");
+		settingsbtn.setPrefWidth(200);
 		
 		// Add buttons and labels to the view.
 		mainPane.add(startbtn, 0, 0, 2, 1);
-		mainPane.add(winning, 2, 0, 3, 1);
+		mainPane.add(winninglabel, 2, 0, 2, 1);
 		for(int col=0;col<5;col++) {
 			mainPane.add(catlabels[col], col, 1);
 			for (int row=0;row<5;row++) {
@@ -79,6 +86,7 @@ public class GameView {
 		mainPane.add(submitbtn, 0, 10, 2, 1);
 		mainPane.add(dkbtn, 2, 10, 2, 1);
 		mainPane.add(returnToMenuButton, 0, 11, 3, 1);
+		mainPane.add(settingsbtn, 3, 11, 2, 1);
 		// Button functionality
 		startbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -116,7 +124,7 @@ public class GameView {
 			public void handle(ActionEvent arg0) {
 				submitAnswer(controller);
 				updatebtns(controller);
-				winning.setText("Current Worth: $"+Integer.toString(controller.getcurrentwinning()));
+				winninglabel.setText("Current Worth: $"+Integer.toString(controller.getcurrentwinning()));
 				updateQscomponents(controller);
 			}
 		});
@@ -136,6 +144,12 @@ public class GameView {
 				controller.returnToMenu();
 			}
 		});		
+		settingsbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.goToSettings();
+			}
+		});		
 	}
 	/*
 	 * This method is used to regenerate all the components and send notice
@@ -143,7 +157,7 @@ public class GameView {
 	 */
 	public void regenerategame(GameController controller) {
 		controller.generatedata();
-		winning.setText("Current Worth: $0");
+		winninglabel.setText("Current Worth: $0");
 		for(int i=0;i<5;i++) {
 			catlabels[i].setText(controller.getcat()[i]);
 			for(int j=0;j<5;j++) {
@@ -198,7 +212,6 @@ public class GameView {
 			+". Click availabel buttons above to continue.");
 		}	
 	}
-
 	public Scene getScene() {
 		return main;
 	}

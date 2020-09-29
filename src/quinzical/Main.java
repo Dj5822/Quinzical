@@ -23,8 +23,8 @@ public class Main extends Application {
 		// Initialise controllers.
 		SceneController sceneController = new SceneController(primaryStage);
 		MenuController menuController = new MenuController(sceneController);
-		GameController gameController = new GameController(sceneController);
 		SettingsController settingsController = new SettingsController(sceneController);
+		GameController gameController = new GameController(sceneController, settingsController);
 		PracticeController practiceController = new PracticeController(sceneController, settingsController);
 		
 		// Initialise views.
