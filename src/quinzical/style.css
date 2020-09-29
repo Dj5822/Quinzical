@@ -28,3 +28,17 @@
 	-fx-background-color: #6a718d;
 	-fx-text-fill: white;
 }
+
+.combo-box-base {
+	-fx-border-color: #6a718d;
+	-fx-border-width: 3;
+	-fx-background-radius: 5;
+	-fx-background-color: transparent;
+	-fx-font-family:"Segoe UI", Helvetica, Arial, sans-serif;
+	-fx-text-fill: #6a718d;
+}
+
+.combo-box-base:hover {
+	-fx-background-color: #6a718d;
+	-fx-text-fill: white;
+}
