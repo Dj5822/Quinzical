@@ -4,11 +4,15 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import quinzical.controller.SettingsController;
 
 public class SettingsView {
@@ -25,6 +29,8 @@ public class SettingsView {
 	public SettingsView(SettingsController controller, int width, int height) {
 		
 		GridPane mainPane = new GridPane();
+		mainPane.setVgap(height/7);
+		mainPane.setAlignment(Pos.CENTER);
 		main = new Scene(mainPane, width, height);
 		
 		// Initialize buttons and labels.
@@ -39,8 +45,23 @@ public class SettingsView {
 		testButton = new Button("Test");
 		returnButton = new Button("Return");
 		
-		// Set component sizes.
+		// Set component sizes. and alignment
+		title.setTextAlignment(TextAlignment.CENTER);
+		title.setAlignment(Pos.CENTER);
+		title.setPrefHeight(height/6);
+		title.setPrefWidth(width/2);
+		title.setFont(new Font(height/9));
+		testButton.setPrefHeight(height/9);
+		testButton.setPrefWidth(width/3);
+		returnButton.setPrefHeight(height/9);
+		returnButton.setPrefWidth(width/3);
 		speechSpeedSlider.setPrefWidth(width/2);
+		speechSpeedLabel.setFont(new Font(height/18));
+		testLabel.setFont(new Font(height/18));
+		GridPane.setHalignment(title, HPos.CENTER);
+		GridPane.setHalignment(testLabel, HPos.LEFT);
+		GridPane.setHalignment(testButton, HPos.RIGHT);
+		GridPane.setHalignment(returnButton, HPos.CENTER);
 		
 		// Add buttons and labels to the view.
 		mainPane.add(title, 0, 0, 2, 1);
