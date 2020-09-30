@@ -142,7 +142,7 @@ public class PracticeController {
 				answerCount = 0;
 				
 				// read out the question.
-				AudioTask task1 = new AudioTask(question, settingsController.getSpeed());
+				VoiceTask task1 = new VoiceTask(question, settingsController.getSpeed());
 				Thread thread1 = new Thread(task1);
 				thread1.start();
 				return question;
@@ -204,7 +204,7 @@ public class PracticeController {
 		}
 		
 		// read out and show the output.
-		AudioTask task1 = new AudioTask(output, settingsController.getSpeed());
+		VoiceTask task1 = new VoiceTask(output, settingsController.getSpeed());
 		Thread thread1 = new Thread(task1);
 		thread1.start();
 		return output;

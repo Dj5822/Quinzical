@@ -5,12 +5,12 @@ import java.io.PrintWriter;
 
 import javafx.concurrent.Task;
 
-public class AudioTask extends Task<Object> {
+public class VoiceTask extends Task<Object> {
 	
 	private String text;
 	private double speed;
 	
-	public AudioTask(String text, double speed) {
+	public VoiceTask(String text, double speed) {
 		this.text = text;
 		this.speed = speed;
 	}

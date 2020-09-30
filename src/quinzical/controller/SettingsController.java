@@ -12,7 +12,7 @@ public class SettingsController {
 	}
 	
 	public void testSpeech() {
-		AudioTask task1 = new AudioTask(testText, getSpeed());
+		VoiceTask task1 = new VoiceTask(testText, getSpeed());
 		Thread thread1 = new Thread(task1);
 		thread1.start();
 	}

@@ -81,7 +81,7 @@ public class GameController {
 			hintLabel.setText("Correct! You can now continue on the next one~");
 		}else {
 			hintLabel.setText("Wrong. The correct answer was: "+answer[1]
-			+". Click availabel buttons above to continue.");
+			+". Click available buttons above to continue.");
 		}	
 		updateClueButtons(clueButtons);
 		winningLabel.setText("Current Worth: $"+Integer.toString(currentWinning));
@@ -125,7 +125,7 @@ public class GameController {
 		answer = new String[2];
 		answer[0] = clues[colnum][rownum].getans_1();
 		answer[1] = clues[colnum][rownum].getans_2();		
-		AudioTask task1 = new AudioTask(question, settingsController.getSpeed());
+		VoiceTask task1 = new VoiceTask(question, settingsController.getSpeed());
 		Thread thread1 = new Thread(task1);
 		thread1.start();
 		System.out.println("{For test condition:"+question);
@@ -224,7 +224,7 @@ public class GameController {
 	
 	/*
 	 * This method is used to check if the user's input is
-	 * correct correspoding to the question. Return true if
+	 * correct corresponding to the question. Return true if
 	 * correct and false if incorrect.
 	 */
 	public boolean checkAnswer(String text) {

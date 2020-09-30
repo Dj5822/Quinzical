@@ -1,11 +1,22 @@
 package quinzical.controller;
 
+import java.io.File;
+
+import javafx.scene.media.AudioClip;
+
 public class MenuController {
 	
 	private SceneController sceneController;
+	private AudioClip hoverSound;
 	
 	public MenuController(SceneController sceneController) {
 		this.sceneController = sceneController;
+		File soundFile = new File("./sound/sound1.wav");
+    	hoverSound = new AudioClip(soundFile.toURI().toString());
+	}
+	
+	public void playHoverSound() {
+		hoverSound.play();
 	}
 	
 	/**
