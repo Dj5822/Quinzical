@@ -9,7 +9,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -90,13 +89,6 @@ public class MenuView {
 				controller.showPracticeView();
 			}
 		});
-		
-		practiceButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent t) {
-		    	controller.playHoverSound();
-		    }
-		});
 
 		// On game button activation.
 		gameButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -106,26 +98,12 @@ public class MenuView {
 			}
 		});
 		
-		gameButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent t) {
-		    	controller.playHoverSound();
-		    }
-		});
-		
 		// On settings button activation.
 		settingsButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				controller.showSettingsView();
 			}
-		});
-		
-		settingsButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent t) {
-		    	controller.playHoverSound();
-		    }
 		});
 
 		// on quit button activation.
@@ -134,13 +112,6 @@ public class MenuView {
 			public void handle(ActionEvent arg0) {
 				controller.quitGame();
 			}
-		});
-		
-		quitButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent t) {
-		    	controller.playHoverSound();
-		    }
 		});
 	}
 	
