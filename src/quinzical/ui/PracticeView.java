@@ -18,6 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import quinzical.controller.PracticeController;
 
@@ -32,7 +33,7 @@ public class PracticeView {
 	private ObservableList<String> categoryOptions;
 	private ComboBox<String> categoryCB;
 	
-	private Label answerLabel;
+	private Text answerText;
 	private Label hintLabel;
 	private TextArea answerTextBox;
 	private Button checkAnswerButton;
@@ -89,29 +90,31 @@ public class PracticeView {
 		answerPane.setAlignment(Pos.CENTER);
 		
 		// create answer pane components.
-		answerLabel = new Label("Question");
+		answerText = new Text("Question");
 		hintLabel = new Label();
 		answerTextBox = new TextArea();
 		checkAnswerButton = new Button("Check Answer");
 		
 		// set the size and alignment of components.
-		answerLabel.setTextAlignment(TextAlignment.CENTER);
-		answerLabel.setAlignment(Pos.CENTER);
-		answerLabel.setFont(new Font(height/25));
+		answerText.setTextAlignment(TextAlignment.CENTER);
+		answerText.setFont(new Font(height/25));
+		answerText.prefHeight(height/2);
+		answerText.prefWidth(width/1.1);
+		answerText.setWrappingWidth(width/1.1);
 		hintLabel.setTextAlignment(TextAlignment.CENTER);
 		hintLabel.setAlignment(Pos.CENTER);
 		hintLabel.setFont(new Font(height/15));
 		answerTextBox.setPrefHeight(height/9);
-		answerTextBox.setPrefWidth(width/3);
+		answerTextBox.setPrefWidth(width/1.1);
 		checkAnswerButton.setPrefHeight(height/9);
 		checkAnswerButton.setPrefWidth(width/3);
-		GridPane.setHalignment(answerLabel, HPos.CENTER);
+		GridPane.setHalignment(answerText, HPos.CENTER);
 		GridPane.setHalignment(hintLabel, HPos.CENTER);
 		GridPane.setHalignment(checkAnswerButton, HPos.CENTER);
 		checkAnswerButton.setFocusTraversable(false);
 		
 		// add components to answer pane.
-		answerPane.add(answerLabel, 0, 0);
+		answerPane.add(answerText, 0, 0);
 		answerPane.add(hintLabel, 0, 1);
 		answerPane.add(answerTextBox, 0, 2);
 		answerPane.add(checkAnswerButton, 0, 3);
@@ -128,7 +131,7 @@ public class PracticeView {
 		showQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.showQuestion(controller, main, answerPane, categoryCB, answerLabel,
+				controller.showQuestion(controller, main, answerPane, categoryCB, answerText,
 						answerTextBox, hintLabel, checkAnswerButton);
 			}
 		});

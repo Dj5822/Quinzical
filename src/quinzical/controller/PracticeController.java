@@ -13,6 +13,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 
 public class PracticeController {
 	
@@ -43,13 +44,13 @@ public class PracticeController {
 	}
 	
 	public void showQuestion(PracticeController controller, Scene main, GridPane answerPane, 
-			ComboBox<String> categoryCB, Label answerLabel, TextArea answerTextBox, Label hintLabel, 
+			ComboBox<String> categoryCB, Text answerText, TextArea answerTextBox, Label hintLabel, 
 			Button checkAnswerButton) {
 		if (categoryCB.getValue() == null) {
 			controller.showErrorMessage("You must select a category", "Please select a category from the combobox.");
 		}
 		else {
-			answerLabel.setText(getQuestion(categoryCB.getValue().toString()));
+			answerText.setText(getQuestion(categoryCB.getValue().toString()));
 			answerTextBox.setVisible(true);
 			answerTextBox.clear();
 			hintLabel.setText("");
@@ -185,6 +186,12 @@ public class PracticeController {
 			String answerRegex = "(" + answer[0].toLowerCase().strip() + " )?" + potentialAnswer.replace(".", "").toLowerCase().strip();
 			
 			if (input.toLowerCase().strip().matches(answerRegex)) {
+				output = "correct";
+			}
+			else if (("the " + input.toLowerCase().strip()).matches(answerRegex)) {
+				output = "correct";
+			}
+			else if (("a " + input.toLowerCase().strip()).matches(answerRegex)) {
 				output = "correct";
 			}
 		}

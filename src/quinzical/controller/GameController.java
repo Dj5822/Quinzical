@@ -239,6 +239,12 @@ public class GameController {
 				currentWinning+= (questionPosition[1]+1)*100;
 				return true;
 			}
+			else if (("the " + text.toLowerCase().strip()).matches(answerRegex)) {
+				return true;
+			}
+			else if (("a " + text.toLowerCase().strip()).matches(answerRegex)) {
+				return true;
+			}
 		}
 		return false;
 		
@@ -252,6 +258,7 @@ public class GameController {
 	 * Used to go back to the menu scene.
 	 */
 	public void returnToMenu() {
+		generateData();
 		sceneController.changeScene("menu");
 	}
 	
