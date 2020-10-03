@@ -22,6 +22,7 @@ public class VoiceTask extends Task<Object> {
 			Process process = builder.start();
 			OutputStream in = process.getOutputStream();
 			PrintWriter stdin = new PrintWriter(in);
+			//stdin.println("(voice_akl_nz_jdt_diphone)");
 			stdin.println("(Parameter.set `Duration_Stretch " + 1/speed + ")");
 			stdin.println("(SayText \"" + text + "\")");
 			stdin.close();

@@ -11,7 +11,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -28,16 +30,25 @@ public class SettingsView {
 	private Button testButton;
 	private Button returnButton;
 	
+	private Label speechTypeLabel;
+	private RadioButton nzMaleRadioButton;
+	private RadioButton nzFemaleRadioButton;
+	private RadioButton defaultRadioButton;
+	private final ToggleGroup voiceTypeToggleGroup;
+	private GridPane voiceTypeMenu;
+	
 	public SettingsView(SettingsController controller, int width, int height) {
 		
 		GridPane mainPane = new GridPane();
-		mainPane.setVgap(height/7);
+		mainPane.setVgap(height/9);
 		mainPane.setAlignment(Pos.CENTER);
 		main = new Scene(mainPane, width, height);
 		
 		File styleFile = new File("./src/quinzical/style.css");
 		main.getStylesheets().clear();
 		main.getStylesheets().add("file:///" + styleFile.getAbsolutePath().replace("\\", "/"));
+		
+		voiceTypeToggleGroup = new ToggleGroup();
 		
 		// Initialize buttons and labels.
 		title = new Label("Settings");
@@ -50,6 +61,16 @@ public class SettingsView {
 		testLabel = new Label(controller.getTestText());
 		testButton = new Button("Test");
 		returnButton = new Button("Return");
+		
+		speechTypeLabel = new Label("Speech type: ");
+		defaultRadioButton = new RadioButton("Default voice");
+		defaultRadioButton.setToggleGroup(voiceTypeToggleGroup);
+		defaultRadioButton.setSelected(true);
+		nzMaleRadioButton = new RadioButton("NZ male voice");
+		nzMaleRadioButton.setToggleGroup(voiceTypeToggleGroup);
+		nzFemaleRadioButton = new RadioButton("NZ female voice");
+		nzFemaleRadioButton.setToggleGroup(voiceTypeToggleGroup);
+		voiceTypeMenu = new GridPane();
 		
 		// Set component sizes. and alignment
 		title.setTextAlignment(TextAlignment.CENTER);
@@ -64,20 +85,27 @@ public class SettingsView {
 		speechSpeedSlider.setPrefWidth(width/2);
 		speechSpeedLabel.setFont(new Font(height/18));
 		testLabel.setFont(new Font(height/18));
+		speechTypeLabel.setFont(new Font(height/18));
 		GridPane.setHalignment(title, HPos.CENTER);
 		GridPane.setHalignment(testLabel, HPos.LEFT);
 		GridPane.setHalignment(testButton, HPos.RIGHT);
 		GridPane.setHalignment(returnButton, HPos.CENTER);
 		testButton.setFocusTraversable(false);
 		returnButton.setFocusTraversable(false);
+		voiceTypeMenu.setHgap(width/9);
 		
 		// Add buttons and labels to the view.
+		voiceTypeMenu.add(speechTypeLabel, 0, 0);
+		voiceTypeMenu.add(defaultRadioButton, 1, 0);
+		voiceTypeMenu.add(nzMaleRadioButton, 2, 0);
+		voiceTypeMenu.add(nzFemaleRadioButton, 3, 0);
 		mainPane.add(title, 0, 0, 2, 1);
 		mainPane.add(testLabel, 0, 1);
 		mainPane.add(testButton, 1, 1);
 		mainPane.add(speechSpeedLabel, 0, 2);
 		mainPane.add(speechSpeedSlider, 1, 2);
-		mainPane.add(returnButton, 0, 3, 2, 1);
+		mainPane.add(voiceTypeMenu, 0, 3, 2, 1);
+		mainPane.add(returnButton, 0, 4, 2, 1);
 		
 		speechSpeedSlider.valueProperty().addListener(new ChangeListener<Number>() {
 
