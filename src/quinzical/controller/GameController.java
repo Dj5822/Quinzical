@@ -270,9 +270,11 @@ public class GameController {
 				return true;
 			}
 			else if (("the " + text.toLowerCase().strip()).matches(answerRegex)) {
+				currentWinning+= (questionPosition[1]+1)*100;
 				return true;
 			}
 			else if (("a " + text.toLowerCase().strip()).matches(answerRegex)) {
+				currentWinning+= (questionPosition[1]+1)*100;
 				return true;
 			}
 		}
