@@ -1,6 +1,8 @@
 package quinzical;
 
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import quinzical.controller.GameController;
 import quinzical.controller.MenuController;
@@ -14,11 +16,12 @@ import quinzical.ui.SettingsView;
 
 public class Main extends Application {
 	
-	private final int HEIGHT = 500;
-	private final int WIDTH = 1000;
-	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+		final int HEIGHT = (int) screenBounds.getHeight();
+		final int WIDTH = (int) screenBounds.getWidth();
 		
 		// Initialise controllers.
 		SceneController sceneController = new SceneController(primaryStage);

@@ -40,7 +40,7 @@ public class SettingsView {
 	public SettingsView(SettingsController controller, int width, int height) {
 		
 		GridPane mainPane = new GridPane();
-		mainPane.setVgap(height/9);
+		mainPane.setVgap(height/15);
 		mainPane.setAlignment(Pos.CENTER);
 		main = new Scene(mainPane, width, height);
 		
@@ -92,7 +92,7 @@ public class SettingsView {
 		GridPane.setHalignment(returnButton, HPos.CENTER);
 		testButton.setFocusTraversable(false);
 		returnButton.setFocusTraversable(false);
-		voiceTypeMenu.setHgap(width/9);
+		voiceTypeMenu.setHgap(width/15);
 		
 		// Add buttons and labels to the view.
 		voiceTypeMenu.add(speechTypeLabel, 0, 0);

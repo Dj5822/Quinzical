@@ -55,6 +55,7 @@ public class GameView {
 		submitButton = new Button("Submit my answer!");
 		dontKnowButton = new Button("don't know");
 		returnToMenuButton = new Button("Return to menu");
+		settingsButton = new Button("Voice speed setting");
 		for(int col=0;col<5;col++) {
 			// Creating 5 categories labels.
 			categoryLabels[col]=new Label("{Category No: "+col+"}");
@@ -68,6 +69,19 @@ public class GameView {
 			}
 		}
 		
+		// set component sizes
+		startButton.setPrefHeight(height/9);
+		submitButton.setPrefHeight(height/9);
+		dontKnowButton.setPrefHeight(height/9);
+		returnToMenuButton.setPrefHeight(height/9);
+		settingsButton.setPrefHeight(height/9);
+		
+		startButton.setPrefWidth(width/3);
+		submitButton.setPrefWidth(width/3);
+		dontKnowButton.setPrefWidth(width/3);
+		returnToMenuButton.setPrefWidth(width/3);
+		settingsButton.setPrefWidth(width/3);
+		
 		// set component visibility.
 		endingLabel.setVisible(false);
 		hintLabel.setWrapText(true);
@@ -75,9 +89,6 @@ public class GameView {
 		inputField.setVisible(false);
 		submitButton.setVisible(false);
 		dontKnowButton.setVisible(false);
-		returnToMenuButton.setPrefWidth(200);
-		settingsButton = new Button("Voice speed setting");
-		settingsButton.setPrefWidth(200);
 		startButton.setFocusTraversable(false);
 		submitButton.setFocusTraversable(false);
 		dontKnowButton.setFocusTraversable(false);
