@@ -4,6 +4,7 @@ import java.io.File;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 import quinzical.controller.GameController;
 
 /**
@@ -34,15 +36,15 @@ public class GameView {
 	private Label[] categoryLabels;
 	private Button[][] clueButtons;
 	private TextField inputField;
+	private GridPane gameGrid;
 	
 	public GameView(GameController controller, int width, int height) {
 		
 		// Setup main pane.		
 		GridPane mainPane = new GridPane();
-		mainPane.setPadding(new Insets(20,20,20,20));
 		mainPane.setAlignment(Pos.CENTER);
-		mainPane.setVgap(20);
-		mainPane.setHgap(20);
+		mainPane.setVgap(height/30);
+		gameGrid = new GridPane();
 		
 		// Initialize buttons and labels.
 		startButton = new Button("Start/Reset the game");
@@ -63,7 +65,7 @@ public class GameView {
 			for (int row=1;row<=5;row++) {
 				// Creating 5x5 grid clue buttons.
 				clueButtons[col][row-1]=new Button(Integer.toString(row*100));
-				clueButtons[col][row-1].setId(Integer.toString(10*(col)+row+1));
+				clueButtons[col][row-1].setId(Integer.toString(10*(col)+row-1));
 				clueButtons[col][row-1].setDisable(true);
 				clueButtons[col][row-1].setFocusTraversable(false);
 			}
@@ -82,6 +84,16 @@ public class GameView {
 		returnToMenuButton.setPrefWidth(width/3);
 		settingsButton.setPrefWidth(width/3);
 		
+		winningLabel.setFont(new Font(30));
+		endingLabel.setFont(new Font(30));
+		hintLabel.setFont(new Font(30));
+		
+		// Set alignmnet
+		gameGrid.setAlignment(Pos.CENTER);
+		GridPane.setHalignment(gameGrid, HPos.CENTER);
+		GridPane.setHalignment(winningLabel, HPos.CENTER);
+		GridPane.setHalignment(hintLabel, HPos.CENTER);
+		
 		// set component visibility.
 		endingLabel.setVisible(false);
 		hintLabel.setWrapText(true);
@@ -96,21 +108,27 @@ public class GameView {
 		settingsButton.setFocusTraversable(false);
 		
 		// Add buttons and labels to the view.
-		mainPane.add(startButton, 0, 0, 2, 1);
-		mainPane.add(winningLabel, 2, 0, 2, 1);
-		mainPane.add(endingLabel, 0, 2, 5, 2);
-		mainPane.add(hintLabel, 0, 7, 5, 2);
-		mainPane.add(inputField, 0, 9, 5, 1);
-		mainPane.add(submitButton, 0, 10, 2, 1);
-		mainPane.add(dontKnowButton, 2, 10, 2, 1);
-		mainPane.add(returnToMenuButton, 0, 11, 3, 1);
-		mainPane.add(settingsButton, 3, 11, 2, 1);
 		for(int col=0;col<5;col++) {
-			mainPane.add(categoryLabels[col], col, 1);
+			gameGrid.add(categoryLabels[col], col, 0);
 			for (int row=0;row<5;row++) {
-				mainPane.add(clueButtons[col][4-row], col, row+2);
+				gameGrid.add(clueButtons[col][4-row], col, row+1);
 			}
 		}
+		mainPane.add(startButton, 0, 0);
+		mainPane.add(winningLabel, 1, 0);
+		mainPane.add(gameGrid, 0, 1, 2, 1);
+		
+		mainPane.add(hintLabel, 0, 2, 2, 1);
+		//mainPane.add(endingLabel, 1, 2);
+		
+		mainPane.add(inputField, 0, 3, 2, 1);
+		
+		mainPane.add(submitButton, 0, 4);
+		mainPane.add(dontKnowButton, 1, 4);
+		
+		mainPane.add(returnToMenuButton, 0, 5);
+		mainPane.add(settingsButton, 1, 5);
+		
 		
 		main = new Scene(mainPane, width, height);
 		
