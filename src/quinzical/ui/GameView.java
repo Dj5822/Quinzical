@@ -28,6 +28,7 @@ public class GameView {
 	private Button dontKnowButton;
 	private Button returnToMenuButton;
 	private Button settingsButton;
+	private GridPane menuGrid;
 
 	private Label winningLabel;
 	private Label endingLabel;
@@ -45,6 +46,8 @@ public class GameView {
 		mainPane.setAlignment(Pos.CENTER);
 		mainPane.setVgap(height/30);
 		gameGrid = new GridPane();
+		menuGrid = new GridPane();
+		menuGrid.setStyle("-fx-background-color: white");
 		
 		// Initialize buttons and labels.
 		startButton = new Button("Start/Reset the game");
@@ -90,9 +93,11 @@ public class GameView {
 		
 		// Set alignmnet
 		gameGrid.setAlignment(Pos.CENTER);
+		menuGrid.setAlignment(Pos.CENTER);
 		GridPane.setHalignment(gameGrid, HPos.CENTER);
 		GridPane.setHalignment(winningLabel, HPos.CENTER);
 		GridPane.setHalignment(hintLabel, HPos.CENTER);
+		GridPane.setHalignment(menuGrid, HPos.CENTER);
 		
 		// set component visibility.
 		endingLabel.setVisible(false);
@@ -114,8 +119,12 @@ public class GameView {
 				gameGrid.add(clueButtons[col][4-row], col, row+1);
 			}
 		}
-		mainPane.add(startButton, 0, 0);
-		mainPane.add(winningLabel, 1, 0);
+		
+		menuGrid.add(startButton, 0, 0);
+		menuGrid.add(returnToMenuButton, 1, 0);
+		menuGrid.add(settingsButton, 2, 0);
+		
+		mainPane.add(winningLabel, 0, 0, 2, 1);
 		
 		mainPane.add(gameGrid, 0, 1, 2, 1);
 		mainPane.add(endingLabel, 0, 1, 2, 1);
@@ -127,8 +136,8 @@ public class GameView {
 		mainPane.add(submitButton, 0, 4);
 		mainPane.add(dontKnowButton, 1, 4);
 		
-		mainPane.add(returnToMenuButton, 0, 5);
-		mainPane.add(settingsButton, 1, 5);
+		mainPane.add(menuGrid, 0, 5, 2, 1);
+
 		
 		
 		main = new Scene(mainPane, width, height);
