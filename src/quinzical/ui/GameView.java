@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import quinzical.controller.GameController;
 
 /**
@@ -46,6 +47,7 @@ public class GameView {
 		mainPane.setAlignment(Pos.CENTER);
 		mainPane.setVgap(height/30);
 		gameGrid = new GridPane();
+		gameGrid.setHgap(width/20);
 		menuGrid = new GridPane();
 		menuGrid.setStyle("-fx-background-color: white");
 		
@@ -63,14 +65,20 @@ public class GameView {
 		settingsButton = new Button("Voice speed setting");
 		for(int col=0;col<5;col++) {
 			// Creating 5 categories labels.
-			categoryLabels[col]=new Label("{Category No: "+col+"}");
+			categoryLabels[col] = new Label("{Category No: "+col+"}");
 			categoryLabels[col].setMinWidth(150);
+			categoryLabels[col].setAlignment(Pos.CENTER);
+			categoryLabels[col].setTextAlignment(TextAlignment.CENTER);
+			categoryLabels[col].setFont(new Font(30));
+			GridPane.setHalignment(categoryLabels[col], HPos.CENTER);
 			for (int row=1;row<=5;row++) {
 				// Creating 5x5 grid clue buttons.
 				clueButtons[col][row-1]=new Button(Integer.toString(row*100));
 				clueButtons[col][row-1].setId(Integer.toString(10*(col)+row-1));
 				clueButtons[col][row-1].setDisable(true);
 				clueButtons[col][row-1].setFocusTraversable(false);
+				clueButtons[col][row-1].setAlignment(Pos.CENTER);
+				GridPane.setHalignment(clueButtons[col][row-1], HPos.CENTER);
 			}
 		}
 		
@@ -98,6 +106,8 @@ public class GameView {
 		GridPane.setHalignment(winningLabel, HPos.CENTER);
 		GridPane.setHalignment(hintLabel, HPos.CENTER);
 		GridPane.setHalignment(menuGrid, HPos.CENTER);
+		GridPane.setHalignment(submitButton, HPos.CENTER);
+		GridPane.setHalignment(dontKnowButton, HPos.CENTER);
 		
 		// set component visibility.
 		endingLabel.setVisible(false);
@@ -121,8 +131,8 @@ public class GameView {
 		}
 		
 		menuGrid.add(startButton, 0, 0);
-		menuGrid.add(returnToMenuButton, 1, 0);
-		menuGrid.add(settingsButton, 2, 0);
+		menuGrid.add(settingsButton, 1, 0);
+		menuGrid.add(returnToMenuButton, 2, 0);
 		
 		mainPane.add(winningLabel, 0, 0, 2, 1);
 		
