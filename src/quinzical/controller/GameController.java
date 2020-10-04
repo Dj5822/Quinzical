@@ -114,7 +114,10 @@ public class GameController {
 		VoiceTask task1 = new VoiceTask(question, settingsController.getSpeed(), settingsController.getVoiceType());
 		Thread thread1 = new Thread(task1);
 		thread1.start();
+		// For debugging purposes.
+		/*
 		System.out.println("{For test condition:"+question);
+		*/
 		for(int i=0;i<5;i++) {
 			if(i != colnum) {
 				clueButtons[i][enableButtons[i]].setDisable(true);
@@ -129,7 +132,7 @@ public class GameController {
 	public void updateQuestionComponents(Button submitButton, TextField inputField, Button dontKnowButton, Label endingLabel,Label hintLabel, GridPane gameGrid) {
 		submitButton.setVisible(false);
 		inputField.setVisible(false);
-		inputField.setText("Type your answer here: ");
+		inputField.setText("");
 		dontKnowButton.setVisible(false);
 		if(count== 25) {
 			endingLabel.setText("Congrats! All questions completed!! You have a reward of $"

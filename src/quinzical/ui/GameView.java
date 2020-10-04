@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -61,7 +63,7 @@ public class GameView {
 		hintLabel = new Label("Click one of the available buttons above to hear a clue~"); // instruction label set up
 		inputField = new TextField();
 		submitButton = new Button("Submit my answer!");
-		dontKnowButton = new Button("don't know");
+		dontKnowButton = new Button("Don't know");
 		returnToMenuButton = new Button("Return to menu");
 		settingsButton = new Button("Voice speed setting");
 		for(int col=0;col<5;col++) {
@@ -105,10 +107,6 @@ public class GameView {
 		hintLabel.setFont(new Font(30));
 		
 		// Set alignmnet
-		gameGrid.setAlignment(Pos.CENTER);
-		menuGrid.setAlignment(Pos.BOTTOM_CENTER);
-		submitButton.setAlignment(Pos.CENTER);
-		dontKnowButton.setAlignment(Pos.CENTER);
 		GridPane.setHalignment(gameGrid, HPos.CENTER);
 		GridPane.setHalignment(winningLabel, HPos.CENTER);
 		GridPane.setHalignment(hintLabel, HPos.CENTER);
@@ -116,6 +114,10 @@ public class GameView {
 		GridPane.setHalignment(submitButton, HPos.CENTER);
 		GridPane.setHalignment(dontKnowButton, HPos.CENTER);
 		GridPane.setValignment(menuGrid, VPos.BOTTOM);
+		gameGrid.setAlignment(Pos.CENTER);
+		menuGrid.setAlignment(Pos.BOTTOM_CENTER);
+		submitButton.setAlignment(Pos.CENTER);
+		dontKnowButton.setAlignment(Pos.CENTER);
 		
 		// set component visibility.
 		endingLabel.setVisible(false);
@@ -180,6 +182,15 @@ public class GameView {
 				controller.submitButtonPressed(inputField, hintLabel, clueButtons,
 						winningLabel, submitButton, dontKnowButton, endingLabel, gameGrid);
 			}
+		});
+		
+		main.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+		    public void handle(KeyEvent ke) {
+		        if (ke.getCode() == KeyCode.ENTER) {
+		        	controller.submitButtonPressed(inputField, hintLabel, clueButtons,
+							winningLabel, submitButton, dontKnowButton, endingLabel, gameGrid);
+		        }
+		    }
 		});
 		
 		dontKnowButton.setOnAction(new EventHandler<ActionEvent>() {

@@ -177,11 +177,14 @@ public class PracticeController {
 		
 		answerCount ++;
 		
-		// check if answer is correct.
+		// For debugging purposes.
+		/*
 		System.out.println("Input: " + input.toLowerCase().strip());
 		System.out.println("Answer p1: " + answer[0].toLowerCase().strip());
 		System.out.println("Answer p2: " + answer[1].toLowerCase().strip());
+		*/
 		
+		// check if answer is correct.
 		for (String potentialAnswer : answer[1].split("/")) {
 			String answerRegex = "(" + answer[0].toLowerCase().strip() + " )?" + potentialAnswer.replace(".", "").toLowerCase().strip();
 			
