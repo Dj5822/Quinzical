@@ -5,7 +5,6 @@ import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -65,7 +64,7 @@ public class GameView {
 		settingsButton = new Button("Voice speed setting");
 		for(int col=0;col<5;col++) {
 			// Creating 5 categories labels.
-			categoryLabels[col] = new Label("{Category No: "+col+"}");
+			categoryLabels[col] = new Label();
 			categoryLabels[col].setMinWidth(150);
 			categoryLabels[col].setAlignment(Pos.CENTER);
 			categoryLabels[col].setTextAlignment(TextAlignment.CENTER);

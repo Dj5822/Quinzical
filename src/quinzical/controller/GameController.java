@@ -235,7 +235,7 @@ public class GameController {
 		generateData();
 		winningLabel.setText("Current Worth: $0");
 		for(int i=0;i<5;i++) {
-			categoryLabels[i].setText("{Category No: "+i+"}");
+			categoryLabels[i].setText("");
 			for(int j=0;j<5;j++) {
 				clueButtons[i][j].setVisible(true);
 				clueButtons[i][j].setDisable(true);
