@@ -50,7 +50,8 @@ public class GameView {
 		mainPane.setVgap(height/30);
 		mainPane.setStyle("-fx-background-color: #edf4fc");
 		gameGrid = new GridPane();
-		gameGrid.setHgap(width/20);
+		gameGrid.setHgap(width/15);
+		gameGrid.setVgap(height/30);
 		menuGrid = new GridPane();
 		menuGrid.setStyle("-fx-background-color: white");
 		

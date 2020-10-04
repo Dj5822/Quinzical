@@ -46,7 +46,7 @@ public class GameController {
 		errorAlert.showAndWait();
 	}
 	
-	/*
+	/**
 	 * This method is used to regenerate all the components and send notice
 	 * for the game controller to to initialize the game data.
 	 */
@@ -57,7 +57,7 @@ public class GameController {
 		generateViews(controller,winningLabel,categoryLabels,clueButtons,endingLabel,hintLabel,inputField,submitButton,dontKnowButton,gameGrid);
 	}
 	
-	/*
+	/**
 	 * This method is used to send request to the game controller and
 	 * check if the user's answer is correct
 	 */
@@ -76,7 +76,7 @@ public class GameController {
 	
 	public void dontKnowButtonPressed(Button[][] clueButtons, Label hintLabel,
 			Button submitButton, TextField inputField, Button dontKnowButton, Label endingLabel, GridPane gameGrid) {
-		/*
+		/**
 		 * This method is used to deal with data changes when
 		 * user click dont know button.
 		 */
@@ -90,7 +90,7 @@ public class GameController {
 		updateQuestionComponents(submitButton, inputField, dontKnowButton, endingLabel,hintLabel, gameGrid);
 	}
 	
-	/*
+	/**
 	 * This method deals with the event when one of the clue
 	 * buttons are clicked. Storing the data of that question
 	 * into states.
@@ -125,7 +125,7 @@ public class GameController {
 		}
 	}
 	
-	/*
+	/**
 	 * This method is used to update the question showing label and 
 	 * visibility of submit and dont know buttons
 	 */
@@ -151,7 +151,7 @@ public class GameController {
 		}
 	}
 	
-	/*
+	/**
 	 * This method is used to generate data for a quinzical game 
 	 * and get questions from txt files.
 	 */
@@ -252,7 +252,7 @@ public class GameController {
 		submitButton.setVisible(false);
 		dontKnowButton.setVisible(false);
 	}
-	/*
+	/**
 	 * This method is used to check if the user's input is
 	 * correct corresponding to the question. Return true if
 	 * correct and false if incorrect.
@@ -279,12 +279,11 @@ public class GameController {
 		return false;
 		
 	}
-	
 	public String getCategory(int position) {
 		return categories[position];
 	}
 	
-	/*
+	/**
 	 * Used to go back to the menu scene.
 	 */
 	public void returnToMenu(GameController controller, Label winningLabel, Label[] categoryLabels,
@@ -294,7 +293,7 @@ public class GameController {
 		sceneController.changeScene("menu");
 	}
 	
-	/*
+	/**
 	 * Used to go to setting scene.
 	 */
 	public void goToSettings() {
