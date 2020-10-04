@@ -2,5 +2,9 @@
 
 Use this repo for both Assignment 3 and also your final Project (as you will be in the same team). 
 
-Be sure to update this README file to provide an easy-to-follow set of instructions on how to run your program. 
+1) right-click in the current directory.
+2) select open in terminal
+3) in the terminal, run the following:
+
+./quinzical.sh
 
