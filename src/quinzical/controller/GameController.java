@@ -67,7 +67,7 @@ public class GameController {
 			hintLabel.setText("Correct! You can now continue on the next one~");
 		}else {
 			hintLabel.setText("Wrong. The correct answer was: "+answer[1]
-			+". Click available buttons above to continue.");
+			+". You can now continue on the next one~");
 		}	
 		updateClueButtons(clueButtons);
 		winningLabel.setText("Current Worth: $"+Integer.toString(currentWinning));
@@ -86,7 +86,7 @@ public class GameController {
 			enableButtons[questionPosition[0]]++;
 		}
 		updateClueButtons(clueButtons);
-		hintLabel.setText("The correct answer was: "+answer[1]+". Click one of the available buttons above to hear a clue~");
+		hintLabel.setText("The correct answer was: "+answer[1]+". You can now continue on the next one~");
 		updateQuestionComponents(submitButton, inputField, dontKnowButton, endingLabel,hintLabel, gameGrid);
 	}
 	
@@ -110,7 +110,7 @@ public class GameController {
 		question = clues[colnum][rownum].getquestion();
 		answer = new String[2];
 		answer[0] = clues[colnum][rownum].getans_1();
-		answer[1] = clues[colnum][rownum].getans_2();		
+		answer[1] = clues[colnum][rownum].getans_2();
 		VoiceTask task1 = new VoiceTask(question, settingsController.getSpeed(), settingsController.getVoiceType());
 		Thread thread1 = new Thread(task1);
 		thread1.start();
@@ -135,10 +135,9 @@ public class GameController {
 		inputField.setText("");
 		dontKnowButton.setVisible(false);
 		if(count== 25) {
-			endingLabel.setText("Congrats! All questions completed!! You have a reward of $"
+			endingLabel.setText("Congrats! All questions completed!! You have a totoal reward of $"
 					+currentWinning+" . Click restart"
 					+" button to start a new game or return to the menu.");
-			hintLabel.setText("The correct answer was: "+answer[1]);
 			gameGrid.setVisible(false);
 			endingLabel.setVisible(true);
 		}

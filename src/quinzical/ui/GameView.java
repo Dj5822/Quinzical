@@ -117,6 +117,7 @@ public class GameView {
 		GridPane.setValignment(menuGrid, VPos.BOTTOM);
 		gameGrid.setAlignment(Pos.CENTER);
 		menuGrid.setAlignment(Pos.BOTTOM_CENTER);
+		endingLabel.setAlignment(Pos.CENTER);
 		submitButton.setAlignment(Pos.CENTER);
 		dontKnowButton.setAlignment(Pos.CENTER);
 		
