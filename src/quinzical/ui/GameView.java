@@ -165,7 +165,8 @@ public class GameView {
 		returnToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.returnToMenu();
+				controller.returnToMenu(controller, winningLabel, categoryLabels,
+						clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton, gameGrid);
 			}
 		});		
 		settingsButton.setOnAction(new EventHandler<ActionEvent>() {

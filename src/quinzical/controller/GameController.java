@@ -54,23 +54,7 @@ public class GameController {
 			Button[][] clueButtons, Label endingLabel, Label hintLabel, TextField inputField,
 			Button submitButton, Button dontKnowButton, GridPane gameGrid) {
 		generateData();
-		
-		winningLabel.setText("Current Worth: $0");
-		for(int i=0;i<5;i++) {
-			categoryLabels[i].setText(controller.getCategory(i));
-			for(int j=0;j<5;j++) {
-				clueButtons[i][j].setVisible(true);
-				clueButtons[i][j].setDisable(true);
-			}
-			clueButtons[i][0].setDisable(false);
-		}
-		endingLabel.setVisible(false);
-		gameGrid.setVisible(true);
-		hintLabel.setText("Click one of the available buttons above to hear a clue~");
-		hintLabel.setVisible(true);
-		inputField.setVisible(false);
-		submitButton.setVisible(false);
-		dontKnowButton.setVisible(false);
+		generateViews(controller,winningLabel,categoryLabels,clueButtons,endingLabel,hintLabel,inputField,submitButton,dontKnowButton,gameGrid);
 	}
 	
 	/*
@@ -225,7 +209,46 @@ public class GameController {
 			e.printStackTrace();
 		}
 	}
-	
+	public void generateViews(GameController controller, Label winningLabel, Label[] categoryLabels,
+			Button[][] clueButtons, Label endingLabel, Label hintLabel, TextField inputField,
+			Button submitButton, Button dontKnowButton, GridPane gameGrid) {
+		winningLabel.setText("Current Worth: $0");
+		for(int i=0;i<5;i++) {
+			categoryLabels[i].setText(controller.getCategory(i));
+			for(int j=0;j<5;j++) {
+				clueButtons[i][j].setVisible(true);
+				clueButtons[i][j].setDisable(true);
+			}
+			clueButtons[i][0].setDisable(false);
+		}
+		endingLabel.setVisible(false);
+		gameGrid.setVisible(true);
+		hintLabel.setText("Click one of the available buttons above to hear a clue~");
+		hintLabel.setVisible(true);
+		inputField.setVisible(false);
+		submitButton.setVisible(false);
+		dontKnowButton.setVisible(false);
+	}
+	public void initializeViews(GameController controller, Label winningLabel, Label[] categoryLabels,
+			Button[][] clueButtons, Label endingLabel, Label hintLabel, TextField inputField,
+			Button submitButton, Button dontKnowButton, GridPane gameGrid) {
+		generateData();
+		winningLabel.setText("Current Worth: $0");
+		for(int i=0;i<5;i++) {
+			categoryLabels[i].setText("{Category No: "+i+"}");
+			for(int j=0;j<5;j++) {
+				clueButtons[i][j].setVisible(true);
+				clueButtons[i][j].setDisable(true);
+			}
+		}
+		endingLabel.setVisible(false);
+		gameGrid.setVisible(true);
+		hintLabel.setText("Click one of the available buttons above to hear a clue~");
+		hintLabel.setVisible(false);
+		inputField.setVisible(false);
+		submitButton.setVisible(false);
+		dontKnowButton.setVisible(false);
+	}
 	/*
 	 * This method is used to check if the user's input is
 	 * correct corresponding to the question. Return true if
@@ -261,8 +284,10 @@ public class GameController {
 	/*
 	 * Used to go back to the menu scene.
 	 */
-	public void returnToMenu() {
-		generateData();
+	public void returnToMenu(GameController controller, Label winningLabel, Label[] categoryLabels,
+			Button[][] clueButtons, Label endingLabel, Label hintLabel, TextField inputField,
+			Button submitButton, Button dontKnowButton, GridPane gameGrid) {
+		initializeViews(controller,winningLabel,categoryLabels,clueButtons,endingLabel,hintLabel,inputField,submitButton,dontKnowButton,gameGrid);
 		sceneController.changeScene("menu");
 	}
 	
