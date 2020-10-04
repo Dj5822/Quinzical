@@ -50,7 +50,7 @@ public class MenuView {
 		// Mainpane settings.
 		mainPane.setVgap(height/15);
 		mainPane.setAlignment(Pos.CENTER);
-		mainPane.setStyle("-fx-background-color: white");
+		mainPane.setStyle("-fx-background-color: #edf4fc");
 		
 		// Title label settings.
 		title.setTextAlignment(TextAlignment.CENTER);

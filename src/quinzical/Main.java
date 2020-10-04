@@ -20,8 +20,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		
 		Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-		final int HEIGHT = (int) screenBounds.getHeight();
-		final int WIDTH = (int) screenBounds.getWidth();
+		final int HEIGHT = (int) screenBounds.getHeight()- 60;
+		final int WIDTH = (int) screenBounds.getWidth() - 80;
 		
 		// Initialise controllers.
 		SceneController sceneController = new SceneController(primaryStage);

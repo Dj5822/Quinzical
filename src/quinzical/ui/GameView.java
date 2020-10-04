@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -43,8 +44,9 @@ public class GameView {
 		
 		// Setup main pane.		
 		GridPane mainPane = new GridPane();
-		mainPane.setAlignment(Pos.CENTER);
+		mainPane.setAlignment(Pos.BOTTOM_CENTER);
 		mainPane.setVgap(height/30);
+		mainPane.setStyle("-fx-background-color: #edf4fc");
 		gameGrid = new GridPane();
 		gameGrid.setHgap(width/20);
 		menuGrid = new GridPane();
@@ -94,19 +96,26 @@ public class GameView {
 		returnToMenuButton.setPrefWidth(width/3);
 		settingsButton.setPrefWidth(width/3);
 		
+		inputField.setPrefHeight(height/9);
+		inputField.setPrefWidth(width/1.1);
+		
+		inputField.setFont(new Font(30));
 		winningLabel.setFont(new Font(30));
 		endingLabel.setFont(new Font(30));
 		hintLabel.setFont(new Font(30));
 		
 		// Set alignmnet
 		gameGrid.setAlignment(Pos.CENTER);
-		menuGrid.setAlignment(Pos.CENTER);
+		menuGrid.setAlignment(Pos.BOTTOM_CENTER);
+		submitButton.setAlignment(Pos.CENTER);
+		dontKnowButton.setAlignment(Pos.CENTER);
 		GridPane.setHalignment(gameGrid, HPos.CENTER);
 		GridPane.setHalignment(winningLabel, HPos.CENTER);
 		GridPane.setHalignment(hintLabel, HPos.CENTER);
 		GridPane.setHalignment(menuGrid, HPos.CENTER);
 		GridPane.setHalignment(submitButton, HPos.CENTER);
 		GridPane.setHalignment(dontKnowButton, HPos.CENTER);
+		GridPane.setValignment(menuGrid, VPos.BOTTOM);
 		
 		// set component visibility.
 		endingLabel.setVisible(false);

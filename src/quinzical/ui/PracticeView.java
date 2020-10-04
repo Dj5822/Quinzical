@@ -44,6 +44,7 @@ public class PracticeView {
 		GridPane categoryPane = new GridPane();
 		categoryPane.setVgap(height/30);
 		categoryPane.setAlignment(Pos.CENTER);
+		categoryPane.setStyle("-fx-background-color: #edf4fc");
 		
 		// create category pane components.
 		title = new Label("Practice View");
@@ -88,6 +89,7 @@ public class PracticeView {
 		GridPane answerPane = new GridPane();
 		answerPane.setVgap(height/30);
 		answerPane.setAlignment(Pos.CENTER);
+		answerPane.setStyle("-fx-background-color: #edf4fc");
 		
 		// create answer pane components.
 		answerText = new Text("Question");
