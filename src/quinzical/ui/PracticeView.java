@@ -106,6 +106,7 @@ public class PracticeView {
 		hintLabel.setFont(new Font(height/15));
 		answerTextBox.setPrefHeight(height/9);
 		answerTextBox.setPrefWidth(width/1.1);
+		answerTextBox.setStyle("-fx-font-size: 4em;");
 		checkAnswerButton.setPrefHeight(height/9);
 		checkAnswerButton.setPrefWidth(width/3);
 		GridPane.setHalignment(answerText, HPos.CENTER);
