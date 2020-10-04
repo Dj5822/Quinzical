@@ -11,6 +11,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 
 /**
  * This class is used to manage the game data of game mode of quinzical.
@@ -51,7 +52,7 @@ public class GameController {
 	 */
 	public void startButtonPressed(GameController controller, Label winningLabel, Label[] categoryLabels,
 			Button[][] clueButtons, Label endingLabel, Label hintLabel, TextField inputField,
-			Button submitButton, Button dontKnowButton) {
+			Button submitButton, Button dontKnowButton, GridPane gameGrid) {
 		generateData();
 		
 		winningLabel.setText("Current Worth: $0");
@@ -64,6 +65,7 @@ public class GameController {
 			clueButtons[i][0].setDisable(false);
 		}
 		endingLabel.setVisible(false);
+		gameGrid.setVisible(true);
 		hintLabel.setText("Click one of the available buttons above to hear a clue~");
 		hintLabel.setVisible(true);
 		inputField.setVisible(false);
@@ -76,7 +78,7 @@ public class GameController {
 	 * check if the user's answer is correct
 	 */
 	public void submitButtonPressed(TextField inputField, Label hintLabel, Button[][] clueButtons,
-			Label winningLabel, Button submitButton, Button dontKnowButton, Label endingLabel) {
+			Label winningLabel, Button submitButton, Button dontKnowButton, Label endingLabel, GridPane gameGrid) {
 		if(checkAnswer(inputField.getText())) {
 			hintLabel.setText("Correct! You can now continue on the next one~");
 		}else {
@@ -85,11 +87,11 @@ public class GameController {
 		}	
 		updateClueButtons(clueButtons);
 		winningLabel.setText("Current Worth: $"+Integer.toString(currentWinning));
-		updateQuestionComponents(submitButton, inputField, dontKnowButton, endingLabel);
+		updateQuestionComponents(submitButton, inputField, dontKnowButton, endingLabel, hintLabel, gameGrid);
 	}
 	
 	public void dontKnowButtonPressed(Button[][] clueButtons, Label hintLabel,
-			Button submitButton, TextField inputField, Button dontKnowButton, Label endingLabel) {
+			Button submitButton, TextField inputField, Button dontKnowButton, Label endingLabel, GridPane gameGrid) {
 		/*
 		 * This method is used to deal with data changes when
 		 * user click dont know button.
@@ -101,7 +103,7 @@ public class GameController {
 		}
 		updateClueButtons(clueButtons);
 		hintLabel.setText("The correct answer was: "+answer[1]+". Click one of the available buttons above to hear a clue~");
-		updateQuestionComponents(submitButton, inputField, dontKnowButton, endingLabel);
+		updateQuestionComponents(submitButton, inputField, dontKnowButton, endingLabel,hintLabel, gameGrid);
 	}
 	
 	/*
@@ -140,7 +142,7 @@ public class GameController {
 	 * This method is used to update the question showing label and 
 	 * visibility of submit and dont know buttons
 	 */
-	public void updateQuestionComponents(Button submitButton, TextField inputField, Button dontKnowButton, Label endingLabel) {
+	public void updateQuestionComponents(Button submitButton, TextField inputField, Button dontKnowButton, Label endingLabel,Label hintLabel, GridPane gameGrid) {
 		submitButton.setVisible(false);
 		inputField.setVisible(false);
 		inputField.setText("Type your answer here: ");
@@ -149,6 +151,8 @@ public class GameController {
 			endingLabel.setText("Congrats! All questions completed!! You have a reward of $"
 					+currentWinning+" . Click restart"
 					+" button to start a new game or return to the menu.");
+			hintLabel.setText("The correct answer was: "+answer[1]);
+			gameGrid.setVisible(false);
 			endingLabel.setVisible(true);
 		}
 	}

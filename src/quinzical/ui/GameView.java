@@ -116,10 +116,11 @@ public class GameView {
 		}
 		mainPane.add(startButton, 0, 0);
 		mainPane.add(winningLabel, 1, 0);
+		
 		mainPane.add(gameGrid, 0, 1, 2, 1);
+		mainPane.add(endingLabel, 0, 1, 2, 1);
 		
 		mainPane.add(hintLabel, 0, 2, 2, 1);
-		//mainPane.add(endingLabel, 1, 2);
 		
 		mainPane.add(inputField, 0, 3, 2, 1);
 		
@@ -142,7 +143,7 @@ public class GameView {
 			@Override
 			public void handle(ActionEvent arg0) {
 				controller.startButtonPressed(controller, winningLabel, categoryLabels,
-						clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton);
+						clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton, gameGrid);
 			}
 		});
 		
@@ -150,7 +151,7 @@ public class GameView {
 			@Override
 			public void handle(ActionEvent arg0) {
 				controller.submitButtonPressed(inputField, hintLabel, clueButtons,
-						winningLabel, submitButton, dontKnowButton, endingLabel);
+						winningLabel, submitButton, dontKnowButton, endingLabel, gameGrid);
 			}
 		});
 		
@@ -158,7 +159,7 @@ public class GameView {
 			@Override
 			public void handle(ActionEvent arg0) {
 				controller.dontKnowButtonPressed(clueButtons, hintLabel,
-						submitButton, inputField, dontKnowButton, endingLabel);
+						submitButton, inputField, dontKnowButton, endingLabel, gameGrid);
 			}
 		});		
 		returnToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
