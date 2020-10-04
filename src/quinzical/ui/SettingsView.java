@@ -122,7 +122,29 @@ public class SettingsView {
 			public void handle(ActionEvent arg0) {
 				controller.testSpeech();
 			}
-		});		
+		});
+		
+		nzMaleRadioButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.setVoiceType("nz male");
+			}
+		});
+		
+		nzFemaleRadioButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.setVoiceType("nz female");
+			}
+		});
+		
+		defaultRadioButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.setVoiceType("default");
+			}
+		});
+		
 		returnButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {

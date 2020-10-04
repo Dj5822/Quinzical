@@ -125,7 +125,7 @@ public class GameController {
 		answer = new String[2];
 		answer[0] = clues[colnum][rownum].getans_1();
 		answer[1] = clues[colnum][rownum].getans_2();		
-		VoiceTask task1 = new VoiceTask(question, settingsController.getSpeed());
+		VoiceTask task1 = new VoiceTask(question, settingsController.getSpeed(), settingsController.getVoiceType());
 		Thread thread1 = new Thread(task1);
 		thread1.start();
 		System.out.println("{For test condition:"+question);

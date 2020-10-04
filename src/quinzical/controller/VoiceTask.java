@@ -9,10 +9,12 @@ public class VoiceTask extends Task<Object> {
 	
 	private String text;
 	private double speed;
+	private String type;
 	
-	public VoiceTask(String text, double speed) {
+	public VoiceTask(String text, double speed, String type) {
 		this.text = text;
 		this.speed = speed;
+		this.type = type;
 	}
 
 	@Override
@@ -22,7 +24,15 @@ public class VoiceTask extends Task<Object> {
 			Process process = builder.start();
 			OutputStream in = process.getOutputStream();
 			PrintWriter stdin = new PrintWriter(in);
-			//stdin.println("(voice_akl_nz_jdt_diphone)");
+			if (type.equals("nz male")) {
+				stdin.println("(voice_akl_nz_jdt_diphone)");
+			}
+			else if (type.equals("nz female")) {
+				stdin.println("(voice_akl_nz_cw_cg_cg)");
+			}
+			else {
+				stdin.println("(voice_kal_diphone)");
+			}
 			stdin.println("(Parameter.set `Duration_Stretch " + 1/speed + ")");
 			stdin.println("(SayText \"" + text + "\")");
 			stdin.close();
