@@ -20,8 +20,7 @@ public class PracticeController {
 	private SceneController sceneController;
 	private SettingsController settingsController;
 	
-	private String question;
-	private String[] answer;
+	private Question question;
 	private int answerCount;
 	
 	public PracticeController(SceneController sceneController, SettingsController settingsController) {
@@ -136,17 +135,14 @@ public class PracticeController {
 			
 			if (exitStatus == 0) {				
 				String[] output = inputReader.readLine().split("[\\(\\)]", 3);
-				question = output[0];
-				answer = new String[2];
-				answer[0] = output[1];
-				answer[1] = output[2];
+				question = new Question(output[0], output[1], output[2]);
 				answerCount = 0;
 				
 				// read out the question.
-				VoiceTask task1 = new VoiceTask(question, settingsController.getSpeed(), settingsController.getVoiceType());
+				VoiceTask task1 = new VoiceTask(question.getClue(), settingsController.getSpeed(), settingsController.getVoiceType());
 				Thread thread1 = new Thread(task1);
 				thread1.start();
-				return question;
+				return question.getClue();
 			} 
 			else {
 				showErrorMessage("Failed to get a random question", errorReader.readLine());
@@ -169,7 +165,7 @@ public class PracticeController {
 	public String checkAnswer(String input) {
 		
 		String output = "";
-		String hint = "" + answer[1].charAt(1);
+		String hint = "" + question.getFirstLetterOfAnswerBack();
 		
 		if (answerCount < 0) {
 			showErrorMessage("Invalid answer count", "Answer count can not be less than 0.");
@@ -185,24 +181,13 @@ public class PracticeController {
 		*/
 		
 		// check if answer is correct.
-		for (String potentialAnswer : answer[1].split("/")) {
-			String answerRegex = "(" + answer[0].toLowerCase().strip() + " )?" + potentialAnswer.replace(".", "").toLowerCase().strip();
-			
-			if (input.toLowerCase().strip().matches(answerRegex)) {
-				output = "correct";
-			}
-			else if (("the " + input.toLowerCase().strip()).matches(answerRegex)) {
-				output = "correct";
-			}
-			else if (("a " + input.toLowerCase().strip()).matches(answerRegex)) {
-				output = "correct";
-			}
+		if (question.checkAnswerIsCorrect(input)) {
+			output = "correct";
 		}
-		
-		if (output == "") {
+		else {
 			if (answerCount >= 3) {
 				// show clue and answer if the user has no attempts remaining.
-				output = "wrong, correct answer was: " + answer[1] + "\nHint: Answer starts with " + hint;
+				output = "wrong, correct answer was: " + question.getAnswerBack() + "\nHint: Answer starts with " + hint;
 			}
 			else if (answerCount >= 2) {
 				// show clue if the user is on the third attempt.
