@@ -4,11 +4,14 @@ import java.io.BufferedReader;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Optional;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -22,19 +25,54 @@ public class GameController {
 	private SceneController sceneController;
 	private SettingsController settingsController;
 	
-	private String[] categories;
-	private Clue[][] clues;
-	private int[] enableButtons;
-	private int currentWinning;
+	// Used to store currently selected categories and clues.
+	private Category[] categories;
+	private Question currentQuestion;
+	private int colnum;
+	private int rownum;
+	private int[] enabledButtons;
 	
-	private String question;
-	private String[] answer;
-	private int[] questionPosition;
-	private int count;
+	// Used to store current winnings.
+	private int currentWinnings;
+	
+	// Used to keep track of how many questions were answered.
+	private int count = 0;
+	
+	// GUI components
+	private Label winningLabel;
+	private Label[] categoryLabels;
+	private Button[][] clueButtons;
+	private Label endingLabel;
+	private Label hintLabel;
+	private TextField inputField;
+	private Button submitButton;
+	private Button dontKnowButton;
+	private GridPane gameGrid;
 	
 	public GameController(SceneController sceneController, SettingsController settingsController) {
 		this.sceneController = sceneController;
 		this.settingsController = settingsController;
+	}
+	
+	public void setup(
+			Label winningLabel,
+			Label[] categoryLabels,
+			Button[][] clueButtons,
+			Label endingLabel,
+			Label hintLabel,
+			TextField inputField,
+			Button submitButton,
+			Button dontKnowButton,
+			GridPane gameGrid) {
+		this.winningLabel = winningLabel;
+		this.categoryLabels = categoryLabels;
+		this.clueButtons = clueButtons;
+		this.endingLabel = endingLabel;
+		this.hintLabel = hintLabel;
+		this.inputField = inputField;
+		this.submitButton = submitButton;
+		this.dontKnowButton = dontKnowButton;
+		this.gameGrid = gameGrid;
 	}
 	
 	public void showErrorMessage(String headerMessage, String contentMessage) {
@@ -50,44 +88,81 @@ public class GameController {
 	 * This method is used to regenerate all the components and send notice
 	 * for the game controller to to initialize the game data.
 	 */
-	public void startButtonPressed(GameController controller, Label winningLabel, Label[] categoryLabels,
-			Button[][] clueButtons, Label endingLabel, Label hintLabel, TextField inputField,
-			Button submitButton, Button dontKnowButton, GridPane gameGrid) {
-		generateData();
-		generateViews(controller,winningLabel,categoryLabels,clueButtons,endingLabel,hintLabel,inputField,submitButton,dontKnowButton,gameGrid);
+	public void startButtonPressed() {		
+		ButtonType yes = new ButtonType("Yes", ButtonData.YES);
+		ButtonType no = new ButtonType("No", ButtonData.CANCEL_CLOSE);
+		Alert confirmationAlert = new Alert(AlertType.CONFIRMATION, "WARNING: All your progress will be lost.", yes, no);
+		confirmationAlert.setTitle("WARNING");
+		confirmationAlert.setHeaderText("Are you sure you want to start/restart the game?");
+		confirmationAlert.setContentText("If you restart, your progress will be deleted.");
+		Optional<ButtonType> result = confirmationAlert.showAndWait();
+		
+		if (result.orElse(no) == yes) {
+			generateData();
+			generateView();
+			for(int i=0;i<5;i++) {
+				categoryLabels[i].setText(categories[i].getName());
+				clueButtons[i][0].setDisable(false);
+			}
+			endingLabel.setVisible(false);
+			gameGrid.setVisible(true);
+			hintLabel.setVisible(true);
+			inputField.setVisible(true);
+			submitButton.setVisible(true);
+			dontKnowButton.setVisible(true);
+		}
 	}
 	
 	/**
 	 * This method is used to send request to the game controller and
 	 * check if the user's answer is correct
 	 */
-	public void submitButtonPressed(TextField inputField, Label hintLabel, Button[][] clueButtons,
-			Label winningLabel, Button submitButton, Button dontKnowButton, Label endingLabel, GridPane gameGrid) {
+	public void submitButtonPressed() {	
+		count++;
+		String text;
+		
 		if(checkAnswer(inputField.getText())) {
-			hintLabel.setText("Correct! You can now continue on the next one~");
+			text = "Correct!";
 		}else {
-			hintLabel.setText("Wrong. The correct answer was: "+answer[1]
-			+". You can now continue on the next one~");
-		}	
-		updateClueButtons(clueButtons);
-		winningLabel.setText("Current Worth: $"+Integer.toString(currentWinning));
-		updateQuestionComponents(submitButton, inputField, dontKnowButton, endingLabel, hintLabel, gameGrid);
+			text = "Wrong. The correct answer was: "+ currentQuestion.getAnswerBack();
+		}
+		
+		hintLabel.setText(text);
+		VoiceTask task1 = new VoiceTask(text, settingsController.getSpeed(), settingsController.getVoiceType());
+		Thread thread1 = new Thread(task1);
+		thread1.start();
+		
+		winningLabel.setText("Current Worth: $" + Integer.toString(currentWinnings));
+		
+		updateClueButtons();
+		updateQuestionComponents();
 	}
 	
-	public void dontKnowButtonPressed(Button[][] clueButtons, Label hintLabel,
-			Button submitButton, TextField inputField, Button dontKnowButton, Label endingLabel, GridPane gameGrid) {
-		/**
-		 * This method is used to deal with data changes when
-		 * user click dont know button.
-		 */
+	/**
+	 * This method is used to deal with data changes when
+	 * user click dont know button.
+	 */
+	public void dontKnowButtonPressed() {		
 		count++;
-		//udate positions of clickable buttons
-		if(enableButtons[questionPosition[0]]<4) {
-			enableButtons[questionPosition[0]]++;
+		String text = "The correct answer was: "+ currentQuestion.getAnswerBack();
+		hintLabel.setText(text);
+		
+		VoiceTask task1 = new VoiceTask(text, settingsController.getSpeed(), settingsController.getVoiceType());
+		Thread thread1 = new Thread(task1);
+		thread1.start();
+		
+		updateClueButtons();		
+		updateQuestionComponents();
+	}
+	
+	private void updateClueButtons() {
+		clueButtons[colnum][rownum].setVisible(false);
+		if (enabledButtons[colnum] < 4) {
+			enabledButtons[colnum]++;
 		}
-		updateClueButtons(clueButtons);
-		hintLabel.setText("The correct answer was: "+answer[1]+". You can now continue on the next one~");
-		updateQuestionComponents(submitButton, inputField, dontKnowButton, endingLabel,hintLabel, gameGrid);
+		for(int i=0;i<5;i++) {
+			clueButtons[i][enabledButtons[i]].setDisable(false);
+		}
 	}
 	
 	/**
@@ -95,59 +170,97 @@ public class GameController {
 	 * buttons are clicked. Storing the data of that question
 	 * into states.
 	 */
-	public void clueButtonPressed(ActionEvent arg0, Label hintLabel, TextField inputField, Button submitButton,
-			Button dontKnowButton, Button[][] clueButtons) {
-		hintLabel.setText("You can click the button if you want to listen to it again.");
-		Button x =(Button)arg0.getSource();
-		int colnum = (Integer.parseInt(x.getId())/10);
-		int rownum = (Integer.parseInt(x.getId())%10);
+	public void clueButtonPressed(ActionEvent arg0) {
+	
+		hintLabel.setText("To listen to the clue again, click the clue button.");
+		
+		// used to get the position of the clicked clue.
+		Button x =(Button) arg0.getSource();
+		colnum = (Integer.parseInt(x.getId())/10);
+		rownum = (Integer.parseInt(x.getId())%10);
+		
+		// set current question.
+		currentQuestion = categories[colnum].getQuestion(rownum);
+		
+		// read out the question.
+		VoiceTask task1 = new VoiceTask(currentQuestion.getClue(), settingsController.getSpeed(), settingsController.getVoiceType());
+		Thread thread1 = new Thread(task1);
+		thread1.start();
+		
+		// set component visibility.
+		for(int i=0;i<5;i++) {
+			if(i != colnum) {
+				clueButtons[i][enabledButtons[i]].setDisable(true);
+			}
+		}
 		inputField.setVisible(true);
 		submitButton.setVisible(true);
 		dontKnowButton.setVisible(true);
-		questionPosition = new int[2];
-		questionPosition[0] = colnum;
-		questionPosition[1] = rownum;
-		question = clues[colnum][rownum].getquestion();
-		answer = new String[2];
-		answer[0] = clues[colnum][rownum].getans_1();
-		answer[1] = clues[colnum][rownum].getans_2();
-		VoiceTask task1 = new VoiceTask(question, settingsController.getSpeed(), settingsController.getVoiceType());
-		Thread thread1 = new Thread(task1);
-		thread1.start();
-		// For debugging purposes.
-		/*
-		System.out.println("{For test condition:"+question);
-		*/
-		for(int i=0;i<5;i++) {
-			if(i != colnum) {
-				clueButtons[i][enableButtons[i]].setDisable(true);
-			}
+	}
+	
+	/**
+	 * Used to go back to the menu scene.
+	 * Resets the gameview.
+	 */
+	public void returnToMenu() {
+		ButtonType yes = new ButtonType("Yes", ButtonData.YES);
+		ButtonType no = new ButtonType("No", ButtonData.CANCEL_CLOSE);
+		Alert confirmationAlert = new Alert(AlertType.CONFIRMATION, "WARNING: All your progress will be lost.", yes, no);
+		confirmationAlert.setTitle("WARNING");
+		confirmationAlert.setHeaderText("All game progress will be reset");
+		Optional<ButtonType> result = confirmationAlert.showAndWait();
+		
+		if (result.orElse(no) == yes) {
+			generateView();
+			sceneController.changeScene("menu");
 		}
+	}
+	
+	/**
+	 * Used to go to setting scene.
+	 */
+	public void goToSettings() {
+		sceneController.changeScene("settings");
 	}
 	
 	/**
 	 * This method is used to update the question showing label and 
 	 * visibility of submit and dont know buttons
 	 */
-	public void updateQuestionComponents(Button submitButton, TextField inputField, Button dontKnowButton, Label endingLabel,Label hintLabel, GridPane gameGrid) {
+	public void updateQuestionComponents() {
 		submitButton.setVisible(false);
 		inputField.setVisible(false);
-		inputField.setText("");
 		dontKnowButton.setVisible(false);
-		if(count== 25) {
+		inputField.setText("");
+		
+		if(count == 25) {
 			endingLabel.setText("Congrats! All questions completed!! You have a totoal reward of $"
-					+currentWinning+" . Click restart"
+					+currentWinnings+" . Click restart."
 					+" button to start a new game or return to the menu.");
 			gameGrid.setVisible(false);
 			endingLabel.setVisible(true);
 		}
 	}
 	
-	public void updateClueButtons(Button[][] clueButtons) {
-		clueButtons[questionPosition[0]][questionPosition[1]].setVisible(false);
+	/**
+	 * Resets all GUI components in the game view.
+	 */
+	public void generateView() {
+		winningLabel.setText("Current Worth: $0");
+		hintLabel.setText("Click one of the available buttons above to hear a clue~");
 		for(int i=0;i<5;i++) {
-			clueButtons[i][enableButtons[i]].setDisable(false);
+			categoryLabels[i].setText("");
+			for(int j=0;j<5;j++) {
+				clueButtons[i][j].setVisible(true);
+				clueButtons[i][j].setDisable(true);
+			}
 		}
+		endingLabel.setVisible(false);
+		gameGrid.setVisible(true);
+		hintLabel.setVisible(false);
+		inputField.setVisible(false);
+		submitButton.setVisible(false);
+		dontKnowButton.setVisible(false);
 	}
 	
 	/**
@@ -155,11 +268,13 @@ public class GameController {
 	 * and get questions from txt files.
 	 */
 	public void generateData() {
-		categories = new String[5];
-		clues = new Clue[5][5];
-		enableButtons = new int[] {0,0,0,0,0};
-		currentWinning = 0;
-		count=0;
+		categories = new Category[5];
+		enabledButtons = new int[5];
+		for (int i=0; i<5; i++) {
+			enabledButtons[i] = 0;
+		}
+		
+		currentWinnings = 0;
 		try {
 			//select 5 random categories
 			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "ls categories | shuf -n 5");			
@@ -170,13 +285,12 @@ public class GameController {
 			BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
 			int exitStatus = process.waitFor();
 			
-			// If there is no error in the command, then output the result.
 			if (exitStatus == 0) {
 				String line;
 				int i = 0;
 				while ((line = inputReader.readLine()) != null) {
-					String[] catname = line.split("\\.",2);
-			        categories[i]=catname[0];
+					String[] categoryName = line.split("\\.",2);
+			        categories[i] = new Category(categoryName[0]);
 			        i++;
 				}
 			} 
@@ -184,120 +298,24 @@ public class GameController {
 				showErrorMessage("Failed to get categories", errorReader.readLine());
 			}
 			process.destroy();
+			
 			//for each categories select 5 random questions
-			for(int catno=0;catno<5;catno++) {
-				ProcessBuilder qbuilder = new ProcessBuilder("bash", "-c", "./scripts/get5RandomQuestion.sh \"" + categories[catno] + "\"");
-				Process qprocess = qbuilder.start();
-				InputStream qinputStream = qprocess.getInputStream();
-				InputStream qerrorStream = qprocess.getErrorStream();
-				BufferedReader qinputReader = new BufferedReader(new InputStreamReader(qinputStream));
-				BufferedReader qerrorReader = new BufferedReader(new InputStreamReader(qerrorStream));
-				int qexitStatus = qprocess.waitFor();			
-				if (qexitStatus == 0) {
-					String line;
-					int qsno=0;
-					while ((line = qinputReader.readLine()) != null) {
-						String[] output = line.split("[\\(\\)]", 3);
-						clues[catno][qsno] = new Clue(output[0],output[1],output[2]);
-						qsno++;
-					}	
-				} 
-				else {
-					showErrorMessage("Failed to get a random question", qerrorReader.readLine());
-				}
-				qprocess.destroy();
+			for(Category category: categories) {
+				category.selectQuestions(this);
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public void generateViews(GameController controller, Label winningLabel, Label[] categoryLabels,
-			Button[][] clueButtons, Label endingLabel, Label hintLabel, TextField inputField,
-			Button submitButton, Button dontKnowButton, GridPane gameGrid) {
-		winningLabel.setText("Current Worth: $0");
-		for(int i=0;i<5;i++) {
-			categoryLabels[i].setText(controller.getCategory(i));
-			for(int j=0;j<5;j++) {
-				clueButtons[i][j].setVisible(true);
-				clueButtons[i][j].setDisable(true);
-			}
-			clueButtons[i][0].setDisable(false);
-		}
-		endingLabel.setVisible(false);
-		gameGrid.setVisible(true);
-		hintLabel.setText("Click one of the available buttons above to hear a clue~");
-		hintLabel.setVisible(true);
-		inputField.setVisible(false);
-		submitButton.setVisible(false);
-		dontKnowButton.setVisible(false);
-	}
-	public void initializeViews(GameController controller, Label winningLabel, Label[] categoryLabels,
-			Button[][] clueButtons, Label endingLabel, Label hintLabel, TextField inputField,
-			Button submitButton, Button dontKnowButton, GridPane gameGrid) {
-		generateData();
-		winningLabel.setText("Current Worth: $0");
-		for(int i=0;i<5;i++) {
-			categoryLabels[i].setText("");
-			for(int j=0;j<5;j++) {
-				clueButtons[i][j].setVisible(true);
-				clueButtons[i][j].setDisable(true);
-			}
-		}
-		endingLabel.setVisible(false);
-		gameGrid.setVisible(true);
-		hintLabel.setText("Click one of the available buttons above to hear a clue~");
-		hintLabel.setVisible(false);
-		inputField.setVisible(false);
-		submitButton.setVisible(false);
-		dontKnowButton.setVisible(false);
-	}
+	
 	/**
 	 * This method is used to check if the user's input is
 	 * correct corresponding to the question. Return true if
 	 * correct and false if incorrect.
 	 */
 	public boolean checkAnswer(String text) {
-		count++;
-		if(enableButtons[questionPosition[0]]<4) {
-			enableButtons[questionPosition[0]]++;
-		}
-		for (String potentialAnswer : answer[1].split("/")) {
-			String answerRegex = "(" + answer[0].toLowerCase().strip() + " )?" + potentialAnswer.replace(".", "").toLowerCase().strip();
-			
-			if (text.toLowerCase().strip().matches(answerRegex)) {
-				currentWinning+= (questionPosition[1]+1)*100;
-				return true;
-			}
-			else if (("the " + text.toLowerCase().strip()).matches(answerRegex)) {
-				currentWinning+= (questionPosition[1]+1)*100;
-				return true;
-			}
-			else if (("a " + text.toLowerCase().strip()).matches(answerRegex)) {
-				currentWinning+= (questionPosition[1]+1)*100;
-				return true;
-			}
-		}
-		return false;
+		return currentQuestion.checkAnswerIsCorrect(text);
 		
-	}
-	public String getCategory(int position) {
-		return categories[position];
-	}
-	
-	/**
-	 * Used to go back to the menu scene.
-	 */
-	public void returnToMenu(GameController controller, Label winningLabel, Label[] categoryLabels,
-			Button[][] clueButtons, Label endingLabel, Label hintLabel, TextField inputField,
-			Button submitButton, Button dontKnowButton, GridPane gameGrid) {
-		initializeViews(controller,winningLabel,categoryLabels,clueButtons,endingLabel,hintLabel,inputField,submitButton,dontKnowButton,gameGrid);
-		sceneController.changeScene("menu");
-	}
-	
-	/**
-	 * Used to go to setting scene.
-	 */
-	public void goToSettings() {
-		sceneController.changeScene("settings");
 	}
 }

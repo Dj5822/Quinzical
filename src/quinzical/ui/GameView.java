@@ -11,8 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -42,8 +40,7 @@ public class GameView {
 	private TextField inputField;
 	private GridPane gameGrid;
 	
-	public GameView(GameController controller, int width, int height) {
-		
+	public GameView(GameController controller, int width, int height) {		
 		// Setup main pane.		
 		GridPane mainPane = new GridPane();
 		mainPane.setAlignment(Pos.BOTTOM_CENTER);
@@ -61,7 +58,7 @@ public class GameView {
 		categoryLabels= new Label[5] ;
 		clueButtons = new Button[5][5];
 		endingLabel = new Label(""); // label to notify the user all questions are completed
-		hintLabel = new Label("Click one of the available buttons above to hear a clue~"); // instruction label set up
+		hintLabel = new Label("Click one of the available buttons above to hear a clue."); // instruction label set up
 		inputField = new TextField();
 		submitButton = new Button("Submit my answer!");
 		dontKnowButton = new Button("Don't know");
@@ -139,6 +136,7 @@ public class GameView {
 			gameGrid.add(categoryLabels[col], col, 0);
 			for (int row=0;row<5;row++) {
 				gameGrid.add(clueButtons[col][4-row], col, row+1);
+				clueButtons[col][row].setFocusTraversable(false);
 			}
 		}
 		
@@ -159,8 +157,6 @@ public class GameView {
 		mainPane.add(dontKnowButton, 1, 4);
 		
 		mainPane.add(menuGrid, 0, 5, 2, 1);
-
-		
 		
 		main = new Scene(mainPane, width, height);
 		
@@ -169,44 +165,33 @@ public class GameView {
 		main.getStylesheets().clear();
 		main.getStylesheets().add("file:///" + styleFile.getAbsolutePath().replace("\\", "/"));
 		
+		controller.setup(winningLabel, categoryLabels, clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton, mainPane);
+		
 		// Button functionality
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.startButtonPressed(controller, winningLabel, categoryLabels,
-						clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton, gameGrid);
+				controller.startButtonPressed();
 			}
 		});
 		
 		submitButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.submitButtonPressed(inputField, hintLabel, clueButtons,
-						winningLabel, submitButton, dontKnowButton, endingLabel, gameGrid);
+				controller.submitButtonPressed();
 			}
-		});
-		
-		main.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-		    public void handle(KeyEvent ke) {
-		        if (ke.getCode() == KeyCode.ENTER) {
-		        	controller.submitButtonPressed(inputField, hintLabel, clueButtons,
-							winningLabel, submitButton, dontKnowButton, endingLabel, gameGrid);
-		        }
-		    }
 		});
 		
 		dontKnowButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.dontKnowButtonPressed(clueButtons, hintLabel,
-						submitButton, inputField, dontKnowButton, endingLabel, gameGrid);
+				controller.dontKnowButtonPressed();
 			}
 		});		
 		returnToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.returnToMenu(controller, winningLabel, categoryLabels,
-						clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton, gameGrid);
+				controller.returnToMenu();
 			}
 		});		
 		settingsButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -222,8 +207,7 @@ public class GameView {
 				clueButtons[colindex][rowindex].setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent arg0) {
-						controller.clueButtonPressed(arg0, 
-								hintLabel, inputField, submitButton, dontKnowButton, clueButtons);
+						controller.clueButtonPressed(arg0);
 					}
 				});		
 			}

@@ -130,28 +130,27 @@ public class PracticeView {
 		main.getStylesheets().clear();
 		main.getStylesheets().add("file:///" + styleFile.getAbsolutePath().replace("\\", "/"));
 		
+		controller.setup(main, answerPane, categoryPane, categoryCB, answerText, answerTextBox, hintLabel, checkAnswerButton);
+		
 		// Button functionality.
 		showQuestionButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.showQuestion(controller, main, answerPane, categoryCB, answerText,
-						answerTextBox, hintLabel, checkAnswerButton);
+				controller.showQuestion();
 			}
 		});
 		
 		checkAnswerButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.submitAnswer(controller, main, categoryPane,
-						checkAnswerButton, hintLabel, answerTextBox, categoryCB);
+				controller.submitAnswer();
 			}
 		});
 		
 		main.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 		    public void handle(KeyEvent ke) {
 		        if (ke.getCode() == KeyCode.ENTER) {
-		        	controller.submitAnswer(controller, main, categoryPane,
-							checkAnswerButton, hintLabel, answerTextBox, categoryCB);
+		        	controller.submitAnswer();
 		        }
 		    }
 		});

@@ -23,9 +23,37 @@ public class PracticeController {
 	private Question question;
 	private int answerCount;
 	
+	// GUI components
+	private Scene main;
+	private GridPane answerPane;
+	private GridPane categoryPane;
+	private ComboBox<String> categoryCB;
+	private Text answerText;
+	private TextArea answerTextBox;
+	private Label hintLabel;
+	private Button checkAnswerButton;
+	
 	public PracticeController(SceneController sceneController, SettingsController settingsController) {
 		this.sceneController = sceneController;
 		this.settingsController = settingsController;
+	}
+	
+	public void setup(Scene main,
+	GridPane answerPane,
+	GridPane categoryPane,
+	ComboBox<String> categoryCB,
+	Text answerText,
+	TextArea answerTextBox,
+	Label hintLabel,
+	Button checkAnswerButton) {
+		this.main = main;
+		this.answerPane = answerPane;
+		this.categoryPane = categoryPane;
+		this.categoryCB = categoryCB;
+		this.answerText = answerText;
+		this.answerTextBox = answerTextBox;
+		this.hintLabel = hintLabel;
+		this.checkAnswerButton = checkAnswerButton;
 	}
 	
 	/**
@@ -42,11 +70,9 @@ public class PracticeController {
 		errorAlert.showAndWait();
 	}
 	
-	public void showQuestion(PracticeController controller, Scene main, GridPane answerPane, 
-			ComboBox<String> categoryCB, Text answerText, TextArea answerTextBox, Label hintLabel, 
-			Button checkAnswerButton) {
+	public void showQuestion() {
 		if (categoryCB.getValue() == null) {
-			controller.showErrorMessage("You must select a category", "Please select a category from the combobox.");
+			showErrorMessage("You must select a category", "Please select a category from the combobox.");
 		}
 		else {
 			answerText.setText(getQuestion(categoryCB.getValue().toString()));
@@ -58,14 +84,12 @@ public class PracticeController {
 		}
 	}
 	
-	public void submitAnswer(PracticeController controller, Scene main, GridPane categoryPane,
-			Button checkAnswerButton, Label hintLabel, TextArea answerTextBox, 
-			ComboBox<String> categoryCB) {
+	public void submitAnswer() {
 		if (checkAnswerButton.getText() == "Check Answer") {
-			hintLabel.setText(controller.checkAnswer(answerTextBox.getText()));
+			hintLabel.setText(checkAnswer(answerTextBox.getText()));
 			answerTextBox.clear();
 			
-			if (controller.getAnswerCount() >= 3 | hintLabel.getText() == "correct") {
+			if (getAnswerCount() >= 3 | hintLabel.getText() == "correct") {
 				answerTextBox.setVisible(false);
 				categoryCB.getSelectionModel().clearSelection();
 				checkAnswerButton.setText("Return");
