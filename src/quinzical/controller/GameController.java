@@ -17,7 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
 /**
- * This class is used to manage the game data of game mode of quinzical.
+ * This class is used to manage the game data of game mode.
  * Contains methods to update,get and set data of the game.
  */
 public class GameController {
@@ -48,6 +48,8 @@ public class GameController {
 	private Button submitButton;
 	private Button dontKnowButton;
 	private GridPane gameGrid;
+	
+	private VoiceTask currentVoiceTask;
 	
 	public GameController(SceneController sceneController, SettingsController settingsController) {
 		this.sceneController = sceneController;
@@ -128,9 +130,9 @@ public class GameController {
 		}
 		
 		hintLabel.setText(text);
-		VoiceTask task1 = new VoiceTask(text, settingsController.getSpeed(), settingsController.getVoiceType());
-		Thread thread1 = new Thread(task1);
-		thread1.start();
+		
+		
+		playVoice(text);
 		
 		winningLabel.setText("Current Worth: $" + Integer.toString(currentWinnings));
 		
@@ -140,16 +142,14 @@ public class GameController {
 	
 	/**
 	 * This method is used to deal with data changes when
-	 * user click dont know button.
+	 * user click don't know button.
 	 */
 	public void dontKnowButtonPressed() {		
 		count++;
 		String text = "The correct answer was: "+ currentQuestion.getAnswerBack();
 		hintLabel.setText(text);
 		
-		VoiceTask task1 = new VoiceTask(text, settingsController.getSpeed(), settingsController.getVoiceType());
-		Thread thread1 = new Thread(task1);
-		thread1.start();
+		playVoice(text);
 		
 		updateClueButtons();		
 		updateQuestionComponents();
@@ -182,10 +182,7 @@ public class GameController {
 		// set current question.
 		currentQuestion = categories[colnum].getQuestion(rownum);
 		
-		// read out the question.
-		VoiceTask task1 = new VoiceTask(currentQuestion.getClue(), settingsController.getSpeed(), settingsController.getVoiceType());
-		Thread thread1 = new Thread(task1);
-		thread1.start();
+		playVoice(currentQuestion.getClue());
 		
 		// set component visibility.
 		for(int i=0;i<5;i++) {
@@ -200,7 +197,7 @@ public class GameController {
 	
 	/**
 	 * Used to go back to the menu scene.
-	 * Resets the gameview.
+	 * Resets the game view.
 	 */
 	public void returnToMenu() {
 		ButtonType yes = new ButtonType("Yes", ButtonData.YES);
@@ -225,16 +222,16 @@ public class GameController {
 	
 	/**
 	 * This method is used to update the question showing label and 
-	 * visibility of submit and dont know buttons
+	 * visibility of submit and don't know buttons
 	 */
-	public void updateQuestionComponents() {
+	private void updateQuestionComponents() {
 		submitButton.setVisible(false);
 		inputField.setVisible(false);
 		dontKnowButton.setVisible(false);
 		inputField.setText("");
 		
 		if(count == 25) {
-			endingLabel.setText("Congrats! All questions completed!! You have a totoal reward of $"
+			endingLabel.setText("Congrats! All questions completed!! You have a total reward of $"
 					+currentWinnings+" . Click restart."
 					+" button to start a new game or return to the menu.");
 			gameGrid.setVisible(false);
@@ -245,7 +242,7 @@ public class GameController {
 	/**
 	 * Resets all GUI components in the game view.
 	 */
-	public void generateView() {
+	private void generateView() {
 		winningLabel.setText("Current Worth: $0");
 		hintLabel.setText("Click one of the available buttons above to hear a clue~");
 		for(int i=0;i<5;i++) {
@@ -264,10 +261,10 @@ public class GameController {
 	}
 	
 	/**
-	 * This method is used to generate data for a quinzical game 
-	 * and get questions from txt files.
+	 * This method is used to generate game data
+	 * and get questions from text files.
 	 */
-	public void generateData() {
+	private void generateData() {
 		categories = new Category[5];
 		enabledButtons = new int[5];
 		for (int i=0; i<5; i++) {
@@ -314,8 +311,13 @@ public class GameController {
 	 * correct corresponding to the question. Return true if
 	 * correct and false if incorrect.
 	 */
-	public boolean checkAnswer(String text) {
+	private boolean checkAnswer(String text) {
 		return currentQuestion.checkAnswerIsCorrect(text);
-		
+	}
+	
+	private void playVoice(String text) {
+		currentVoiceTask = new VoiceTask(text, settingsController.getSpeed(), settingsController.getVoiceType());
+		Thread thread1 = new Thread(currentVoiceTask);
+		thread1.start();
 	}
 }
