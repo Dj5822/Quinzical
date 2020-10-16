@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Optional;
 
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -51,12 +54,17 @@ public class GameController {
 	
 	private VoiceTask currentVoiceTask;
 	
+	private Scene gameScene;
+	private GridPane selectionPane;
+	
 	public GameController(SceneController sceneController, SettingsController settingsController) {
 		this.sceneController = sceneController;
 		this.settingsController = settingsController;
 	}
 	
 	public void setup(
+			Scene gameScene,
+			GridPane selectionPane,
 			Label winningLabel,
 			Label[] categoryLabels,
 			Button[][] clueButtons,
@@ -66,6 +74,8 @@ public class GameController {
 			Button submitButton,
 			Button dontKnowButton,
 			GridPane gameGrid) {
+		this.gameScene = gameScene;
+		this.selectionPane = selectionPane;
 		this.winningLabel = winningLabel;
 		this.categoryLabels = categoryLabels;
 		this.clueButtons = clueButtons;
@@ -208,6 +218,7 @@ public class GameController {
 		Optional<ButtonType> result = confirmationAlert.showAndWait();
 		
 		if (result.orElse(no) == yes) {
+			gameScene.setRoot(selectionPane);
 			generateView();
 			sceneController.changeScene("menu");
 		}
@@ -315,9 +326,9 @@ public class GameController {
 		return currentQuestion.checkAnswerIsCorrect(text);
 	}
 	
-	private void playVoice(String text) {
+	private void playVoice(String text) {		
 		currentVoiceTask = new VoiceTask(text, settingsController.getSpeed(), settingsController.getVoiceType());
-		Thread thread1 = new Thread(currentVoiceTask);
-		thread1.start();
+		Thread voiceThread = new Thread(currentVoiceTask);
+		voiceThread.start();
 	}
 }
