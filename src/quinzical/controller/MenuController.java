@@ -30,6 +30,12 @@ public class MenuController {
 	}	
 	
 	/**
+	 * Switches the scene to database scene.
+	 */
+	public void showDatabaseView() {
+		sceneController.changeScene("database");
+	}
+	/**
 	 * Ends the game.
 	 */
 	public void quitGame() {

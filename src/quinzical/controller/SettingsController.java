@@ -39,10 +39,11 @@ public class SettingsController {
 		return speed;
 	}
 	
-	/**
-	 * Used to go back to the previous scene.
-	 */
-	public void returnToLastScene() {
-		sceneController.returnToPreviousScene();
+	public void returnToMenu() {
+		sceneController.changeScene("menu");
+	}
+
+	public void switchToDatabase() {
+		sceneController.changeScene("database");
 	}
 }
