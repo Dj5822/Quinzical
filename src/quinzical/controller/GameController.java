@@ -256,34 +256,16 @@ public class GameController {
 		endingLabel.setVisible(true);
 		
 		try {
-			//select 5 random categories
 			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "echo true > gamedata/internationalUnlocked");			
 			Process process = builder.start();
-			InputStream inputStream = process.getInputStream();
 			InputStream errorStream = process.getErrorStream();
-			BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));
 			BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
 			int exitStatus = process.waitFor();
 			
-			if (exitStatus == 0) {
-				String line;
-				int i = 0;
-				while ((line = inputReader.readLine()) != null) {
-					String[] categoryName = line.split("\\.",2);
-			        categories[i] = new Category(categoryName[0]);
-			        i++;
-				}
-			} 
-			else {
+			if (exitStatus != 0) {
 				showErrorMessage("Failed to unlock international mode", errorReader.readLine());
 			}
-			process.destroy();
-			
-			//for each categories select 5 random questions
-			for(Category category: categories) {
-				category.selectQuestions(this);
-			}
-			
+			process.destroy();			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
