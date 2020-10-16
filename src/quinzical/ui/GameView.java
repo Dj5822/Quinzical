@@ -54,7 +54,7 @@ public class GameView {
 		
 		main = new Scene(selectionPane, width, height);
 		
-		controller.setup(main, selectionPane, winningLabel, categoryLabels, clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton, mainPane);
+		controller.setup(main, selectionPane, winningLabel, categoryLabels, clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton, gameGrid);
 
 		// Makes everything look prettier.
 		File styleFile = new File("./src/quinzical/style.css");

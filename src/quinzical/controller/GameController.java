@@ -1,7 +1,8 @@
 package quinzical.controller;
 
 import java.io.BufferedReader;
-
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -242,11 +243,49 @@ public class GameController {
 		inputField.setText("");
 		
 		if(count == 25) {
-			endingLabel.setText("Congrats! All questions completed!! You have a total reward of $"
-					+currentWinnings+" . Click restart."
-					+" button to start a new game or return to the menu.");
-			gameGrid.setVisible(false);
-			endingLabel.setVisible(true);
+			gameComplete();
+		}
+	}
+	
+	private void gameComplete() {
+		endingLabel.setText("Congrats! All questions completed!! You have a total reward of $"
+				+currentWinnings+".\n Click restart to play again.\n"
+				+ " You have unlocked international mode!"
+				+" button to start a new game or return to the menu.");
+		gameGrid.setVisible(false);
+		endingLabel.setVisible(true);
+		
+		try {
+			//select 5 random categories
+			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "echo true > gamedata/internationalUnlocked");			
+			Process process = builder.start();
+			InputStream inputStream = process.getInputStream();
+			InputStream errorStream = process.getErrorStream();
+			BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));
+			BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
+			int exitStatus = process.waitFor();
+			
+			if (exitStatus == 0) {
+				String line;
+				int i = 0;
+				while ((line = inputReader.readLine()) != null) {
+					String[] categoryName = line.split("\\.",2);
+			        categories[i] = new Category(categoryName[0]);
+			        i++;
+				}
+			} 
+			else {
+				showErrorMessage("Failed to unlock international mode", errorReader.readLine());
+			}
+			process.destroy();
+			
+			//for each categories select 5 random questions
+			for(Category category: categories) {
+				category.selectQuestions(this);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -315,6 +354,25 @@ public class GameController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		try {
+			//generate gameData
+			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "./scripts/generateGameData.sh");			
+			Process process = builder.start();
+			InputStream errorStream = process.getErrorStream();
+			BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
+			int exitStatus = process.waitFor();
+			
+			if (exitStatus != 0) {
+				showErrorMessage("Failed to generate gamedata", errorReader.readLine());
+			}
+			process.destroy();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	/**
