@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -26,6 +27,8 @@ public class DatabaseView {
 	private ObservableList<String> categoryOptions;
 	private ComboBox<String> categoryCB;
 	private Button showButton;
+	private ListView listView;
+	private Button addButton,modifyButton,deleteButton;
 	private Button returnButton;
 
 	public DatabaseView(DatabaseController controller, int width, int height) {
@@ -44,28 +47,48 @@ public class DatabaseView {
 		controller.updateCategoryOptions(categoryOptions);
 		categoryCB = new ComboBox<String>(categoryOptions);
 		showButton = new Button ("Show data");
+		listView = new ListView();
+		addButton = new Button("add");
+		modifyButton = new Button("modify");
+		deleteButton = new Button("delete");
 		returnButton = new Button("Return");
 		
 		CBLabel.setTextAlignment(TextAlignment.CENTER);
 		CBLabel.setAlignment(Pos.CENTER);
-		CBLabel.setFont(new Font(height/18));
+		CBLabel.setFont(new Font(height/20));
 		CBLabel.setPadding(new Insets(0, width/20, 0, width/20));
-		categoryCB.setPrefHeight(height/12);
+		categoryCB.setPrefHeight(height/20);
 		categoryCB.setPrefWidth(width/4);
-		showButton.setPrefHeight(height/12);
+		showButton.setPrefHeight(height/20);
 		showButton.setPrefWidth(width/4);
-		returnButton.setPrefHeight(height/12);
+		listView.setPrefHeight(height/2);
+		listView.setPrefWidth(width);
+		addButton.setPrefHeight(height/20);
+		addButton.setPrefWidth(width/4);
+		modifyButton.setPrefHeight(height/20);
+		modifyButton.setPrefWidth(width/4);
+		deleteButton.setPrefHeight(height/20);
+		deleteButton.setPrefWidth(width/4);
+		returnButton.setPrefHeight(height/20);
 		returnButton.setPrefWidth(width/4);
 		
 		GridPane.setHalignment(CBLabel, HPos.CENTER);
 		GridPane.setHalignment(categoryCB, HPos.CENTER);
 		GridPane.setHalignment(showButton, HPos.CENTER);
+		GridPane.setHalignment(listView, HPos.CENTER);
+		GridPane.setHalignment(addButton, HPos.CENTER);
+		GridPane.setHalignment(modifyButton, HPos.CENTER);
+		GridPane.setHalignment(deleteButton, HPos.CENTER);
 		GridPane.setHalignment(returnButton, HPos.CENTER);
 		
-		mainPane.add(CBLabel, 0, 0, 2, 1);
+		mainPane.add(CBLabel, 0, 0, 3, 1);
 		mainPane.add(categoryCB, 0, 1);
-		mainPane.add(showButton, 1, 1);
-		mainPane.add(returnButton, 0, 4, 2, 1);
+		mainPane.add(showButton, 1, 1);	
+		mainPane.add(listView, 0, 2, 3, 1);
+		mainPane.add(addButton, 0, 3);
+		mainPane.add(modifyButton, 1, 3);
+		mainPane.add(deleteButton, 2, 3);
+		mainPane.add(returnButton, 0, 4, 3, 1);
 		
 		returnButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
