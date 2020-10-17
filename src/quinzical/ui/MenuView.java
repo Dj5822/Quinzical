@@ -26,6 +26,7 @@ public class MenuView {
 	private Button settingsButton;
 	private Button databaseButton;
 	private Button resetButton;
+	private Button helpButton;
 	private Button quitButton;
 	
 	public MenuView(MenuController controller, int width, int height) {
@@ -51,6 +52,7 @@ public class MenuView {
 		settingsButton = new Button("Settings");
 		databaseButton = new Button("Edit questions");
 		resetButton = new Button("Reset");
+		helpButton = new Button("Help");
 		quitButton = new Button("Quit");
 		
 		// Mainpane settings.
@@ -71,6 +73,7 @@ public class MenuView {
 		settingsButton.setPrefHeight(BUTTONHEIGHT);
 		databaseButton.setPrefHeight(BUTTONHEIGHT);
 		resetButton.setPrefHeight(BUTTONHEIGHT);
+		helpButton.setPrefHeight(BUTTONHEIGHT);
 		quitButton.setPrefHeight(BUTTONHEIGHT);
 		practiceButton.setPrefWidth(BUTTONWIDTH);
 		gameButton.setPrefWidth(BUTTONWIDTH);
@@ -78,6 +81,7 @@ public class MenuView {
 		settingsButton.setPrefWidth(BUTTONWIDTH);
 		databaseButton.setPrefWidth(BUTTONWIDTH);
 		resetButton.setPrefWidth(BUTTONWIDTH);
+		helpButton.setPrefWidth(BUTTONWIDTH);
 		quitButton.setPrefWidth(BUTTONWIDTH);
 		practiceButton.setFocusTraversable(false);
 		gameButton.setFocusTraversable(false);
@@ -85,6 +89,7 @@ public class MenuView {
 		settingsButton.setFocusTraversable(false);
 		databaseButton.setFocusTraversable(false);
 		resetButton.setFocusTraversable(false);
+		helpButton.setFocusTraversable(false);
 		quitButton.setFocusTraversable(false);
 		
 		// Add buttons and labels to the menubar.
@@ -94,7 +99,8 @@ public class MenuView {
 		menuBar.add(settingsButton, 3, 0);
 		menuBar.add(databaseButton, 0, 1);
 		menuBar.add(resetButton, 1, 1);
-		menuBar.add(quitButton, 2, 1);
+		menuBar.add(helpButton, 2, 1);
+		menuBar.add(quitButton, 3, 1);
 		
 		// add compoments to mainpane.
 		mainPane.add(title, 0, 0);
@@ -142,6 +148,13 @@ public class MenuView {
 			@Override
 			public void handle(ActionEvent arg0) {
 				controller.resetGame();
+			}
+		});
+		
+		helpButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.showHelpView();
 			}
 		});
 

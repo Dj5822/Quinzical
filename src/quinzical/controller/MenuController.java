@@ -63,6 +63,10 @@ public class MenuController {
 		sceneController.changeScene("database");
 	}
 	
+	public void showHelpView() {
+		sceneController.changeScene("help");
+	}
+	
 	public void resetGame() {
 		ButtonType yes = new ButtonType("Yes", ButtonData.YES);
 		ButtonType no = new ButtonType("No", ButtonData.CANCEL_CLOSE);

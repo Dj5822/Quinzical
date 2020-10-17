@@ -6,6 +6,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import quinzical.controller.DatabaseController;
 import quinzical.controller.GameController;
+import quinzical.controller.HelpController;
 import quinzical.controller.LeaderboardController;
 import quinzical.controller.MenuController;
 import quinzical.controller.PracticeController;
@@ -13,6 +14,7 @@ import quinzical.controller.SceneController;
 import quinzical.controller.SettingsController;
 import quinzical.ui.DatabaseView;
 import quinzical.ui.GameView;
+import quinzical.ui.HelpView;
 import quinzical.ui.LeaderboardView;
 import quinzical.ui.MenuView;
 import quinzical.ui.PracticeView;
@@ -35,6 +37,7 @@ public class Main extends Application {
 		DatabaseController databaseController = new DatabaseController(sceneController);
 		GameController gameController = new GameController(sceneController, settingsController, leaderboardController);
 		PracticeController practiceController = new PracticeController(sceneController, settingsController);
+		HelpController helpController = new HelpController(sceneController);
 		
 		// Initialise views.
 		MenuView menuView = new MenuView(menuController, WIDTH, HEIGHT);
@@ -43,6 +46,7 @@ public class Main extends Application {
 		LeaderboardView leaderboardView = new LeaderboardView(leaderboardController, WIDTH, HEIGHT);
 		SettingsView settingsView = new SettingsView(settingsController, WIDTH, HEIGHT);
 		DatabaseView databaseView = new DatabaseView(databaseController, WIDTH, HEIGHT);
+		HelpView helpView = new HelpView(helpController, WIDTH, HEIGHT);
 		
 		// Add scenes to scene controller.
 		sceneController.addScene("menu", menuView.getScene());
@@ -51,6 +55,7 @@ public class Main extends Application {
 		sceneController.addScene("leaderboard", leaderboardView.getScene());
 		sceneController.addScene("settings", settingsView.getScene());
 		sceneController.addScene("database",databaseView.getScene());
+		sceneController.addScene("help", helpView.getScene());
 		
 		// Start at the menu.
 		primaryStage.setTitle("Quinzical");
