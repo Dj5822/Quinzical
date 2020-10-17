@@ -56,8 +56,13 @@ public class GameController {
 	private VoiceTask currentVoiceTask;
 	
 	private Scene gameScene;
+	private GridPane gamePane;
 	private GridPane selectionPane;
 	private GridPane namePane;
+	
+	private TextField nameTextbox;
+	private String username;
+	private String gameMode;
 	
 	public GameController(SceneController sceneController, SettingsController settingsController) {
 		this.sceneController = sceneController;
@@ -66,8 +71,10 @@ public class GameController {
 	
 	public void setup(
 			Scene gameScene,
+			GridPane gamePane,
 			GridPane selectionPane,
 			GridPane namePane,
+			TextField nameTextbox,
 			Label winningLabel,
 			Label[] categoryLabels,
 			Button[][] clueButtons,
@@ -78,8 +85,10 @@ public class GameController {
 			Button dontKnowButton,
 			GridPane gameGrid) {
 		this.gameScene = gameScene;
+		this.gamePane = gamePane;
 		this.selectionPane = selectionPane;
 		this.namePane = namePane;
+		this.nameTextbox = nameTextbox;
 		this.winningLabel = winningLabel;
 		this.categoryLabels = categoryLabels;
 		this.clueButtons = clueButtons;
@@ -101,15 +110,18 @@ public class GameController {
 	}
 	
 	public void nzButtonPressed() {
+		gameMode = "nz";
 		gameScene.setRoot(namePane);
 	}
 	
 	public void internationalButtonPressed() {
+		gameMode = "international";
 		gameScene.setRoot(namePane);
 	}
 	
 	public void submitName() {
-		
+		username = nameTextbox.getText();
+		gameScene.setRoot(gamePane);
 	}
 	
 	/**

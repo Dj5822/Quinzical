@@ -60,7 +60,7 @@ public class GameView {
 		
 		main = new Scene(selectionPane, width, height);
 		
-		controller.setup(main, selectionPane, namePane, winningLabel, categoryLabels, clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton, gameGrid);
+		controller.setup(main, mainPane, selectionPane, namePane, nameTextbox, winningLabel, categoryLabels, clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton, gameGrid);
 
 		// Makes everything look prettier.
 		File styleFile = new File("./src/quinzical/style.css");
