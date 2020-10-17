@@ -4,12 +4,14 @@ import java.io.File;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import quinzical.controller.HelpController;
@@ -29,6 +31,8 @@ public class HelpView {
 		// setup main pane
 		mainPane = new GridPane();
 		mainPane.setAlignment(Pos.CENTER);
+		mainPane.setVgap(height/15);
+		mainPane.setStyle("-fx-background-color: #edf4fc");
 		helpScene = new Scene(mainPane, width, height);
 		File styleFile = new File("./src/quinzical/style.css");
 		helpScene.getStylesheets().clear();
@@ -36,12 +40,25 @@ public class HelpView {
 		
 		// setup components
 		title = new Label("Help");
+		returnToMenuButton = new Button("Return to Menu");
+		
+		// headers
 		Text practiceHeader = new Text("Practice mode\n");
-        Text gameHeader = new Text("Game mode\n");
-        Text leaderboardHeader = new Text("Leaderboard\n");
-        Text settingsHeader = new Text("Settings\n");
-        Text databaseHeader = new Text("Add Questions\n");
-        Text resetHeader = new Text("Reset\n");
+        Text gameHeader = new Text("\n\nGame mode\n");
+        Text leaderboardHeader = new Text("\n\nLeaderboard\n");
+        Text settingsHeader = new Text("\n\nSettings\n");
+        Text databaseHeader = new Text("\n\nAdd Questions\n");
+        Text resetHeader = new Text("\n\nReset\n");
+        
+        // set header style
+        practiceHeader.setStyle("-fx-font-size: " + height/20 + "; -fx-fill: #6a718d;");
+		gameHeader.setStyle("-fx-font-size: " + height/20 + "; -fx-fill: #6a718d;");
+		leaderboardHeader.setStyle("-fx-font-size: " + height/20 + "; -fx-fill: #6a718d;");
+		settingsHeader.setStyle("-fx-font-size: " + height/20 + "; -fx-fill: #6a718d;");
+		databaseHeader.setStyle("-fx-font-size: " + height/20 + "; -fx-fill: #6a718d;");
+		resetHeader.setStyle("-fx-font-size: " + height/20 + "; -fx-fill: #6a718d;");
+        
+        // NOTE: move this text to text file later.
         Text practiceBody = new Text("You can enter practice mode by pressing 'Practice' in the menu.\n"
         		+ "After that, select a category from the combobox that you want to practice.\n"
         		+ "You get three tries to get the answer right. If you get it wrong twice, you are shown a clue.\n"
@@ -72,17 +89,31 @@ public class HelpView {
         		+ "You can test the voice by pressing the 'Test' button.\n");
         Text databaseBody = new Text("This is where you can add, delete, and modify questions.\n");
         Text resetBody = new Text("This is where you can reset the game.\n"
-        		+ "Reseting the game will clear the leaderboard and will also lock international mode until you complete 2 categories in NZ mode again.");
-        practiceHeader.setStyle("-fx-font-size: " + height/20 + "; -fx-fill: #6a718d;");
-		gameHeader.setStyle("-fx-font-size: " + height/20 + "; -fx-fill: #6a718d;");
-		leaderboardHeader.setStyle("-fx-font-size: " + height/20 + "; -fx-fill: #6a718d;");
-		settingsHeader.setStyle("-fx-font-size: " + height/20 + "; -fx-fill: #6a718d;");
-		databaseHeader.setStyle("-fx-font-size: " + height/20 + "; -fx-fill: #6a718d;");
-		resetHeader.setStyle("-fx-font-size: " + height/20 + "; -fx-fill: #6a718d;");
+        		+ "Reseting the game will clear the leaderboard and will also lock international mode\n "
+        		+ "until you complete 2 categories in NZ mode again.");
+        
+        // set body style
+        practiceBody.setStyle("-fx-font-size: " + height/40 + ";");
+		gameBody.setStyle("-fx-font-size: " + height/40 + ";");
+		leaderboardBody.setStyle("-fx-font-size: " + height/40 + "; ");
+		settingsBody.setStyle("-fx-font-size: " + height/40 + ";");
+		databaseBody.setStyle("-fx-font-size: " + height/40 + ";");
+		resetBody.setStyle("-fx-font-size: " + height/40 + ";");
+
+		// add text to the body.
 		body = new TextFlow(practiceHeader, practiceBody, gameHeader, gameBody, leaderboardHeader, leaderboardBody,
 				settingsHeader, settingsBody, databaseHeader, databaseBody, resetHeader, resetBody);
-		returnToMenuButton = new Button("Return to Menu");
 		bodyPane = new ScrollPane(body);
+		
+		// resize and align components.
+		title.setFont(new Font(height/9));
+		bodyPane.setPrefWidth(width/1.1);
+		bodyPane.setPrefHeight(height/2);
+		returnToMenuButton.setPrefHeight(height/9);
+		returnToMenuButton.setPrefWidth(width/5);
+		GridPane.setHalignment(title, HPos.CENTER);
+		GridPane.setHalignment(returnToMenuButton, HPos.CENTER);
+		returnToMenuButton.setFocusTraversable(false);
 		
 		// add components to the main pane.
 		mainPane.add(title, 0, 0);
