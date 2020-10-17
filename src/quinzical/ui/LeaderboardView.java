@@ -11,15 +11,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import quinzical.controller.LeaderboardController;
+import quinzical.controller.LeaderboardItem;
 
 public class LeaderboardView {
 	private Scene main;
 	
 	private Label title;
-	private ListView<String> leaderboard;
-	private ObservableList<String> leaderboardList;
+	private TableView<LeaderboardItem> leaderboard;
 	private Button returnToMenuButton;
 	
 	public LeaderboardView(LeaderboardController controller, int width, int height) {
@@ -32,14 +35,17 @@ public class LeaderboardView {
 		main.getStylesheets().clear();
 		main.getStylesheets().add("file:///" + styleFile.getAbsolutePath().replace("\\", "/"));
 		
-		
 		// generate leaderboard components.
 		title = new Label("Leaderboard");
-		leaderboardList = FXCollections.observableArrayList();
-		leaderboard = new ListView<String>(leaderboardList);
-		controller.setupLeaderboard(leaderboardList);
-		controller.updateLeaderboard();
 		returnToMenuButton = new Button("Return to Menu");
+		
+		leaderboard = new TableView<LeaderboardItem>();
+		TableColumn<LeaderboardItem, String> nameColumn = new TableColumn<LeaderboardItem, String>("Username");
+		nameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+		TableColumn<LeaderboardItem, String> scoreColumn = new TableColumn<LeaderboardItem, String>("Score");
+		scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
+		leaderboard.getColumns().addAll(nameColumn, scoreColumn);
+		leaderboard.getItems().add(new LeaderboardItem("test", "1000"));
 		
 		// add components to the pane.
 		mainPane.add(title, 0, 0);

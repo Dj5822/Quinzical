@@ -73,6 +73,7 @@ public class MenuView {
 		quitButton.setPrefWidth(BUTTONWIDTH);
 		practiceButton.setFocusTraversable(false);
 		gameButton.setFocusTraversable(false);
+		leaderboardButton.setFocusTraversable(false);
 		settingsButton.setFocusTraversable(false);
 		quitButton.setFocusTraversable(false);
 		
