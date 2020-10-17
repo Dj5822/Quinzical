@@ -22,6 +22,7 @@ public class MenuView {
 	private Label title;
 	private Button practiceButton;
 	private Button gameButton;
+	private Button leaderboardButton;
 	private Button settingsButton;
 	private Button quitButton;
 	
@@ -44,6 +45,7 @@ public class MenuView {
 		menuBar = new GridPane();
 		practiceButton = new Button("Practice");
 		gameButton = new Button("Play Game");
+		leaderboardButton = new Button("Leaderboard");
 		settingsButton = new Button("Settings");
 		quitButton = new Button("Quit");
 		
@@ -61,10 +63,12 @@ public class MenuView {
 		// Button sizes.
 		practiceButton.setPrefHeight(BUTTONHEIGHT);
 		gameButton.setPrefHeight(BUTTONHEIGHT);
+		leaderboardButton.setPrefHeight(BUTTONHEIGHT);
 		settingsButton.setPrefHeight(BUTTONHEIGHT);
 		quitButton.setPrefHeight(BUTTONHEIGHT);
 		practiceButton.setPrefWidth(BUTTONWIDTH);
 		gameButton.setPrefWidth(BUTTONWIDTH);
+		leaderboardButton.setPrefWidth(BUTTONWIDTH);
 		settingsButton.setPrefWidth(BUTTONWIDTH);
 		quitButton.setPrefWidth(BUTTONWIDTH);
 		practiceButton.setFocusTraversable(false);
@@ -75,8 +79,9 @@ public class MenuView {
 		// Add buttons and labels to the menubar.
 		menuBar.add(practiceButton, 0, 0);
 		menuBar.add(gameButton, 1, 0);
-		menuBar.add(settingsButton, 2, 0);
-		menuBar.add(quitButton, 3, 0);
+		menuBar.add(leaderboardButton, 2, 0);
+		menuBar.add(settingsButton, 3, 0);
+		menuBar.add(quitButton, 4, 0);
 		
 		// add compoments to mainpane.
 		mainPane.add(title, 0, 0);
@@ -95,6 +100,13 @@ public class MenuView {
 			@Override
 			public void handle(ActionEvent arg0) {
 				controller.showGameView();
+			}
+		});
+		
+		leaderboardButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.showLeaderBoardView();
 			}
 		});
 		

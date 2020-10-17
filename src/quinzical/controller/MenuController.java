@@ -22,6 +22,11 @@ public class MenuController {
 		sceneController.changeScene("practice");
 	}
 	
+	
+	public void showLeaderBoardView() {
+		sceneController.changeScene("leaderboard");
+	}
+	
 	/**
 	 * Switches the scene to the settings scene.
 	 */
