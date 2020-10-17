@@ -148,7 +148,7 @@ public class PracticeController {
 	public String getQuestion(String category) {
 		
 		try {
-			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "./scripts/getRandomQuestion.sh \"" + category + "\"");
+			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "./scripts/getRandomQuestion.sh nz/\"" + category + "\"");
 			
 			Process process = builder.start();
 			InputStream inputStream = process.getInputStream();

@@ -397,7 +397,7 @@ public class GameController {
 		currentWinnings = 0;
 		try {
 			//select 5 random categories
-			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "ls categories | shuf -n 5");			
+			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "ls categories/" + gameMode + " | shuf -n 5");			
 			Process process = builder.start();
 			InputStream inputStream = process.getInputStream();
 			InputStream errorStream = process.getErrorStream();
@@ -421,7 +421,7 @@ public class GameController {
 			
 			//for each categories select 5 random questions
 			for(Category category: categories) {
-				category.selectQuestions(this);
+				category.selectQuestions(this, gameMode);
 			}
 			
 		} catch (Exception e) {

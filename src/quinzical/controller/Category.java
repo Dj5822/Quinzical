@@ -26,9 +26,9 @@ public class Category {
 		this.questions = new ArrayList<Question>();
 	}
 	
-	public void selectQuestions(GameController controller) {
+	public void selectQuestions(GameController controller, String gameMode) {
 		try {
-			ProcessBuilder qbuilder = new ProcessBuilder("bash", "-c", "./scripts/get5RandomQuestion.sh \"" + name + "\"");
+			ProcessBuilder qbuilder = new ProcessBuilder("bash", "-c", "./scripts/get5RandomQuestion.sh \"" + name + "\" " + gameMode);
 			Process qprocess = qbuilder.start();
 			InputStream qinputStream = qprocess.getInputStream();
 			InputStream qerrorStream = qprocess.getErrorStream();
