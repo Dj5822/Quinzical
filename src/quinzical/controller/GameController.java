@@ -393,6 +393,7 @@ public class GameController {
 			enabledButtons[i] = 0;
 		}
 		
+		completedCategories = 0;
 		currentWinnings = 0;
 		try {
 			//select 5 random categories
