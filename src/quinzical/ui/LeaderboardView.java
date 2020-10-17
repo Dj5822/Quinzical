@@ -30,6 +30,7 @@ public class LeaderboardView {
 		GridPane mainPane = new GridPane();
 		mainPane.setAlignment(Pos.CENTER);
 		mainPane.setVgap(height/15);
+		mainPane.setStyle("-fx-background-color: #edf4fc");
 		main = new Scene(mainPane, width, height);
 		File styleFile = new File("./src/quinzical/style.css");
 		main.getStylesheets().clear();

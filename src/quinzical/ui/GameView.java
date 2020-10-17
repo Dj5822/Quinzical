@@ -73,6 +73,7 @@ public class GameView {
 		selectionPane = new GridPane();
 		selectionPane.setAlignment(Pos.CENTER);
 		selectionPane.setVgap(height/15);
+		selectionPane.setStyle("-fx-background-color: #edf4fc");
 		
 		// components.
 		gameSelectionLabel = new Label("Please select game mode");
@@ -285,6 +286,7 @@ public class GameView {
 		namePane = new GridPane();
 		namePane.setAlignment(Pos.CENTER);
 		namePane.setVgap(height/15);
+		namePane.setStyle("-fx-background-color: #edf4fc");
 		
 		// initialise components.
 		nameLabel = new Label("Enter your name: ");
