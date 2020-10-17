@@ -1,6 +1,9 @@
 package quinzical.ui;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,14 +13,18 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import quinzical.controller.DatabaseController;
+import quinzical.controller.LeaderboardItem;
 
 public class DatabaseView {
 	
@@ -30,6 +37,18 @@ public class DatabaseView {
 	private ListView listView;
 	private Button addButton,modifyButton,deleteButton;
 	private Button returnButton;
+	
+	private Label title;
+	private Label typeLabel;
+	private Label typeInput;
+	private Label clueLabel;
+	private TextField clueInput;
+	private Label answerFrontLabel;
+	private TextField answerFrontInput;
+	private Label answerBackLabel;
+	private TextField answerBackInput;
+	private Button confirmButton;
+	private Button cancelButton;
 
 	public DatabaseView(DatabaseController controller, int width, int height) {
 		GridPane mainPane = new GridPane();
@@ -81,6 +100,10 @@ public class DatabaseView {
 		GridPane.setHalignment(deleteButton, HPos.CENTER);
 		GridPane.setHalignment(returnButton, HPos.CENTER);
 		
+		addButton.setVisible(false);
+		modifyButton.setVisible(false);
+		deleteButton.setVisible(false);
+		
 		mainPane.add(CBLabel, 0, 0, 3, 1);
 		mainPane.add(categoryCB, 0, 1);
 		mainPane.add(showButton, 1, 1);	
@@ -90,14 +113,85 @@ public class DatabaseView {
 		mainPane.add(deleteButton, 2, 3);
 		mainPane.add(returnButton, 0, 4, 3, 1);
 		
+		GridPane modifyPane = new GridPane();
+		modifyPane.setVgap(height/15);
+		modifyPane.setAlignment(Pos.CENTER);
+		modifyPane.setStyle("-fx-background-color: #edf4fc");
+		
+		title = new Label("Add / Modify a question.");
+		typeLabel = new Label("Operation type: ");
+		typeInput = new Label("");
+		clueLabel = new Label("Clue: ");
+		clueInput = new TextField("");
+		answerFrontLabel = new Label("Front part of answer: ");
+		answerFrontInput = new TextField("");
+		answerBackLabel = new Label("Back part of answer: ");
+		answerBackInput = new TextField("");
+		confirmButton = new Button ("Confirm");
+		cancelButton = new Button ("Cancel");
+		
+		typeInput.setDisable(false);
+			
+		modifyPane.add(title, 0, 0, 2, 1);
+		modifyPane.add(typeLabel, 0, 1);
+		modifyPane.add(typeInput, 1, 1);
+		modifyPane.add(clueLabel, 0, 2);
+		modifyPane.add(clueInput, 1, 2);
+		modifyPane.add(answerFrontLabel, 0, 3);
+		modifyPane.add(answerFrontInput, 1, 3);
+		modifyPane.add(answerBackLabel, 0, 4);
+		modifyPane.add(answerBackInput, 1, 4);
+		modifyPane.add(confirmButton, 0, 5);
+		modifyPane.add(cancelButton, 1, 5);
+		
+		controller.setup(main, mainPane, modifyPane, categoryCB, listView, typeInput, 
+				clueInput, answerFrontInput, answerBackInput);
+		showButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				addButton.setVisible(true);
+				modifyButton.setVisible(true);
+				deleteButton.setVisible(true);
+				controller.updateListView(categoryCB.getValue().toString());
+			}
+		});
+		addButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.addQuestion();
+			}
+		});
+		modifyButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.modifyQuestion();
+			}
+		});
+		deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.deleteQuestion();
+			}
+		});
 		returnButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				controller.returnToLastScene();
 			}
-		});		
+		});
+		confirmButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.confirmModification();
+			}
+		});
+		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.cancelModification();
+			}
+		});
 	}
-	
 	public Scene getScene() {
 		return main;
 	}
