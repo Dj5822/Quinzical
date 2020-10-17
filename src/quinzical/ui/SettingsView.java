@@ -28,7 +28,6 @@ public class SettingsView {
 	private Slider speechSpeedSlider;
 	private Label testLabel;
 	private Button testButton;
-	private Button databaseButton;
 	private Button returnButton;
 	
 	private Label speechTypeLabel;
@@ -62,7 +61,6 @@ public class SettingsView {
 		speechSpeedSlider.setBlockIncrement(0.1f);
 		testLabel = new Label(controller.getTestText());
 		testButton = new Button("Test");
-		databaseButton = new Button("Manage Database");
 		returnButton = new Button("Return");
 		
 		speechTypeLabel = new Label("Speech type: ");
@@ -83,8 +81,6 @@ public class SettingsView {
 		title.setFont(new Font(height/9));
 		testButton.setPrefHeight(height/9);
 		testButton.setPrefWidth(width/3);
-		databaseButton.setPrefHeight(height/9);
-		databaseButton.setPrefWidth(width/3);
 		returnButton.setPrefHeight(height/9);
 		returnButton.setPrefWidth(width/3);
 		speechSpeedSlider.setPrefWidth(width/2);
@@ -94,10 +90,8 @@ public class SettingsView {
 		GridPane.setHalignment(title, HPos.CENTER);
 		GridPane.setHalignment(testLabel, HPos.LEFT);
 		GridPane.setHalignment(testButton, HPos.RIGHT);
-		GridPane.setHalignment(databaseButton, HPos.CENTER);
 		GridPane.setHalignment(returnButton, HPos.CENTER);
 		testButton.setFocusTraversable(false);
-		databaseButton.setFocusTraversable(false);
 		returnButton.setFocusTraversable(false);
 		voiceTypeMenu.setHgap(width/15);
 		
@@ -112,8 +106,7 @@ public class SettingsView {
 		mainPane.add(speechSpeedLabel, 0, 2);
 		mainPane.add(speechSpeedSlider, 1, 2);
 		mainPane.add(voiceTypeMenu, 0, 3, 2, 1);
-		mainPane.add(databaseButton, 0, 4, 1, 1);
-		mainPane.add(returnButton, 1, 4, 2, 1);
+		mainPane.add(returnButton, 0, 4, 2, 1);
 		
 		speechSpeedSlider.valueProperty().addListener(new ChangeListener<Number>() {
 
@@ -152,16 +145,11 @@ public class SettingsView {
 				controller.setVoiceType("default");
 			}
 		});
-		databaseButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				controller.switchToDatabase();
-			}
-		});		
+		
 		returnButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.returnToMenu();
+				controller.returnToPreviousScreen();
 			}
 		});		
 	}

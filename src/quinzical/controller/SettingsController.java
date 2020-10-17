@@ -39,11 +39,7 @@ public class SettingsController {
 		return speed;
 	}
 	
-	public void returnToMenu() {
-		sceneController.changeScene("menu");
-	}
-
-	public void switchToDatabase() {
-		sceneController.changeScene("database");
+	public void returnToPreviousScreen() {
+		sceneController.returnToPreviousScene();
 	}
 }
