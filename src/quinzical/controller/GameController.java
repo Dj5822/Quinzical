@@ -28,6 +28,7 @@ public class GameController {
 	
 	private SceneController sceneController;
 	private SettingsController settingsController;
+	private LeaderboardController leaderboardController;
 	
 	// Used to store currently selected categories and clues.
 	private Category[] categories;
@@ -64,9 +65,10 @@ public class GameController {
 	private String username;
 	private String gameMode;
 	
-	public GameController(SceneController sceneController, SettingsController settingsController) {
+	public GameController(SceneController sceneController, SettingsController settingsController, LeaderboardController leaderboardController) {
 		this.sceneController = sceneController;
 		this.settingsController = settingsController;
+		this.leaderboardController = leaderboardController;
 	}
 	
 	public void setup(
@@ -120,7 +122,7 @@ public class GameController {
 	}
 	
 	public void submitName() {
-		username = nameTextbox.getText();
+		username = nameTextbox.getText().replace(" ", "");
 		gameScene.setRoot(gamePane);
 	}
 	
@@ -163,6 +165,7 @@ public class GameController {
 		
 		if(checkAnswer(inputField.getText())) {
 			text = "Correct!";
+			currentWinnings = Integer.parseInt(clueButtons[colnum][rownum].getText());
 		}else {
 			text = "Wrong. The correct answer was: "+ currentQuestion.getAnswerBack();
 		}
@@ -296,6 +299,8 @@ public class GameController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		leaderboardController.addToLeaderboard(username, currentWinnings);
 	}
 	
 	/**

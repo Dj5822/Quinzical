@@ -32,9 +32,9 @@ public class Main extends Application {
 		MenuController menuController = new MenuController(sceneController);
 		SettingsController settingsController = new SettingsController(sceneController);
 		DatabaseController databaseController = new DatabaseController(sceneController);
-		GameController gameController = new GameController(sceneController, settingsController);
-		PracticeController practiceController = new PracticeController(sceneController, settingsController);
 		LeaderboardController leaderboardController = new LeaderboardController(sceneController);
+		GameController gameController = new GameController(sceneController, settingsController, leaderboardController);
+		PracticeController practiceController = new PracticeController(sceneController, settingsController);
 		
 		// Initialise views.
 		MenuView menuView = new MenuView(menuController, WIDTH, HEIGHT);

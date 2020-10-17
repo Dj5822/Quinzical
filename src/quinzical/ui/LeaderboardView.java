@@ -42,10 +42,14 @@ public class LeaderboardView {
 		leaderboard = new TableView<LeaderboardItem>();
 		TableColumn<LeaderboardItem, String> nameColumn = new TableColumn<LeaderboardItem, String>("Username");
 		nameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
-		TableColumn<LeaderboardItem, String> scoreColumn = new TableColumn<LeaderboardItem, String>("Score");
+		TableColumn<LeaderboardItem, Integer> scoreColumn = new TableColumn<LeaderboardItem, Integer>("Score");
 		scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
+		scoreColumn.setSortType(TableColumn.SortType.DESCENDING);
+		leaderboard.getSortOrder().add(scoreColumn);
 		leaderboard.getColumns().addAll(nameColumn, scoreColumn);
-		leaderboard.getItems().add(new LeaderboardItem("test", "1000"));
+		
+		controller.setupLeaderboard(leaderboard);
+		controller.initialiseLeaderboard();
 		
 		// add components to the pane.
 		mainPane.add(title, 0, 0);

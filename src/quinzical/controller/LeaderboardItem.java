@@ -3,9 +3,9 @@ package quinzical.controller;
 public class LeaderboardItem {
 	
 	private String username;
-	private String score;
+	private int score;
 	
-	public LeaderboardItem(String username, String score) {
+	public LeaderboardItem(String username, int score) {
 		this.username = username;
 		this.score = score;
 	}
@@ -18,11 +18,11 @@ public class LeaderboardItem {
 		this.username = username;
 	}
 	
-	public String getScore() {
+	public int getScore() {
 		return score;
 	}
 	
-	public void setScore(String score) {
+	public void setScore(int score) {
 		this.score = score;
 	}
 }

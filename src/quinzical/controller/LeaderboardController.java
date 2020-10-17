@@ -1,27 +1,33 @@
 package quinzical.controller;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
 import javafx.scene.control.Alert.AlertType;
 
 public class LeaderboardController {
 	
 	SceneController sceneController;
+	TableView<LeaderboardItem> leaderboard;
+	
 	
 	public LeaderboardController(SceneController sceneController) {
 		this.sceneController = sceneController;
 	}
 	
-	public void setupLeaderboard() {
-		
+	public void setupLeaderboard(TableView<LeaderboardItem> leaderboard) {
+		this.leaderboard = leaderboard;
 	}
 	
-	public void updateLeaderboard() {
+	public void initialiseLeaderboard() {
 		try {
 			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "cat gamedata/leaderboard");
 			
@@ -37,7 +43,9 @@ public class LeaderboardController {
 				String line;
 				
 				while ((line = inputReader.readLine()) != null) {
-					System.out.println(line);
+					String[] lineArr = line.split(" ");
+					leaderboard.getItems().add(new LeaderboardItem(lineArr[0], Integer.parseInt(lineArr[1])));
+					leaderboard.sort();
 				}
 			} 
 			else {
@@ -51,6 +59,30 @@ public class LeaderboardController {
 			
 			process.destroy();
 			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addToLeaderboard(String name, int score) {	
+		try {
+			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "echo \"" + name + " " + score + "\" >> ./gamedata/leaderboard");
+			leaderboard.getItems().add(new LeaderboardItem(name, score));
+			leaderboard.sort();
+			Process process = builder.start();
+			InputStream errorStream = process.getErrorStream();
+			BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
+			int exitStatus = process.waitFor();
+			
+			// If there is no error in the command, then output the result.
+			if (exitStatus != 0) {
+				Alert errorAlert = new Alert(AlertType.ERROR);
+				errorAlert.setTitle("Error encountered");
+				errorAlert.setHeaderText("Failed to add leaderboard data");
+				errorAlert.setContentText(errorReader.readLine());
+				errorAlert.showAndWait();
+			}
+			process.destroy();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
