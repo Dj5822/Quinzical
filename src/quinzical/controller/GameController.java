@@ -112,9 +112,40 @@ public class GameController {
 		gameScene.setRoot(namePane);
 	}
 	
-	public void internationalButtonPressed() {
-		gameMode = "international";
-		gameScene.setRoot(namePane);
+	/**
+	 * Check if international is unlocked, if it is unlocked, then
+	 * set the game mode to international.
+	 */
+	public void internationalButtonPressed() {		
+		String output = "false";
+		
+		try {
+			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "cat gamedata/internationalUnlocked");			
+			Process process = builder.start();
+			InputStream inputStream = process.getInputStream();
+			InputStream errorStream = process.getErrorStream();
+			BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));
+			BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
+			int exitStatus = process.waitFor();
+			
+			if (exitStatus == 0) {
+				output = inputReader.readLine();
+			} 
+			else {
+				showErrorMessage("Failed to check internationalUnlocked file", errorReader.readLine());
+			}
+			process.destroy();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if (output == "true") {
+			gameMode = "international";
+			gameScene.setRoot(namePane);
+		}
+		else {
+			showErrorMessage("International mode has not been unlocked", "You must complete at least one game on New Zealand mode.");
+		}
 	}
 	
 	public void submitName() {
