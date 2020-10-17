@@ -57,6 +57,7 @@ public class GameController {
 	
 	private Scene gameScene;
 	private GridPane selectionPane;
+	private GridPane namePane;
 	
 	public GameController(SceneController sceneController, SettingsController settingsController) {
 		this.sceneController = sceneController;
@@ -66,6 +67,7 @@ public class GameController {
 	public void setup(
 			Scene gameScene,
 			GridPane selectionPane,
+			GridPane namePane,
 			Label winningLabel,
 			Label[] categoryLabels,
 			Button[][] clueButtons,
@@ -77,6 +79,7 @@ public class GameController {
 			GridPane gameGrid) {
 		this.gameScene = gameScene;
 		this.selectionPane = selectionPane;
+		this.namePane = namePane;
 		this.winningLabel = winningLabel;
 		this.categoryLabels = categoryLabels;
 		this.clueButtons = clueButtons;
@@ -95,6 +98,18 @@ public class GameController {
 		errorAlert.setContentText(contentMessage);
 		
 		errorAlert.showAndWait();
+	}
+	
+	public void nzButtonPressed() {
+		gameScene.setRoot(namePane);
+	}
+	
+	public void internationalButtonPressed() {
+		gameScene.setRoot(namePane);
+	}
+	
+	public void submitName() {
+		
 	}
 	
 	/**

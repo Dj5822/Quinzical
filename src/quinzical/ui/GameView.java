@@ -24,6 +24,7 @@ public class GameView {
 	
 	private Scene main;
 	
+	// main pane components.
 	private GridPane mainPane;
 	private Button startButton;
 	private Button submitButton;
@@ -31,30 +32,35 @@ public class GameView {
 	private Button returnToMenuButton;
 	private Button settingsButton;
 	private GridPane menuGrid;
-
 	private Label winningLabel;
 	private Label endingLabel;
 	private Label hintLabel;
-	
 	private Label[] categoryLabels;
 	private Button[][] clueButtons;
 	private TextField inputField;
 	private GridPane gameGrid;
 	
-	
+	// selection pane components.
 	private GridPane selectionPane;
 	private Label gameSelectionLabel;
 	private Button nzButton;
 	private Button internationalButton;
 	
+	// name pane components.
+	private GridPane namePane;
+	private Label nameLabel;
+	private TextField nameTextbox;
+	private Button submitNameButton;
+	
 	public GameView(GameController controller, int width, int height) {
 		
+		setupNamePane(controller, width, height);
 		setupMainPane(controller, width, height);
 		setupSelectionPane(controller, width, height);
 		
 		main = new Scene(selectionPane, width, height);
 		
-		controller.setup(main, selectionPane, winningLabel, categoryLabels, clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton, gameGrid);
+		controller.setup(main, selectionPane, namePane, winningLabel, categoryLabels, clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton, gameGrid);
 
 		// Makes everything look prettier.
 		File styleFile = new File("./src/quinzical/style.css");
@@ -79,18 +85,19 @@ public class GameView {
 		nzButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				main.setRoot(mainPane);
+				controller.nzButtonPressed();
 			}
 		});
 		
 		internationalButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				
+				controller.internationalButtonPressed();
 			}
 		});
 	}
 
+	
 	private void setupMainPane(GameController controller, int width, int height) {
 		// Setup main pane.		
 		mainPane = new GridPane();
@@ -254,6 +261,26 @@ public class GameView {
 				});		
 			}
 		}
+	}
+	
+	
+	private void setupNamePane(GameController controller, int width, int height) {
+		namePane = new GridPane();
+		namePane.setAlignment(Pos.CENTER);
+		nameLabel = new Label("Enter your name: ");
+		nameTextbox = new TextField();
+		submitNameButton = new Button("Submit");
+		
+		namePane.add(nameLabel, 0, 0);
+		namePane.add(nameTextbox, 0, 1);
+		namePane.add(submitNameButton, 0, 2);
+		
+		submitNameButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.submitName();
+			}
+		});
 	}
 	
 	public Scene getScene() {
