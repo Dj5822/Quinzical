@@ -280,15 +280,33 @@ public class GameView {
 	
 	
 	private void setupNamePane(GameController controller, int width, int height) {
+		
+		// setup the name pane.
 		namePane = new GridPane();
 		namePane.setAlignment(Pos.CENTER);
+		namePane.setVgap(height/15);
+		
+		// initialise components.
 		nameLabel = new Label("Enter your name: ");
 		nameTextbox = new TextField();
 		submitNameButton = new Button("Submit");
 		
+		// add components to name pane.
 		namePane.add(nameLabel, 0, 0);
 		namePane.add(nameTextbox, 0, 1);
 		namePane.add(submitNameButton, 0, 2);
+		
+		// resize components.
+		nameLabel.setFont(new Font(height/9));
+		nameTextbox.setPrefHeight(height/9);
+		nameTextbox.setPrefWidth(width/1.1);
+		nameTextbox.setFont(new Font(height/9));
+		submitNameButton.setPrefHeight(height/9);
+		submitNameButton.setPrefWidth(width/3);
+		GridPane.setHalignment(nameLabel, HPos.CENTER);
+		GridPane.setHalignment(nameTextbox, HPos.CENTER);
+		GridPane.setHalignment(submitNameButton, HPos.CENTER);
+		
 		
 		submitNameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
