@@ -1,15 +1,10 @@
 package quinzical.controller;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 
-import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Alert.AlertType;
 

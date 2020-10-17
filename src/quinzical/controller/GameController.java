@@ -1,14 +1,10 @@
 package quinzical.controller;
 
 import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Optional;
 
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -368,25 +364,6 @@ public class GameController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		try {
-			//generate gameData
-			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "./scripts/generateGameData.sh");			
-			Process process = builder.start();
-			InputStream errorStream = process.getErrorStream();
-			BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
-			int exitStatus = process.waitFor();
-			
-			if (exitStatus != 0) {
-				showErrorMessage("Failed to generate gamedata", errorReader.readLine());
-			}
-			process.destroy();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
 	}
 	
 	/**

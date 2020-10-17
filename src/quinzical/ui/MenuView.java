@@ -24,6 +24,8 @@ public class MenuView {
 	private Button gameButton;
 	private Button leaderboardButton;
 	private Button settingsButton;
+	private Button databaseButton;
+	private Button resetButton;
 	private Button quitButton;
 	
 	public MenuView(MenuController controller, int width, int height) {
@@ -47,6 +49,8 @@ public class MenuView {
 		gameButton = new Button("Play Game");
 		leaderboardButton = new Button("Leaderboard");
 		settingsButton = new Button("Settings");
+		databaseButton = new Button("Edit questions");
+		resetButton = new Button("Reset");
 		quitButton = new Button("Quit");
 		
 		// Mainpane settings.
@@ -65,16 +69,22 @@ public class MenuView {
 		gameButton.setPrefHeight(BUTTONHEIGHT);
 		leaderboardButton.setPrefHeight(BUTTONHEIGHT);
 		settingsButton.setPrefHeight(BUTTONHEIGHT);
+		databaseButton.setPrefHeight(BUTTONHEIGHT);
+		resetButton.setPrefHeight(BUTTONHEIGHT);
 		quitButton.setPrefHeight(BUTTONHEIGHT);
 		practiceButton.setPrefWidth(BUTTONWIDTH);
 		gameButton.setPrefWidth(BUTTONWIDTH);
 		leaderboardButton.setPrefWidth(BUTTONWIDTH);
 		settingsButton.setPrefWidth(BUTTONWIDTH);
+		databaseButton.setPrefWidth(BUTTONWIDTH);
+		resetButton.setPrefWidth(BUTTONWIDTH);
 		quitButton.setPrefWidth(BUTTONWIDTH);
 		practiceButton.setFocusTraversable(false);
 		gameButton.setFocusTraversable(false);
 		leaderboardButton.setFocusTraversable(false);
 		settingsButton.setFocusTraversable(false);
+		databaseButton.setFocusTraversable(false);
+		resetButton.setFocusTraversable(false);
 		quitButton.setFocusTraversable(false);
 		
 		// Add buttons and labels to the menubar.
@@ -82,7 +92,9 @@ public class MenuView {
 		menuBar.add(gameButton, 1, 0);
 		menuBar.add(leaderboardButton, 2, 0);
 		menuBar.add(settingsButton, 3, 0);
-		menuBar.add(quitButton, 4, 0);
+		menuBar.add(databaseButton, 0, 1);
+		menuBar.add(resetButton, 1, 1);
+		menuBar.add(quitButton, 2, 1);
 		
 		// add compoments to mainpane.
 		mainPane.add(title, 0, 0);
@@ -116,6 +128,20 @@ public class MenuView {
 			@Override
 			public void handle(ActionEvent arg0) {
 				controller.showSettingsView();
+			}
+		});
+		
+		databaseButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.showDatabaseView();
+			}
+		});
+		
+		resetButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.resetGame();
 			}
 		});
 
