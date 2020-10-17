@@ -29,10 +29,10 @@ public class Main extends Application {
 		
 		// Initialise controllers.
 		SceneController sceneController = new SceneController(primaryStage);
-		MenuController menuController = new MenuController(sceneController);
+		LeaderboardController leaderboardController = new LeaderboardController(sceneController);
+		MenuController menuController = new MenuController(sceneController, leaderboardController);
 		SettingsController settingsController = new SettingsController(sceneController);
 		DatabaseController databaseController = new DatabaseController(sceneController);
-		LeaderboardController leaderboardController = new LeaderboardController(sceneController);
 		GameController gameController = new GameController(sceneController, settingsController, leaderboardController);
 		PracticeController practiceController = new PracticeController(sceneController, settingsController);
 		

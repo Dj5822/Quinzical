@@ -36,8 +36,8 @@ public class GameController {
 	// Used to store current winnings.
 	private int currentWinnings;
 	
-	// Used to keep track of how many questions were answered.
-	private int count = 0;
+	// Used to keep track of how many categories were completed.
+	private int completedCategories = 0;
 	
 	// GUI components
 	private Label winningLabel;
@@ -60,6 +60,7 @@ public class GameController {
 	private TextField nameTextbox;
 	private String username;
 	private String gameMode;
+	private boolean internationalUnlocked = false;
 	
 	public GameController(SceneController sceneController, SettingsController settingsController, LeaderboardController leaderboardController) {
 		this.sceneController = sceneController;
@@ -110,6 +111,13 @@ public class GameController {
 	public void nzButtonPressed() {
 		gameMode = "nz";
 		gameScene.setRoot(namePane);
+		
+		if (checkIfInternationalUnlocked()) {
+			internationalUnlocked = true;
+		}
+		else {
+			internationalUnlocked = false;
+		}
 	}
 	
 	/**
@@ -117,6 +125,16 @@ public class GameController {
 	 * set the game mode to international.
 	 */
 	public void internationalButtonPressed() {		
+		if (checkIfInternationalUnlocked()) {
+			gameMode = "international";
+			gameScene.setRoot(namePane);
+		}
+		else {
+			showErrorMessage("International mode has not been unlocked", "You must complete at least two categories on New Zealand mode.");
+		}
+	}
+	
+	public boolean checkIfInternationalUnlocked() {
 		String output = "false";
 		
 		try {
@@ -139,12 +157,13 @@ public class GameController {
 			e.printStackTrace();
 		}
 		
-		if (output == "true") {
-			gameMode = "international";
-			gameScene.setRoot(namePane);
+		if (output.strip().equals("true")) {
+			internationalUnlocked = true;
+			return true;
 		}
 		else {
-			showErrorMessage("International mode has not been unlocked", "You must complete at least one game on New Zealand mode.");
+			internationalUnlocked = false;
+			return false;
 		}
 	}
 	
@@ -187,7 +206,6 @@ public class GameController {
 	 * check if the user's answer is correct
 	 */
 	public void submitButtonPressed() {	
-		count++;
 		String text;
 		
 		if(checkAnswer(inputField.getText())) {
@@ -213,7 +231,6 @@ public class GameController {
 	 * user click don't know button.
 	 */
 	public void dontKnowButtonPressed() {		
-		count++;
 		String text = "The correct answer was: "+ currentQuestion.getAnswerBack();
 		hintLabel.setText(text);
 		
@@ -225,7 +242,10 @@ public class GameController {
 	
 	private void updateClueButtons() {
 		clueButtons[colnum][rownum].setVisible(false);
-		if (enabledButtons[colnum] < 4) {
+		if (enabledButtons[colnum] == 4) {
+			completedCategories ++;
+		}
+		else if (enabledButtons[colnum] < 4) {
 			enabledButtons[colnum]++;
 		}
 		for(int i=0;i<5;i++) {
@@ -299,19 +319,25 @@ public class GameController {
 		dontKnowButton.setVisible(false);
 		inputField.setText("");
 		
-		if(count == 25) {
+		if (completedCategories==2 && internationalUnlocked == false) {
+			unlockInternational();
+		}
+		
+		if(completedCategories==5) {
 			gameComplete();
 		}
 	}
 	
 	private void gameComplete() {
 		endingLabel.setText("Congrats! All questions completed!! You have a total reward of $"
-				+currentWinnings+".\n Click restart to play again.\n"
-				+ " You have unlocked international mode!"
-				+" button to start a new game or return to the menu.");
+				+currentWinnings+".\n Click restart to play again.\n");
 		gameGrid.setVisible(false);
 		endingLabel.setVisible(true);
-		
+		leaderboardController.addToLeaderboard(username, currentWinnings);
+	}
+	
+	private void unlockInternational() {
+		internationalUnlocked = true;
 		try {
 			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "echo true > gamedata/internationalUnlocked");			
 			Process process = builder.start();
@@ -319,17 +345,22 @@ public class GameController {
 			BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
 			int exitStatus = process.waitFor();
 			
-			if (exitStatus != 0) {
-				showErrorMessage("Failed to unlock international mode", errorReader.readLine());
+			if (exitStatus == 0) {
+				Alert unlockAlert = new Alert(AlertType.INFORMATION);
+				unlockAlert.setTitle("Congratulations");
+				unlockAlert.setHeaderText("International mode has been unlocked");
+				unlockAlert.setContentText("You can now play international mode.");
+				
+				unlockAlert.showAndWait();
 			}
+			else {
+				showErrorMessage("Failed to unlock international mode", errorReader.readLine());
+			} 
 			process.destroy();			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		leaderboardController.addToLeaderboard(username, currentWinnings);
 	}
-	
 	/**
 	 * Resets all GUI components in the game view.
 	 */

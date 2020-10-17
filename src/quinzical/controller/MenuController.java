@@ -13,6 +13,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 public class MenuController {
 	
 	private SceneController sceneController;
+	private LeaderboardController leaderboardController;
 	
 	public void showErrorMessage(String headerMessage, String contentMessage) {
 		Alert errorAlert = new Alert(AlertType.ERROR);
@@ -23,8 +24,9 @@ public class MenuController {
 		errorAlert.showAndWait();
 	}
 	
-	public MenuController(SceneController sceneController) {
+	public MenuController(SceneController sceneController, LeaderboardController leaderboardController) {
 		this.sceneController = sceneController;
+		this.leaderboardController = leaderboardController;
 		generateGamedata();
 	}
 	
@@ -79,7 +81,7 @@ public class MenuController {
 				int exitStatus = process.waitFor();
 				
 				if (exitStatus != 0) {
-					showErrorMessage("Error encountered", "Failed to reset the game");
+					showErrorMessage("Failed to reset the game", errorReader.readLine());
 				}
 				process.destroy();			
 			} catch (Exception e) {
@@ -88,6 +90,7 @@ public class MenuController {
 		}
 		
 		generateGamedata();
+		leaderboardController.initialiseLeaderboard();
 	}
 	
 	/**

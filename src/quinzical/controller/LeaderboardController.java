@@ -37,6 +37,7 @@ public class LeaderboardController {
 			if (exitStatus == 0) {
 				String line;
 				
+				leaderboard.getItems().clear();
 				while ((line = inputReader.readLine()) != null) {
 					String[] lineArr = line.split(" ");
 					leaderboard.getItems().add(new LeaderboardItem(lineArr[0], Integer.parseInt(lineArr[1])));
