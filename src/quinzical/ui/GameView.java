@@ -72,14 +72,29 @@ public class GameView {
 		// selection pane.
 		selectionPane = new GridPane();
 		selectionPane.setAlignment(Pos.CENTER);
-
+		selectionPane.setVgap(height/15);
+		
+		// components.
 		gameSelectionLabel = new Label("Please select game mode");
 		nzButton = new Button("New Zealand");
 		internationalButton = new Button("International");
-
+		
+		// adding components to pane.
 		selectionPane.add(gameSelectionLabel, 0, 0, 2, 1);
 		selectionPane.add(nzButton, 0, 1);
 		selectionPane.add(internationalButton, 1, 1);
+		
+		// resizing components.
+		gameSelectionLabel.setFont(new Font(height/9));
+		nzButton.setPrefWidth(width/2);
+		nzButton.setPrefHeight(height);
+		internationalButton.setPrefWidth(width/2);
+		internationalButton.setPrefHeight(height);
+		GridPane.setHalignment(gameSelectionLabel, HPos.CENTER);
+		GridPane.setHalignment(nzButton, HPos.CENTER);
+		GridPane.setHalignment(internationalButton, HPos.CENTER);
+		nzButton.setFocusTraversable(false);
+		internationalButton.setFocusTraversable(false);
 		
 		// Button functionality
 		nzButton.setOnAction(new EventHandler<ActionEvent>() {
