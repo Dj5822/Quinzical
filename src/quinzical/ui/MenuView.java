@@ -96,9 +96,9 @@ public class MenuView {
 		menuBar.add(practiceButton, 0, 0);
 		menuBar.add(gameButton, 1, 0);
 		menuBar.add(leaderboardButton, 2, 0);
-		menuBar.add(settingsButton, 3, 0);
-		menuBar.add(databaseButton, 0, 1);
-		menuBar.add(resetButton, 1, 1);
+		menuBar.add(resetButton, 3, 0);
+		menuBar.add(settingsButton, 0, 1);
+		menuBar.add(databaseButton, 1, 1);
 		menuBar.add(helpButton, 2, 1);
 		menuBar.add(quitButton, 3, 1);
 		

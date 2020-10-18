@@ -1,7 +1,6 @@
-This is New Zealand’s mountain Parrot, ( What is) the Kea
-This is called a living dinosaur,( What is) the Tuatara
-This is the common name for the New Zealand owl, ( What is) Morepork/Ruru
-233555, ( 2323) 2323
-324, ( 235235) 235
-43, ( 234234234) 23423
-134, ( 134) 134
+c1, ( ans1) ans11
+c2, ( ans2) ans22
+c3, ( ans3) ans33
+c4, ( ans4) ans44
+c5, ( ans5) ans55
+c6, ( ans6) ans66
