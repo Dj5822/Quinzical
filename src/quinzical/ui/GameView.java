@@ -34,6 +34,7 @@ public class GameView {
 	private Button settingsButton;
 	private GridPane menuGrid;
 	private Label winningLabel;
+	private Label timerLabel;
 	
 	private VBox reward;
 	private Label rewardUsername;
@@ -69,7 +70,7 @@ public class GameView {
 		
 		main = new Scene(selectionPane, width, height);
 		
-		controller.setup(main, mainPane, selectionPane, namePane, nameTextbox, winningLabel, categoryLabels, clueButtons,
+		controller.setup(main, mainPane, selectionPane, namePane, nameTextbox, winningLabel, timerLabel, categoryLabels, clueButtons,
 				reward, rewardUsername, rewardWinning, rewardCorrectNumber, hintLabel, inputField, submitButton, dontKnowButton, gameGrid);
 
 		// Makes everything look prettier.
@@ -143,10 +144,11 @@ public class GameView {
 		winningLabel = new Label("Current Worth: $0");
 		categoryLabels= new Label[5] ;
 		clueButtons = new Button[5][5];
+		timerLabel = new Label("Select a clue to start timer.");
 		rewardUsername = new Label();
 		rewardWinningLabel = new Label("TOTAL WINNING:");
 		rewardWinning = new Label();
-		rewardCorrectNumberLabel = new Label("Number of correctly answer:");
+		rewardCorrectNumberLabel = new Label("Number of correct answers:");
 		rewardCorrectNumber = new Label();
 		ToLeaderBoardButton = new Button("Click to go to Leader board");
 
@@ -202,6 +204,7 @@ public class GameView {
 		inputField.setFont(new Font(30));
 		winningLabel.setFont(new Font(30));
 		hintLabel.setFont(new Font(30));
+		timerLabel.setFont(new Font(30));
 		ToLeaderBoardButton.setFont(new Font(30));
 
 		
@@ -213,6 +216,7 @@ public class GameView {
 		GridPane.setHalignment(submitButton, HPos.CENTER);
 		GridPane.setHalignment(dontKnowButton, HPos.CENTER);
 		GridPane.setValignment(menuGrid, VPos.BOTTOM);
+		GridPane.setHalignment(timerLabel, HPos.CENTER);
 		GridPane.setHalignment(rewardUsername, HPos.CENTER);
 		GridPane.setHalignment(rewardWinningLabel, HPos.CENTER);
 		GridPane.setHalignment(rewardWinning, HPos.CENTER);
@@ -235,6 +239,7 @@ public class GameView {
 		inputField.setVisible(false);
 		submitButton.setVisible(false);
 		dontKnowButton.setVisible(false);
+		timerLabel.setVisible(false);
 		startButton.setFocusTraversable(false);
 		submitButton.setFocusTraversable(false);
 		dontKnowButton.setFocusTraversable(false);
@@ -260,19 +265,21 @@ public class GameView {
 		menuGrid.add(settingsButton, 1, 0);
 		menuGrid.add(returnToMenuButton, 2, 0);
 
-		mainPane.add(winningLabel, 0, 0, 2, 1);
+		mainPane.add(winningLabel, 0, 0, 3, 1);
 
-		mainPane.add(gameGrid, 0, 1, 2, 1);
-		mainPane.add(reward, 0, 0, 2, 5);
+		mainPane.add(gameGrid, 0, 1, 3, 1);
+		mainPane.add(reward, 0, 0, 3, 5);
 
-		mainPane.add(hintLabel, 0, 2, 2, 1);
+		mainPane.add(hintLabel, 0, 2, 3, 1);
 
-		mainPane.add(inputField, 0, 3, 2, 1);
+		mainPane.add(inputField, 0, 3, 3, 1);
+		
+		mainPane.add(timerLabel, 0, 4, 3, 1);
+		
+		mainPane.add(submitButton, 1, 5);
+		mainPane.add(dontKnowButton, 2, 5);
 
-		mainPane.add(submitButton, 0, 4);
-		mainPane.add(dontKnowButton, 1, 4);
-
-		mainPane.add(menuGrid, 0, 5, 2, 1);
+		mainPane.add(menuGrid, 0, 6, 3, 1);
 
 		// Button functionality
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -310,7 +317,7 @@ public class GameView {
 		ToLeaderBoardButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.goToLeaderBorad();
+				controller.goToLeaderBoard();
 			}
 		});
 		//set up all clue buttons here

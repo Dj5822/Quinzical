@@ -5,7 +5,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Optional;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -16,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 /**
  * This class is used to manage the game data of game mode.
@@ -54,6 +58,7 @@ public class GameController {
 	private Button submitButton;
 	private Button dontKnowButton;
 	private GridPane gameGrid;
+	private Label timerLabel;
 	
 	private VoiceTask currentVoiceTask;
 	
@@ -67,10 +72,38 @@ public class GameController {
 	private String gameMode;
 	private boolean internationalUnlocked = false;
 	
+	private final int INITIALTIME = 20;
+	
+	private Timeline gameTimer;
+	private int timeLeft = INITIALTIME;
+	private boolean timerStart = false;
+	
 	public GameController(SceneController sceneController, SettingsController settingsController, LeaderboardController leaderboardController) {
 		this.sceneController = sceneController;
 		this.settingsController = settingsController;
 		this.leaderboardController = leaderboardController;
+		setupGameTimer();
+	}
+	
+	private void setupGameTimer() {
+		gameTimer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				timeLeft --;
+				timerLabel.setText("Time Left: " + timeLeft + " sec");
+				
+				if (timeLeft <= 0) {
+					dontKnowButtonPressed();
+				}
+			}
+		}));
+		gameTimer.setCycleCount(Timeline.INDEFINITE);
+	}
+	
+	private void resetTime() {
+		gameTimer.stop();
+		timeLeft = INITIALTIME;
+		timerStart = false;
 	}
 	
 	public void setup(
@@ -80,6 +113,7 @@ public class GameController {
 			GridPane namePane,
 			TextField nameTextbox,
 			Label winningLabel,
+			Label timerLabel,
 			Label[] categoryLabels,
 			Button[][] clueButtons,
 			VBox reward,
@@ -94,6 +128,7 @@ public class GameController {
 		this.namePane = namePane;
 		this.nameTextbox = nameTextbox;
 		this.winningLabel = winningLabel;
+		this.timerLabel = timerLabel;
 		this.categoryLabels = categoryLabels;
 		this.clueButtons = clueButtons;
 		this.reward = reward;
@@ -194,6 +229,7 @@ public class GameController {
 		Optional<ButtonType> result = confirmationAlert.showAndWait();
 		
 		if (result.orElse(no) == yes) {
+			resetTime();
 			generateData();
 			generateView();
 			for(int i=0;i<5;i++) {
@@ -201,6 +237,7 @@ public class GameController {
 				clueButtons[i][0].setDisable(false);
 			}
 			reward.setVisible(false);
+			timerLabel.setVisible(true);
 			gameGrid.setVisible(true);
 			hintLabel.setVisible(true);
 			inputField.setVisible(true);
@@ -215,6 +252,8 @@ public class GameController {
 	 */
 	public void submitButtonPressed() {	
 		String text;
+		
+		resetTime();
 		
 		if(checkAnswer(inputField.getText())) {
 			text = "Correct!";
@@ -242,6 +281,8 @@ public class GameController {
 	public void dontKnowButtonPressed() {		
 		String text = "The correct answer was: "+ currentQuestion.getAnswerBack();
 		hintLabel.setText(text);
+		
+		resetTime();
 		
 		playVoice(text);
 		
@@ -287,6 +328,12 @@ public class GameController {
 				clueButtons[i][enabledButtons[i]].setDisable(true);
 			}
 		}
+		
+		if (!timerStart) {
+			gameTimer.play();
+			timerStart = true;
+		}
+		
 		inputField.setVisible(true);
 		submitButton.setVisible(true);
 		dontKnowButton.setVisible(true);
@@ -307,6 +354,7 @@ public class GameController {
 		if (result.orElse(no) == yes) {
 			gameScene.setRoot(selectionPane);
 			generateView();
+			resetTime();
 			sceneController.changeScene("menu");
 		}
 	}
@@ -318,7 +366,7 @@ public class GameController {
 		sceneController.changeScene("settings");
 	}
 
-	public void goToLeaderBorad() {
+	public void goToLeaderBoard() {
 		gameScene.setRoot(selectionPane);
 		generateView();
 		sceneController.changeScene("leaderboard");		
@@ -348,6 +396,7 @@ public class GameController {
 		rewardWinning.setText("$ "+currentWinnings);
 		rewardCorrectNumber.setText(correctcount+" / 25");
 		winningLabel.setVisible(false);
+		timerLabel.setVisible(false);
 		gameGrid.setVisible(false);
 		hintLabel.setVisible(false);
 		reward.setVisible(true);
