@@ -8,19 +8,22 @@ TO START THE QUINZICAL GAME:
 ./quinzical.sh
 ==========================================
 
+*If program does not run, change java -jar --module-path PATH --add-modules javafx.controls,javafx.media,javafx.base,javafx.fxml assignment4.jar
+where PATH should be the location of the javafx file.
 *If permission failed. execute "chmod +x quinzical.sh" in the terminal*
 *Make sure there are at least 5 .txt files in directory /categories/*/
 *Make sure there are at least 5 clues in each *.txt files in /categories/*.txt*
 *Newly added clues in .txt file should be in the format of [{question}, {answer_part_one} {answer_part_two}], and one clue each line in .txt*
+*Clues can also  be added un quinzical program.*
 *Frequently clicking a button in very short period may leads to program shut down, please try to avoid that*
 
 Submission zip file contains:
-assignment-3-and-project-team-10/
+assignment-4-and-project-team-10/
 	categories/
 		international/
-			Endeavour.txt
+			Animals.txt
 			...
-			Symbols.txt
+			Sports.txt
 		nz/
 			ENdeavour.txt
 			...
@@ -46,7 +49,7 @@ assignment-3-and-project-team-10/
 	gamedata/
 		internationalUnlocked
 		leaderboard
-	assignment3.jar
+	assignment4.jar
 	quinzical.sh
 	README.md
 

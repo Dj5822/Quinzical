@@ -1,3 +1,3 @@
 #!/bin/bash
 
-java -jar --module-path /home/se2062020/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.media,javafx.base,javafx.fxml assignment4.jar
+java -jar --module-path /usr/share/java/lib --add-modules javafx.controls,javafx.media,javafx.base,javafx.fxml assignment4.jar
