@@ -1,4 +1,4 @@
-# Software Engineering 206 Assignment 3
+# Software Engineering 206 Assignment 4
 
 TO START THE QUINZICAL GAME:
 ==========================================
@@ -9,7 +9,7 @@ TO START THE QUINZICAL GAME:
 ==========================================
 
 *If permission failed. execute "chmod +x quinzical.sh" in the terminal*
-*Make sure there are at least 5 .txt files in directory /categories/*
+*Make sure there are at least 5 .txt files in directory /categories/*/
 *Make sure there are at least 5 clues in each *.txt files in /categories/*.txt*
 *Newly added clues in .txt file should be in the format of [{question}, {answer_part_one} {answer_part_two}], and one clue each line in .txt*
 *Frequently clicking a button in very short period may leads to program shut down, please try to avoid that*
@@ -17,10 +17,16 @@ TO START THE QUINZICAL GAME:
 Submission zip file contains:
 assignment-3-and-project-team-10/
 	categories/
-		Endeavour.txt
-		...
-		Symbols.txt
+		international/
+			Endeavour.txt
+			...
+			Symbols.txt
+		nz/
+			ENdeavour.txt
+			...
+			Symbols.txt
 	scripts/
+		generateGameData.sh
 		get5RandomQuestion.sh
 		getCategories.sh
 		getRandomQuestion.sh
@@ -37,6 +43,9 @@ assignment-3-and-project-team-10/
 				SettingsView.java
 			Main.java
 			style.css
+	gamedata/
+		internationalUnlocked
+		leaderboard
 	assignment3.jar
 	quinzical.sh
 	README.md
