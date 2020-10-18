@@ -74,6 +74,7 @@ public class HelpView {
         		+ "Return to menu will send you back to menu, however all your gamedata from your current session will be deleted.\n"
         		+ "When you start the game, you will need to click on one of the clues valued at 100.\n"
         		+ "Once you have selected a clue, the clue will be read out.\n"
+        		+ "You get 20 seconds to submit an answer.\n"
         		+ "Type in the answer in the textbox and press submit to check the answer.\n"
         		+ "If your answer is correct, then your winnings (located at the top of the screen will increase).\n"
         		+ "Otherwise, your winnings will not change.\n"
