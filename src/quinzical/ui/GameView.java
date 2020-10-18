@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import quinzical.controller.GameController;
@@ -33,7 +34,15 @@ public class GameView {
 	private Button settingsButton;
 	private GridPane menuGrid;
 	private Label winningLabel;
-	private Label endingLabel;
+	
+	private VBox reward;
+	private Label rewardUsername;
+	private Label rewardWinningLabel;
+	private Label rewardWinning;
+	private Label rewardCorrectNumberLabel;
+	private Label rewardCorrectNumber;
+	private Button ToLeaderBoardButton;
+	
 	private Label hintLabel;
 	private Label[] categoryLabels;
 	private Button[][] clueButtons;
@@ -60,7 +69,8 @@ public class GameView {
 		
 		main = new Scene(selectionPane, width, height);
 		
-		controller.setup(main, mainPane, selectionPane, namePane, nameTextbox, winningLabel, categoryLabels, clueButtons, endingLabel, hintLabel, inputField, submitButton, dontKnowButton, gameGrid);
+		controller.setup(main, mainPane, selectionPane, namePane, nameTextbox, winningLabel, categoryLabels, clueButtons,
+				reward, rewardUsername, rewardWinning, rewardCorrectNumber, hintLabel, inputField, submitButton, dontKnowButton, gameGrid);
 
 		// Makes everything look prettier.
 		File styleFile = new File("./src/quinzical/style.css");
@@ -123,6 +133,8 @@ public class GameView {
 		gameGrid = new GridPane();
 		gameGrid.setHgap(width/15);
 		gameGrid.setVgap(height/30);
+		reward = new VBox();
+		reward.setSpacing(height/10);
 		menuGrid = new GridPane();
 		menuGrid.setStyle("-fx-background-color: white");
 
@@ -131,7 +143,13 @@ public class GameView {
 		winningLabel = new Label("Current Worth: $0");
 		categoryLabels= new Label[5] ;
 		clueButtons = new Button[5][5];
-		endingLabel = new Label(""); // label to notify the user all questions are completed
+		rewardUsername = new Label();
+		rewardWinningLabel = new Label("TOTAL WINNING:");
+		rewardWinning = new Label();
+		rewardCorrectNumberLabel = new Label("Number of correctly answer:");
+		rewardCorrectNumber = new Label();
+		ToLeaderBoardButton = new Button("Click to go to Leader board");
+
 		hintLabel = new Label("Click one of the available buttons above to hear a clue."); // instruction label set up
 		inputField = new TextField();
 		submitButton = new Button("Submit my answer!");
@@ -156,28 +174,37 @@ public class GameView {
 				GridPane.setHalignment(clueButtons[col][row-1], HPos.CENTER);
 			}
 		}
-
+		
 		// set component sizes
 		startButton.setPrefHeight(height/9);
 		submitButton.setPrefHeight(height/9);
 		dontKnowButton.setPrefHeight(height/9);
 		returnToMenuButton.setPrefHeight(height/9);
 		settingsButton.setPrefHeight(height/9);
+		ToLeaderBoardButton.setPrefHeight(height/9);
 
 		startButton.setPrefWidth(width/3);
 		submitButton.setPrefWidth(width/3);
 		dontKnowButton.setPrefWidth(width/3);
 		returnToMenuButton.setPrefWidth(width/3);
 		settingsButton.setPrefWidth(width/3);
+		ToLeaderBoardButton.setPrefWidth(width/3);
 
 		inputField.setPrefHeight(height/9);
 		inputField.setPrefWidth(width/1.1);
 
+		rewardUsername.setFont(new Font(60));
+		rewardWinningLabel.setFont(new Font(30));
+		rewardWinning.setFont(new Font(40));
+		rewardCorrectNumberLabel.setFont(new Font(30));
+		rewardCorrectNumber.setFont(new Font(40));
+		
 		inputField.setFont(new Font(30));
 		winningLabel.setFont(new Font(30));
-		endingLabel.setFont(new Font(30));
 		hintLabel.setFont(new Font(30));
+		ToLeaderBoardButton.setFont(new Font(30));
 
+		
 		// Set alignmnet
 		GridPane.setHalignment(gameGrid, HPos.CENTER);
 		GridPane.setHalignment(winningLabel, HPos.CENTER);
@@ -186,16 +213,25 @@ public class GameView {
 		GridPane.setHalignment(submitButton, HPos.CENTER);
 		GridPane.setHalignment(dontKnowButton, HPos.CENTER);
 		GridPane.setValignment(menuGrid, VPos.BOTTOM);
+		GridPane.setHalignment(rewardUsername, HPos.CENTER);
+		GridPane.setHalignment(rewardWinningLabel, HPos.CENTER);
+		GridPane.setHalignment(rewardWinning, HPos.CENTER);
+		GridPane.setHalignment(rewardCorrectNumberLabel, HPos.CENTER);
+		GridPane.setHalignment(rewardCorrectNumber, HPos.CENTER);
+		GridPane.setHalignment(ToLeaderBoardButton, HPos.CENTER);
+		
 		gameGrid.setAlignment(Pos.CENTER);
+		reward.setAlignment(Pos.CENTER);
 		menuGrid.setAlignment(Pos.BOTTOM_CENTER);
-		endingLabel.setAlignment(Pos.CENTER);
 		submitButton.setAlignment(Pos.CENTER);
 		dontKnowButton.setAlignment(Pos.CENTER);
+		ToLeaderBoardButton.setAlignment(Pos.CENTER);
 
 		// set component visibility.
-		endingLabel.setVisible(false);
+		reward.setVisible(false);
 		hintLabel.setWrapText(true);
 		hintLabel.setVisible(false);
+		ToLeaderBoardButton.setFocusTraversable(false);
 		inputField.setVisible(false);
 		submitButton.setVisible(false);
 		dontKnowButton.setVisible(false);
@@ -213,6 +249,12 @@ public class GameView {
 				clueButtons[col][row].setFocusTraversable(false);
 			}
 		}
+		reward.getChildren().add(rewardUsername);
+		reward.getChildren().add(rewardWinningLabel);
+		reward.getChildren().add(rewardWinning);
+		reward.getChildren().add(rewardCorrectNumberLabel);
+		reward.getChildren().add(rewardCorrectNumber);
+		reward.getChildren().add(ToLeaderBoardButton);
 
 		menuGrid.add(startButton, 0, 0);
 		menuGrid.add(settingsButton, 1, 0);
@@ -221,7 +263,7 @@ public class GameView {
 		mainPane.add(winningLabel, 0, 0, 2, 1);
 
 		mainPane.add(gameGrid, 0, 1, 2, 1);
-		mainPane.add(endingLabel, 0, 1, 2, 1);
+		mainPane.add(reward, 0, 0, 2, 5);
 
 		mainPane.add(hintLabel, 0, 2, 2, 1);
 
@@ -265,7 +307,12 @@ public class GameView {
 				controller.goToSettings();
 			}
 		});
-
+		ToLeaderBoardButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.goToLeaderBorad();
+			}
+		});
 		//set up all clue buttons here
 		for(int colindex=0;colindex<5;colindex++) {
 			for (int rowindex=0;rowindex<5;rowindex++) {

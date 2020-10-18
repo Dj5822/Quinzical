@@ -1,9 +1,6 @@
 package quinzical.ui;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Optional;
 
 import javafx.collections.FXCollections;
@@ -14,7 +11,6 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -22,12 +18,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import quinzical.controller.DatabaseController;
-import quinzical.controller.LeaderboardItem;
 
 public class DatabaseView {
 	
@@ -58,7 +52,7 @@ public class DatabaseView {
 
 	public DatabaseView(DatabaseController controller, int width, int height) {
 		GridPane mainPane = new GridPane();
-		mainPane.setVgap(height/15);
+		mainPane.setVgap(height/20);
 		mainPane.setAlignment(Pos.CENTER);
 		mainPane.setStyle("-fx-background-color: #edf4fc");
 		main = new Scene(mainPane, width, height);
@@ -105,8 +99,8 @@ public class DatabaseView {
 		modifyButton.setPrefWidth(width/4);
 		deleteButton.setPrefHeight(height/20);
 		deleteButton.setPrefWidth(width/4);
-		returnButton.setPrefHeight(height/20);
-		returnButton.setPrefWidth(width/4);
+		returnButton.setPrefHeight(height/10);
+		returnButton.setPrefWidth(width/2);
 		
 		GridPane.setHalignment(mainTitle, HPos.CENTER);
 		GridPane.setHalignment(sectionLabel, HPos.CENTER);
@@ -135,7 +129,7 @@ public class DatabaseView {
 		mainPane.add(returnButton, 0, 5, 3, 1);
 		
 		GridPane modifyPane = new GridPane();
-		modifyPane.setVgap(height/15);
+		modifyPane.setVgap(height/10);
 		modifyPane.setAlignment(Pos.CENTER);
 		modifyPane.setStyle("-fx-background-color: #edf4fc");
 		
@@ -150,6 +144,56 @@ public class DatabaseView {
 		answerBackInput = new TextField("");
 		confirmButton = new Button ("Confirm");
 		cancelButton = new Button ("Cancel");
+		
+		title.setTextAlignment(TextAlignment.CENTER);
+		title.setAlignment(Pos.CENTER);
+		title.setFont(new Font(height/20));
+		title.setPadding(new Insets(0, width/20, 0, width/20));
+		typeLabel.setTextAlignment(TextAlignment.CENTER);
+		typeLabel.setAlignment(Pos.CENTER);
+		typeLabel.setFont(new Font(height/20));
+		typeLabel.setPadding(new Insets(0, width/20, 0, width/20));
+		typeInput.setTextAlignment(TextAlignment.CENTER);
+		typeInput.setAlignment(Pos.CENTER);
+		typeInput.setFont(new Font(height/20));
+		typeInput.setPadding(new Insets(0, width/20, 0, width/20));
+		clueLabel.setTextAlignment(TextAlignment.CENTER);
+		clueLabel.setAlignment(Pos.CENTER);
+		clueLabel.setFont(new Font(height/20));
+		clueLabel.setPadding(new Insets(0, width/20, 0, width/20));
+		clueInput.setAlignment(Pos.CENTER);
+		clueInput.setFont(new Font(height/20));
+		clueInput.setPadding(new Insets(0, width/20, 0, width/20));
+		answerFrontLabel.setTextAlignment(TextAlignment.CENTER);
+		answerFrontLabel.setAlignment(Pos.CENTER);
+		answerFrontLabel.setFont(new Font(height/20));
+		answerFrontLabel.setPadding(new Insets(0, width/20, 0, width/20));
+		answerFrontInput.setAlignment(Pos.CENTER);
+		answerFrontInput.setFont(new Font(height/20));
+		answerFrontInput.setPadding(new Insets(0, width/20, 0, width/20));
+		answerBackLabel.setTextAlignment(TextAlignment.CENTER);
+		answerBackLabel.setAlignment(Pos.CENTER);
+		answerBackLabel.setFont(new Font(height/20));
+		answerBackLabel.setPadding(new Insets(0, width/20, 0, width/20));
+		answerBackInput.setAlignment(Pos.CENTER);
+		answerBackInput.setFont(new Font(height/20));
+		answerBackInput.setPadding(new Insets(0, width/20, 0, width/20));
+		confirmButton.setPrefHeight(height/10);
+		confirmButton.setPrefWidth(width/4);
+		cancelButton.setPrefHeight(height/10);
+		cancelButton.setPrefWidth(width/4);
+		
+		GridPane.setHalignment(title, HPos.CENTER);
+		GridPane.setHalignment(typeLabel, HPos.CENTER);
+		GridPane.setHalignment(typeInput, HPos.CENTER);
+		GridPane.setHalignment(clueLabel, HPos.CENTER);
+		GridPane.setHalignment(clueInput, HPos.CENTER);
+		GridPane.setHalignment(answerFrontLabel, HPos.CENTER);
+		GridPane.setHalignment(answerFrontInput, HPos.CENTER);
+		GridPane.setHalignment(answerBackLabel, HPos.CENTER);
+		GridPane.setHalignment(answerBackInput, HPos.CENTER);
+		GridPane.setHalignment(confirmButton, HPos.CENTER);
+		GridPane.setHalignment(cancelButton, HPos.CENTER);
 		
 		typeInput.setDisable(false);
 			

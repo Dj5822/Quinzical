@@ -15,6 +15,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 /**
  * This class is used to manage the game data of game mode.
@@ -38,12 +39,16 @@ public class GameController {
 	
 	// Used to keep track of how many categories were completed.
 	private int completedCategories = 0;
+	private int correctcount = 0;
 	
 	// GUI components
 	private Label winningLabel;
 	private Label[] categoryLabels;
 	private Button[][] clueButtons;
-	private Label endingLabel;
+	private VBox reward;
+	private Label rewardUsername;
+	private Label rewardWinning;
+	private Label rewardCorrectNumber;
 	private Label hintLabel;
 	private TextField inputField;
 	private Button submitButton;
@@ -77,9 +82,9 @@ public class GameController {
 			Label winningLabel,
 			Label[] categoryLabels,
 			Button[][] clueButtons,
-			Label endingLabel,
-			Label hintLabel,
-			TextField inputField,
+			VBox reward,
+			Label rewardUsername, Label rewardWinning, Label rewardCorrectNumber,
+			Label hintLabel, TextField inputField,
 			Button submitButton,
 			Button dontKnowButton,
 			GridPane gameGrid) {
@@ -91,7 +96,10 @@ public class GameController {
 		this.winningLabel = winningLabel;
 		this.categoryLabels = categoryLabels;
 		this.clueButtons = clueButtons;
-		this.endingLabel = endingLabel;
+		this.reward = reward;
+		this.rewardUsername = rewardUsername;
+		this.rewardWinning = rewardWinning;
+		this.rewardCorrectNumber = rewardCorrectNumber;
 		this.hintLabel = hintLabel;
 		this.inputField = inputField;
 		this.submitButton = submitButton;
@@ -192,7 +200,7 @@ public class GameController {
 				categoryLabels[i].setText(categories[i].getName());
 				clueButtons[i][0].setDisable(false);
 			}
-			endingLabel.setVisible(false);
+			reward.setVisible(false);
 			gameGrid.setVisible(true);
 			hintLabel.setVisible(true);
 			inputField.setVisible(true);
@@ -211,6 +219,7 @@ public class GameController {
 		if(checkAnswer(inputField.getText())) {
 			text = "Correct!";
 			currentWinnings = Integer.parseInt(clueButtons[colnum][rownum].getText());
+			correctcount++;
 		}else {
 			text = "Wrong. The correct answer was: "+ currentQuestion.getAnswerBack();
 		}
@@ -308,6 +317,12 @@ public class GameController {
 	public void goToSettings() {
 		sceneController.changeScene("settings");
 	}
+
+	public void goToLeaderBorad() {
+		gameScene.setRoot(selectionPane);
+		generateView();
+		sceneController.changeScene("leaderboard");		
+	}
 	
 	/**
 	 * This method is used to update the question showing label and 
@@ -329,10 +344,13 @@ public class GameController {
 	}
 	
 	private void gameComplete() {
-		endingLabel.setText("Congrats! All questions completed!! You have a total reward of $"
-				+currentWinnings+".\n Click restart to play again.\n");
+		rewardUsername.setText(username);
+		rewardWinning.setText("$ "+currentWinnings);
+		rewardCorrectNumber.setText(correctcount+" / 25");
+		winningLabel.setVisible(false);
 		gameGrid.setVisible(false);
-		endingLabel.setVisible(true);
+		hintLabel.setVisible(false);
+		reward.setVisible(true);
 		leaderboardController.addToLeaderboard(username, currentWinnings);
 	}
 	
@@ -374,7 +392,7 @@ public class GameController {
 				clueButtons[i][j].setDisable(true);
 			}
 		}
-		endingLabel.setVisible(false);
+		reward.setVisible(false);
 		gameGrid.setVisible(true);
 		hintLabel.setVisible(false);
 		inputField.setVisible(false);
