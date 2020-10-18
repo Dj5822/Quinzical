@@ -3,11 +3,14 @@ package quinzical.controller;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Optional;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -20,8 +23,10 @@ public class DatabaseController {
 	private GridPane mainPane;
 	private GridPane modifyPane;
 	
+	private ComboBox<String> sectionCB;
 	private ComboBox<String> categoryCB;
 	private ListView listView;
+	private Button addButton, modifyButton, deleteButton;
 	
 	private Label typeInput;
 	private TextField clueInput;
@@ -31,18 +36,31 @@ public class DatabaseController {
 	public DatabaseController(SceneController sceneController) {
 		this.sceneController = sceneController;
 	}
-	public void setup(Scene main, GridPane mainPane, GridPane modifyPane, 
-			ComboBox<String> categoryCB, ListView listView, Label typeInput, 
-			TextField clueInput, TextField answerFrontInput, TextField answerBackInput) {
+	public void setup(Scene main, GridPane mainPane, GridPane modifyPane, ComboBox<String> sectionCB,
+			ComboBox<String> categoryCB, ListView listView, Button addButton, Button modifyButton,
+			Button deleteButton, Label typeInput, TextField clueInput, TextField answerFrontInput, 
+			TextField answerBackInput) {
 		this.main = main;
 		this.mainPane = mainPane;
 		this.modifyPane = modifyPane;
+		this.sectionCB = sectionCB;
 		this.categoryCB = categoryCB;
 		this.listView = listView;
+		this.addButton = addButton;
+		this.modifyButton = modifyButton;
+		this.deleteButton = deleteButton;
+				
 		this.typeInput = typeInput;
 		this.clueInput = clueInput;
 		this.answerFrontInput = answerFrontInput;
 		this.answerBackInput = answerBackInput;
+	}
+	public Optional<ButtonType> showConfirmationDialog(String headerMessage, String contentMessage){
+		Alert confirmAlert = new Alert(AlertType.CONFIRMATION);
+		confirmAlert.setTitle("Confirmation Dialog");
+		confirmAlert.setHeaderText(headerMessage);
+		confirmAlert.setContentText(contentMessage);
+		return confirmAlert.showAndWait();
 	}
 	public void showErrorMessage(String headerMessage, String contentMessage) {
 		Alert errorAlert = new Alert(AlertType.ERROR);
@@ -52,13 +70,22 @@ public class DatabaseController {
 		
 		errorAlert.showAndWait();
 	}
-	public ObservableList<String> updateCategoryOptions(ObservableList<String> categoryOptions) {
+	public void updateSectionOptions(ObservableList<String> sectionOptions) {
+		sectionOptions.clear();
+		sectionOptions.add("nz");
+		sectionOptions.add("international");	
+	}
+	public ObservableList<String> updateCategoryOptions(ObservableList<String> categoryOptions, String section) {
 		
 		categoryOptions.clear();		
 		
 		try {
-			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "./scripts/getCategories.sh");
-			
+			ProcessBuilder builder = new ProcessBuilder();
+			if(section.equals("nz")) {
+				builder.command("bash", "-c", "./scripts/getCategories.sh");
+			}else {
+				builder.command("bash", "-c", "./scripts/getInternationalCategories.sh");
+			}			
 			Process process = builder.start();
 			InputStream inputStream = process.getInputStream();
 			InputStream errorStream = process.getErrorStream();
@@ -86,9 +113,11 @@ public class DatabaseController {
 		
 		return categoryOptions;
 	}
-	public void updateListView(String category) {
+	public void updateListView() {
 		try {
-			String cmd = "cat categories/\""+category+"\".txt";
+			String section = sectionCB.getValue().toString();
+			String category = categoryCB.getValue().toString();
+			String cmd = "cat categories/"+section+"/\""+category+"\".txt";
 			ProcessBuilder builder = new ProcessBuilder("bash", "-c", cmd);
 			
 			Process process = builder.start();
@@ -140,8 +169,9 @@ public class DatabaseController {
 		int index = listView.getSelectionModel().getSelectedIndex();
 		String lineNumber = Integer.toString(index+1);	
 		try {
+			String section = sectionCB.getValue().toString();
 			String category = categoryCB.getValue().toString();
-			String cmd = "sed -i \'"+lineNumber+"d\' categories/\""+category+"\".txt";
+			String cmd = "sed -i \'"+lineNumber+"d\' categories/"+section+"/\""+category+"\".txt";
 			ProcessBuilder builder = new ProcessBuilder("bash", "-c", cmd);
 			Process process = builder.start();
 			InputStream errorStream = process.getErrorStream();
@@ -156,9 +186,11 @@ public class DatabaseController {
 				errorAlert.setContentText(errorReader.readLine());
 				errorAlert.showAndWait();
 			}
-			process.destroy();		
-			updateListView(category);
-			
+			process.destroy();
+			modifyButton.setDisable(true);
+			deleteButton.setDisable(true);
+			updateListView();
+				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -168,8 +200,9 @@ public class DatabaseController {
 			String clue = clueInput.getText();
 			String ansFront = answerFrontInput.getText();
 			String ansBack = answerBackInput.getText();
+			String section = sectionCB.getValue().toString();
 			String category = categoryCB.getValue().toString();
-			String cmd = "echo \'"+clue+", ( "+ansFront+") "+ansBack+"\' >> categories/\""+category+"\".txt";
+			String cmd = "echo \'"+clue+", ( "+ansFront+") "+ansBack+"\' >> categories/"+section+"/\""+category+"\".txt";
 			ProcessBuilder builder = new ProcessBuilder("bash", "-c", cmd);
 			Process process = builder.start();
 			InputStream errorStream = process.getErrorStream();
@@ -192,14 +225,34 @@ public class DatabaseController {
 			clueInput.setText("");
 			answerFrontInput.setText("");
 			answerBackInput.setText("");
-			updateListView(category);
+			
+			modifyButton.setDisable(true);
+			deleteButton.setDisable(true);
+			updateListView();
 			main.setRoot(mainPane);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	public void cancelModification() {
+		typeInput.setText("");
+		clueInput.setText("");
+		answerFrontInput.setText("");
+		answerBackInput.setText("");
 		main.setRoot(mainPane);
 		
+	}
+	public void clearListView() {
+		listView.getItems().clear();
+		
+	}
+	public void questionSelected() {
+		int i = listView.getSelectionModel().getSelectedIndex();
+		if(i != -1) {
+			if(modifyButton.isDisabled()) {
+				modifyButton.setDisable(false);
+				deleteButton.setDisable(false);
+			}
+		}
 	}
 }

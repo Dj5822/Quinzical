@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,10 +16,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
@@ -30,10 +33,13 @@ public class DatabaseView {
 	
 	private Scene main;
 	
-	private Label CBLabel;
+	private Label mainTitle;
+	private Label sectionLabel;
+	private Label categoryLabel;
+	private ObservableList<String> sectionOptions;
 	private ObservableList<String> categoryOptions;
-	private ComboBox<String> categoryCB;
-	private Button showButton;
+	private ComboBox<String> sectionCB;
+ 	private ComboBox<String> categoryCB;
 	private ListView listView;
 	private Button addButton,modifyButton,deleteButton;
 	private Button returnButton;
@@ -61,25 +67,36 @@ public class DatabaseView {
 		main.getStylesheets().clear();
 		main.getStylesheets().add("file:///" + styleFile.getAbsolutePath().replace("\\", "/"));
 		
-		CBLabel = new Label("Select the category you want to modify and click show.");
+		mainTitle = new Label("Select the section and category below to modify questions");
+		sectionLabel = new Label("Section:");
+		sectionOptions = FXCollections.observableArrayList();
+		controller.updateSectionOptions(sectionOptions);
+		sectionCB = new ComboBox<String>(sectionOptions);
+		categoryLabel = new Label("Category:");
 		categoryOptions = FXCollections.observableArrayList();
-		controller.updateCategoryOptions(categoryOptions);
 		categoryCB = new ComboBox<String>(categoryOptions);
-		showButton = new Button ("Show data");
 		listView = new ListView();
 		addButton = new Button("add");
 		modifyButton = new Button("modify");
 		deleteButton = new Button("delete");
 		returnButton = new Button("Return");
 		
-		CBLabel.setTextAlignment(TextAlignment.CENTER);
-		CBLabel.setAlignment(Pos.CENTER);
-		CBLabel.setFont(new Font(height/20));
-		CBLabel.setPadding(new Insets(0, width/20, 0, width/20));
+		mainTitle.setTextAlignment(TextAlignment.CENTER);
+		mainTitle.setAlignment(Pos.CENTER);
+		mainTitle.setFont(new Font(height/20));
+		mainTitle.setPadding(new Insets(0, width/20, 0, width/20));
+		sectionLabel.setTextAlignment(TextAlignment.CENTER);
+		sectionLabel.setAlignment(Pos.CENTER);
+		sectionLabel.setFont(new Font(height/20));
+		sectionLabel.setPadding(new Insets(0, width/20, 0, width/20));
+		categoryLabel.setTextAlignment(TextAlignment.CENTER);
+		categoryLabel.setAlignment(Pos.CENTER);
+		categoryLabel.setFont(new Font(height/20));
+		categoryLabel.setPadding(new Insets(0, width/20, 0, width/20));
+		sectionCB.setPrefHeight(height/20);
+		sectionCB.setPrefWidth(width/4);
 		categoryCB.setPrefHeight(height/20);
 		categoryCB.setPrefWidth(width/4);
-		showButton.setPrefHeight(height/20);
-		showButton.setPrefWidth(width/4);
 		listView.setPrefHeight(height/2);
 		listView.setPrefWidth(width);
 		addButton.setPrefHeight(height/20);
@@ -91,27 +108,31 @@ public class DatabaseView {
 		returnButton.setPrefHeight(height/20);
 		returnButton.setPrefWidth(width/4);
 		
-		GridPane.setHalignment(CBLabel, HPos.CENTER);
+		GridPane.setHalignment(mainTitle, HPos.CENTER);
+		GridPane.setHalignment(sectionLabel, HPos.CENTER);
+		GridPane.setHalignment(categoryLabel, HPos.CENTER);
+		GridPane.setHalignment(sectionCB, HPos.CENTER);
 		GridPane.setHalignment(categoryCB, HPos.CENTER);
-		GridPane.setHalignment(showButton, HPos.CENTER);
 		GridPane.setHalignment(listView, HPos.CENTER);
 		GridPane.setHalignment(addButton, HPos.CENTER);
 		GridPane.setHalignment(modifyButton, HPos.CENTER);
 		GridPane.setHalignment(deleteButton, HPos.CENTER);
 		GridPane.setHalignment(returnButton, HPos.CENTER);
 		
-		addButton.setVisible(false);
-		modifyButton.setVisible(false);
-		deleteButton.setVisible(false);
+		addButton.setDisable(true);
+		modifyButton.setDisable(true);
+		deleteButton.setDisable(true);
 		
-		mainPane.add(CBLabel, 0, 0, 3, 1);
-		mainPane.add(categoryCB, 0, 1);
-		mainPane.add(showButton, 1, 1);	
-		mainPane.add(listView, 0, 2, 3, 1);
-		mainPane.add(addButton, 0, 3);
-		mainPane.add(modifyButton, 1, 3);
-		mainPane.add(deleteButton, 2, 3);
-		mainPane.add(returnButton, 0, 4, 3, 1);
+		mainPane.add(mainTitle, 0, 0, 3, 1);
+		mainPane.add(sectionLabel, 0, 1);
+		mainPane.add(categoryLabel, 2, 1);
+		mainPane.add(sectionCB, 0, 2);
+		mainPane.add(categoryCB, 2, 2);
+		mainPane.add(listView, 0, 3, 3, 1);
+		mainPane.add(addButton, 0, 4);
+		mainPane.add(modifyButton, 1, 4);
+		mainPane.add(deleteButton, 2, 4);
+		mainPane.add(returnButton, 0, 5, 3, 1);
 		
 		GridPane modifyPane = new GridPane();
 		modifyPane.setVgap(height/15);
@@ -144,15 +165,36 @@ public class DatabaseView {
 		modifyPane.add(confirmButton, 0, 5);
 		modifyPane.add(cancelButton, 1, 5);
 		
-		controller.setup(main, mainPane, modifyPane, categoryCB, listView, typeInput, 
-				clueInput, answerFrontInput, answerBackInput);
-		showButton.setOnAction(new EventHandler<ActionEvent>() {
+		controller.setup(main, mainPane, modifyPane, sectionCB, categoryCB, listView, addButton,
+				modifyButton, deleteButton,typeInput, clueInput, answerFrontInput, answerBackInput);
+		
+		sectionCB.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				addButton.setVisible(true);
-				modifyButton.setVisible(true);
-				deleteButton.setVisible(true);
-				controller.updateListView(categoryCB.getValue().toString());
+				controller.updateCategoryOptions(categoryOptions, sectionCB.getValue());
+				controller.clearListView();
+				addButton.setDisable(true);
+				modifyButton.setDisable(true);
+				deleteButton.setDisable(true);
+			}
+		});
+		categoryCB.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.clearListView();
+				if(addButton.isDisabled()) {
+					addButton.setDisable(false);
+				}else if(!modifyButton.isDisabled()) {
+					modifyButton.setDisable(true);
+					deleteButton.setDisable(true);
+				}		
+				controller.updateListView();
+			}
+		});
+		listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				controller.questionSelected();
 			}
 		});
 		addButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -170,7 +212,10 @@ public class DatabaseView {
 		deleteButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.deleteQuestion();
+				Optional<ButtonType> result = controller.showConfirmationDialog("Deleting a question!","Are you sure to do this?");
+				if(result.get() == ButtonType.OK) {
+					controller.deleteQuestion();
+				}
 			}
 		});
 		returnButton.setOnAction(new EventHandler<ActionEvent>() {
