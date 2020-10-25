@@ -1,5 +1,11 @@
 package quinzical.controller;
 
+/**
+ * Each time a player completes a game in game mode, a new LeaderboardItem will
+ * be added to the leaderboard.
+ * @author dj5822
+ *
+ */
 public class LeaderboardItem {
 	
 	private String username;

@@ -15,6 +15,17 @@ public class MenuController {
 	private SceneController sceneController;
 	private LeaderboardController leaderboardController;
 	
+	public MenuController(SceneController sceneController, LeaderboardController leaderboardController) {
+		this.sceneController = sceneController;
+		this.leaderboardController = leaderboardController;
+		generateGamedata();
+	}
+	
+	/**
+	 * Used to show an error message.
+	 * @param headerMessage
+	 * @param contentMessage
+	 */
 	public void showErrorMessage(String headerMessage, String contentMessage) {
 		Alert errorAlert = new Alert(AlertType.ERROR);
 		errorAlert.setTitle("Error encountered");
@@ -22,12 +33,6 @@ public class MenuController {
 		errorAlert.setContentText(contentMessage);
 		
 		errorAlert.showAndWait();
-	}
-	
-	public MenuController(SceneController sceneController, LeaderboardController leaderboardController) {
-		this.sceneController = sceneController;
-		this.leaderboardController = leaderboardController;
-		generateGamedata();
 	}
 	
 	/**
@@ -44,7 +49,9 @@ public class MenuController {
 		sceneController.changeScene("practice");
 	}
 	
-	
+	/**
+	 * Switches the scene to the leaderboard.
+	 */
 	public void showLeaderBoardView() {
 		sceneController.changeScene("leaderboard");
 	}
@@ -63,10 +70,18 @@ public class MenuController {
 		sceneController.changeScene("database");
 	}
 	
+	/**
+	 * Switches the scene to the help view.
+	 */
 	public void showHelpView() {
 		sceneController.changeScene("help");
 	}
 	
+	/**
+	 * Resets the game.
+	 * Leaderboard will be cleared and international mode will be locked again
+	 * (if international mode was unlocked).
+	 */
 	public void resetGame() {
 		ButtonType yes = new ButtonType("Yes", ButtonData.YES);
 		ButtonType no = new ButtonType("No", ButtonData.CANCEL_CLOSE);
@@ -98,12 +113,8 @@ public class MenuController {
 	}
 	
 	/**
-	 * Ends the game.
+	 * Used to generate files that are required to store game progress.
 	 */
-	public void quitGame() {
-		sceneController.quitGame();
-	}
-	
 	private void generateGamedata() {
 		try {
 			//generate gameData
@@ -121,5 +132,12 @@ public class MenuController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Ends the game.
+	 */
+	public void quitGame() {
+		sceneController.quitGame();
 	}
 }

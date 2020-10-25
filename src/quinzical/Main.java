@@ -22,6 +22,9 @@ import quinzical.ui.SettingsView;
 
 public class Main extends Application {
 	
+	/**
+	 * Initialises all the components required to run the game.
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		

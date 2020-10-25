@@ -10,28 +10,46 @@ public class Question {
 	private String answerFront;
 	private String answerBack;
 	
-	
-	
+	/**
+	 * The question is split into a clue component and an answer component.
+	 * Note that the answer has a front and back section.
+	 * Front section is typically something like 'what is'
+	 * and back section is typically something like 'a potato'.
+	 * @param clue
+	 * @param answerFront
+	 * @param answerBack
+	 */
 	public Question(String clue, String answerFront, String answerBack) {
 		this.clue = clue;
 		this.answerFront = answerFront;
 		this.answerBack = answerBack;
 	}
 	
+	/**
+	 * Return the clue for the question.
+	 */
 	public String getClue() {
 		return clue;
 	}
 	
+	/**
+	 * Returns a hint for the answer.
+	 * @return
+	 */
 	public char getFirstLetterOfAnswerBack() {
 		return answerBack.charAt(1);
 	}
 	
+	/**
+	 * Returns the back part of the answer.
+	 * @return
+	 */
 	public String getAnswerBack() {
 		return answerBack;
 	}
 	
 	/**
-	 * 
+	 * Checks if the inputed answer is correct.
 	 * @param input
 	 * @return true if answer is correct, false if answer is wrong.
 	 */

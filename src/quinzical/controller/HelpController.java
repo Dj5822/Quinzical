@@ -1,5 +1,9 @@
 package quinzical.controller;
 
+/**
+ * The controller for the help view.
+ *
+ */
 public class HelpController {
 	
 	private SceneController sceneController;

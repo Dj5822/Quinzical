@@ -22,6 +22,10 @@ public class LeaderboardController {
 		this.leaderboard = leaderboard;
 	}
 	
+	/**
+	 * Reads the stored leaderboard data from the gamedata/leaderboard file.
+	 * The leaderboard information will then be added to the leaderboard.
+	 */
 	public void initialiseLeaderboard() {
 		try {
 			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "cat gamedata/leaderboard");
@@ -60,6 +64,12 @@ public class LeaderboardController {
 		}
 	}
 	
+	/**
+	 * Whenever a player completes a game in gamemode, the leaderboard will need to be updated.
+	 * This method will add the new data into the leaderboard.
+	 * @param name
+	 * @param score
+	 */
 	public void addToLeaderboard(String name, int score) {	
 		try {
 			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "echo \"" + name + " " + score + "\" >> ./gamedata/leaderboard");
@@ -84,6 +94,9 @@ public class LeaderboardController {
 		}
 	}
 	
+	/**
+	 * Used to return to the menu.
+	 */
 	public void returnToMenu() {
 		sceneController.changeScene("menu");
 	}

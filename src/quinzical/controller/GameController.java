@@ -30,6 +30,7 @@ import quinzical.task.VoiceTask;
  */
 public class GameController {
 	
+	// Controllers.
 	private SceneController sceneController;
 	private SettingsController settingsController;
 	private LeaderboardController leaderboardController;
@@ -63,20 +64,27 @@ public class GameController {
 	private GridPane gameGrid;
 	private Label timerLabel;
 	
+	// Used for text to speech.
 	private VoiceTask currentVoiceTask;
 	
+	// Scenes and panes.
 	private Scene gameScene;
 	private GridPane gamePane;
 	private GridPane selectionPane;
 	private GridPane namePane;
 	
+	// Used in the name screen.
 	private TextField nameTextbox;
+	
+	// Information required for gamemode.
 	private String username;
 	private String gameMode;
 	private boolean internationalUnlocked = false;
 	
+	// The amount of time given to answer each question.
 	private final int INITIALTIME = 20;
 	
+	// Fields relating to timer.
 	private Timeline gameTimer;
 	private int timeLeft = INITIALTIME;
 	private boolean timerStart = false;
@@ -88,6 +96,9 @@ public class GameController {
 		setupGameTimer();
 	}
 	
+	/**
+	 * Used to set up the timer for the questions.
+	 */
 	private void setupGameTimer() {
 		gameTimer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
 			@Override
@@ -103,12 +114,18 @@ public class GameController {
 		gameTimer.setCycleCount(Timeline.INDEFINITE);
 	}
 	
+	/**
+	 * Used to reset the timer.
+	 */
 	private void resetTime() {
 		gameTimer.stop();
 		timeLeft = INITIALTIME;
 		timerStart = false;
 	}
 	
+	/**
+	 * Used to link game view components to the controller.
+	 */
 	public void setup(
 			Scene gameScene,
 			GridPane gamePane,
@@ -145,6 +162,9 @@ public class GameController {
 		this.gameGrid = gameGrid;
 	}
 	
+	/**
+	 * Used to show error message.
+	 */
 	public void showErrorMessage(String headerMessage, String contentMessage) {
 		Alert errorAlert = new Alert(AlertType.ERROR);
 		errorAlert.setTitle("Error encountered");
@@ -154,6 +174,9 @@ public class GameController {
 		errorAlert.showAndWait();
 	}
 	
+	/**
+	 * When nz mode is selected, player is given nz categories.
+	 */
 	public void nzButtonPressed() {
 		gameMode = "nz";
 		gameScene.setRoot(namePane);
@@ -180,6 +203,11 @@ public class GameController {
 		}
 	}
 	
+	/**
+	 * Used to check whether international mode is unlocked.
+	 * Returns true if international mode is unlocked.
+	 * Returns false if international mode is locked.
+	 */
 	public boolean checkIfInternationalUnlocked() {
 		String output = "false";
 		
@@ -213,6 +241,10 @@ public class GameController {
 		}
 	}
 	
+	/**
+	 * Used to store the player's name.
+	 * Name is used to record the player's score in the leaderboard.
+	 */
 	public void submitName() {
 		username = nameTextbox.getText().replace(" ", "");
 		gameScene.setRoot(gamePane);
@@ -293,6 +325,10 @@ public class GameController {
 		updateQuestionComponents();
 	}
 	
+	/**
+	 * Keeps track of which buttons should be visible and/or disabled.
+	 * Also, if a category is completed, it will increment completedCategories.
+	 */
 	private void updateClueButtons() {
 		clueButtons[colnum][rownum].setVisible(false);
 		if (enabledButtons[colnum] == 4) {
@@ -394,6 +430,9 @@ public class GameController {
 		}
 	}
 	
+	/**
+	 * Activated at the end of a game.
+	 */
 	private void gameComplete() {
 		rewardUsername.setText(username);
 		rewardWinning.setText("$ "+currentWinnings);
@@ -406,6 +445,9 @@ public class GameController {
 		leaderboardController.addToLeaderboard(username, currentWinnings);
 	}
 	
+	/**
+	 * Used to unlock international mode.
+	 */
 	private void unlockInternational() {
 		internationalUnlocked = true;
 		try {
@@ -431,6 +473,7 @@ public class GameController {
 			e.printStackTrace();
 		}
 	}
+	
 	/**
 	 * Resets all GUI components in the game view.
 	 */
@@ -508,6 +551,9 @@ public class GameController {
 		return currentQuestion.checkAnswerIsCorrect(text);
 	}
 	
+	/**
+	 * Used to play the voice for the question.
+	 */
 	private void playVoice(String text) {		
 		currentVoiceTask = new VoiceTask(text, settingsController.getSpeed(), settingsController.getVoiceType());
 		Thread voiceThread = new Thread(currentVoiceTask);

@@ -12,6 +12,7 @@ import quinzical.controller.GameController;
  * @author Dylan Jung
  * 
  * Used in the game mode to represent a category.
+ * Each category will typically store 5 questions.
  *
  */
 public class Category {
@@ -28,6 +29,11 @@ public class Category {
 		this.questions = new ArrayList<Question>();
 	}
 	
+	/**
+	 * Gets five random questions and adds them to the questions arraylist.
+	 * @param controller
+	 * @param gameMode
+	 */
 	public void selectQuestions(GameController controller, String gameMode) {
 		try {
 			ProcessBuilder qbuilder = new ProcessBuilder("bash", "-c", "./scripts/get5RandomQuestion.sh \"" + name + "\" " + gameMode);
@@ -54,10 +60,18 @@ public class Category {
 		}
 	}
 	
+	/**
+	 * Get one of the questions (in an inputed position)
+	 * belonging to the category.
+	 */
 	public Question getQuestion(int position) {
 		return questions.get(position);
 	}
 	
+	/**
+	 * Returns the name of the category.
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}

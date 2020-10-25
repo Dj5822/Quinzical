@@ -40,6 +40,10 @@ public class PracticeController {
 		this.settingsController = settingsController;
 	}
 	
+	/**
+	 * Links the view components with the controller so that the controller
+	 * can manipulate these components.
+	 */
 	public void setup(Scene main,
 	GridPane answerPane,
 	GridPane categoryPane,
@@ -72,6 +76,11 @@ public class PracticeController {
 		errorAlert.showAndWait();
 	}
 	
+	/**
+	 * Used to show question in the practice view.
+	 * Only works if a category is selected.
+	 * If category is not selected, error message will appear.
+	 */
 	public void showQuestion() {
 		if (categoryCB.getValue() == null) {
 			showErrorMessage("You must select a category", "Please select a category from the combobox.");
@@ -86,6 +95,9 @@ public class PracticeController {
 		}
 	}
 	
+	/**
+	 * Used to check if the answer is correct.
+	 */
 	public void submitAnswer() {
 		if (checkAnswerButton.getText() == "Check Answer") {
 			hintLabel.setText(checkAnswer(answerTextBox.getText()));
