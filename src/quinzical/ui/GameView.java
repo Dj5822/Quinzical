@@ -164,7 +164,7 @@ public class GameView {
 			categoryLabels[col].setMinWidth(150);
 			categoryLabels[col].setAlignment(Pos.CENTER);
 			categoryLabels[col].setTextAlignment(TextAlignment.CENTER);
-			categoryLabels[col].setFont(new Font(30));
+			categoryLabels[col].setFont(new Font(24));
 			GridPane.setHalignment(categoryLabels[col], HPos.CENTER);
 			for (int row=1;row<=5;row++) {
 				// Creating 5x5 grid clue buttons.
@@ -191,21 +191,21 @@ public class GameView {
 		returnToMenuButton.setPrefWidth(width/3);
 		settingsButton.setPrefWidth(width/3);
 		ToLeaderBoardButton.setPrefWidth(width/3);
-
+		
 		inputField.setPrefHeight(height/9);
 		inputField.setPrefWidth(width/1.1);
-
-		rewardUsername.setFont(new Font(60));
-		rewardWinningLabel.setFont(new Font(30));
-		rewardWinning.setFont(new Font(40));
-		rewardCorrectNumberLabel.setFont(new Font(30));
-		rewardCorrectNumber.setFont(new Font(40));
 		
-		inputField.setFont(new Font(30));
-		winningLabel.setFont(new Font(30));
-		hintLabel.setFont(new Font(30));
-		timerLabel.setFont(new Font(30));
-		ToLeaderBoardButton.setFont(new Font(30));
+		rewardUsername.setFont(new Font(height/15));
+		rewardWinningLabel.setFont(new Font(height/30));
+		rewardWinning.setFont(new Font(height/20));
+		rewardCorrectNumberLabel.setFont(new Font(height/30));
+		rewardCorrectNumber.setFont(new Font(height/20));
+		
+		inputField.setFont(new Font(height/30));
+		winningLabel.setFont(new Font(height/30));
+		hintLabel.setFont(new Font(height/30));
+		timerLabel.setFont(new Font(height/30));
+		ToLeaderBoardButton.setFont(new Font(height/30));
 
 		
 		// Set alignmnet

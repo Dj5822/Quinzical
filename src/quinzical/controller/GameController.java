@@ -488,6 +488,7 @@ public class GameController {
 			}
 		}
 		reward.setVisible(false);
+		timerLabel.setVisible(false);
 		gameGrid.setVisible(true);
 		hintLabel.setVisible(false);
 		inputField.setVisible(false);
