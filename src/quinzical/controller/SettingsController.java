@@ -1,5 +1,7 @@
 package quinzical.controller;
 
+import quinzical.task.VoiceTask;
+
 public class SettingsController {
 	
 	private SceneController sceneController;

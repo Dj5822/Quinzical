@@ -20,6 +20,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import quinzical.model.Category;
+import quinzical.model.Question;
+import quinzical.task.VoiceTask;
 
 /**
  * This class is used to manage the game data of game mode.

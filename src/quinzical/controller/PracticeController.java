@@ -14,6 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import quinzical.model.Question;
+import quinzical.task.VoiceTask;
 
 public class PracticeController {
 	

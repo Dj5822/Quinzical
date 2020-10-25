@@ -1,9 +1,11 @@
-package quinzical.controller;
+package quinzical.model;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+import quinzical.controller.GameController;
 
 /**
  * 
@@ -21,7 +23,7 @@ public class Category {
 	 * When a new category is created, it must contain 5 random clues
 	 * belonging to that category
 	 */
-	Category(String categoryName) {
+	public Category(String categoryName) {
 		this.name = categoryName;
 		this.questions = new ArrayList<Question>();
 	}

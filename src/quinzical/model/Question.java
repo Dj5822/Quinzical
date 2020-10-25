@@ -1,4 +1,4 @@
-package quinzical.controller;
+package quinzical.model;
 /**
  * Used in the game mode to represent a clue.
  * Also contains the answer to that respective clue.

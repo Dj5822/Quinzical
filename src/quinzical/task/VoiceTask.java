@@ -1,4 +1,4 @@
-package quinzical.controller;
+package quinzical.task;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
