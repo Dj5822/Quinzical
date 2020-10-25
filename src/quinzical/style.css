@@ -14,7 +14,7 @@
 	-fx-background-color: transparent;
 	-fx-font-family:"Segoe UI", Helvetica, Arial, sans-serif;
 	-fx-text-fill: #6a718d;
-	-fx-font-size: 30;
+	-fx-font-size: 24;
 }
 
 .button:focused {
@@ -24,7 +24,7 @@
 	-fx-border-radius: 0, 0;
 	-fx-border-insets: 1 1 1 1, 0;
 	-fx-font-family:"Segoe UI", Helvetica, Arial, sans-serif;
-	-fx-font-size: 30;
+	-fx-font-size: 24;
 }
 
 .button:hover {
@@ -34,12 +34,12 @@
 
 .text-area .content {
 	-fx-font-family:"Segoe UI", Helvetica, Arial, sans-serif;
-	-fx-font-size: 30;
+	-fx-font-size: 24;
 }
 
 .slider {
 	-fx-font-family:"Segoe UI", Helvetica, Arial, sans-serif;
-	-fx-font-size: 30;
+	-fx-font-size: 24;
 }
 
 .combo-box-base {
@@ -49,7 +49,7 @@
 	-fx-background-color: transparent;
 	-fx-font-family:"Segoe UI", Helvetica, Arial, sans-serif;
 	-fx-text-fill: #6a718d;
-	-fx-font-size: 30;
+	-fx-font-size: 24;
 }
 
 .combo-box-base:hover {
@@ -60,7 +60,7 @@
 .radio-button {
 	-fx-font-family:"Segoe UI", Helvetica, Arial, sans-serif;
 	-fx-text-fill: #6a718d;
-	-fx-font-size: 30;
+	-fx-font-size: 24;
 }
 
 .radio-button .radio {
