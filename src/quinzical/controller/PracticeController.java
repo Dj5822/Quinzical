@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import quinzical.model.Question;
@@ -26,7 +27,7 @@ public class PracticeController {
 	private int answerCount;
 	
 	// GUI components
-	private Scene main;
+	private BorderPane backgroundPane;
 	private GridPane answerPane;
 	private GridPane categoryPane;
 	private ComboBox<String> categoryCB;
@@ -44,7 +45,7 @@ public class PracticeController {
 	 * Links the view components with the controller so that the controller
 	 * can manipulate these components.
 	 */
-	public void setup(Scene main,
+	public void setup(BorderPane backgroundPane,
 	GridPane answerPane,
 	GridPane categoryPane,
 	ComboBox<String> categoryCB,
@@ -52,7 +53,7 @@ public class PracticeController {
 	TextArea answerTextBox,
 	Label hintLabel,
 	Button checkAnswerButton) {
-		this.main = main;
+		this.backgroundPane = backgroundPane;
 		this.answerPane = answerPane;
 		this.categoryPane = categoryPane;
 		this.categoryCB = categoryCB;
@@ -90,7 +91,7 @@ public class PracticeController {
 			answerTextBox.setVisible(true);
 			answerTextBox.clear();
 			hintLabel.setText("");
-			main.setRoot(answerPane);
+			backgroundPane.setCenter(answerPane);
 			checkAnswerButton.setText("Check Answer");
 		}
 	}
@@ -110,7 +111,7 @@ public class PracticeController {
 			}
 		}
 		else {
-			main.setRoot(categoryPane);
+			backgroundPane.setCenter(categoryPane);
 		}
 	}
 	

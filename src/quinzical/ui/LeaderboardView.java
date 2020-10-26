@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import quinzical.controller.LeaderboardController;
@@ -26,15 +27,25 @@ public class LeaderboardView {
 	
 	public LeaderboardView(LeaderboardController controller, int width, int height) {
 		
+		// setup background.
+		BorderPane backgroundPane = new BorderPane();
+		backgroundPane.setId("grassbackground");
+		
 		// create main pane.
 		GridPane mainPane = new GridPane();
 		mainPane.setAlignment(Pos.CENTER);
 		mainPane.setVgap(height/15);
-		mainPane.setStyle("-fx-background-color: #edf4fc");
-		main = new Scene(mainPane, width, height);
+		mainPane.setStyle("-fx-background-color: rgba(237, 244, 252, 0.8)");
+		mainPane.setMaxSize(width/1.1, height/1.1);
+		
+		backgroundPane.setCenter(mainPane);
+		
+		main = new Scene(backgroundPane, width, height);
+		
 		File styleFile = new File("./src/quinzical/style.css");
 		main.getStylesheets().clear();
 		main.getStylesheets().add("file:///" + styleFile.getAbsolutePath().replace("\\", "/"));
+		
 		
 		// generate leaderboard components.
 		title = new Label("Leaderboard");
@@ -60,6 +71,7 @@ public class LeaderboardView {
 		scoreColumn.setPrefWidth(width/3);
 		returnToMenuButton.setPrefWidth(width/5);
 		returnToMenuButton.setPrefHeight(height/9);
+		returnToMenuButton.setFocusTraversable(false);
 		GridPane.setHalignment(title, HPos.CENTER);
 		GridPane.setHalignment(returnToMenuButton, HPos.CENTER);
 		
