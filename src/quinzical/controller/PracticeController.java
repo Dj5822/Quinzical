@@ -178,9 +178,7 @@ public class PracticeController {
 				answerCount = 0;
 				
 				// read out the question.
-				VoiceTask task1 = new VoiceTask(question.getClue(), settingsController.getSpeed(), settingsController.getVoiceType());
-				Thread thread1 = new Thread(task1);
-				thread1.start();
+				readOutText(question.getClue());
 				return question.getClue();
 			} 
 			else {
@@ -238,10 +236,14 @@ public class PracticeController {
 		}
 		
 		// read out and show the output.
-		VoiceTask task1 = new VoiceTask(output, settingsController.getSpeed(), settingsController.getVoiceType());
-		Thread thread1 = new Thread(task1);
-		thread1.start();
+		readOutText(output);
 		return output;
+	}
+	
+	public void readOutText(String text) {
+		VoiceTask voiceTask = new VoiceTask(text, settingsController.getSpeed(), settingsController.getVoiceType());
+		Thread voiceThread = new Thread(voiceTask);
+		voiceThread.start();
 	}
 	
 	/**
