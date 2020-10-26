@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -39,11 +41,20 @@ public class SettingsView {
 	
 	public SettingsView(SettingsController controller, int width, int height) {
 		
+		// setup background.
+		BorderPane backgroundPane = new BorderPane();
+		backgroundPane.setId("grassbackground");
+		
+		// setup main pane.
 		GridPane mainPane = new GridPane();
 		mainPane.setVgap(height/15);
 		mainPane.setAlignment(Pos.CENTER);
-		mainPane.setStyle("-fx-background-color: #edf4fc");
-		main = new Scene(mainPane, width, height);
+		mainPane.setStyle("-fx-background-color: rgba(237, 244, 252, 0.8)");
+		mainPane.setMaxSize(width/1.1, height/1.1);
+		
+		backgroundPane.setCenter(mainPane);
+		
+		main = new Scene(backgroundPane, width, height);
 		
 		File styleFile = new File("./src/quinzical/style.css");
 		main.getStylesheets().clear();
@@ -85,7 +96,7 @@ public class SettingsView {
 		returnButton.setPrefWidth(width/3);
 		speechSpeedSlider.setPrefWidth(width/2);
 		speechSpeedLabel.setFont(new Font(height/18));
-		testLabel.setFont(new Font(height/18));
+		testLabel.setFont(new Font(height/30));
 		speechTypeLabel.setFont(new Font(height/18));
 		GridPane.setHalignment(title, HPos.CENTER);
 		GridPane.setHalignment(testLabel, HPos.LEFT);
