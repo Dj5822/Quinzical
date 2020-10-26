@@ -28,9 +28,18 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		Rectangle2D screenBounds = Screen.getPrimary().getBounds();		
-		final int HEIGHT = (int) (screenBounds.getHeight()/1.1);
-		final int WIDTH = (int) (screenBounds.getWidth()/1.1);
+		Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+
+		int height = (int) (screenBounds.getHeight()/1.1);
+		int width = (int) screenBounds.getWidth();
+		
+		if (height > 1200) {
+			height = 1200;
+		}
+		else if (width > 1800) {
+			width = 1800;
+		}
+	
 		
 		// Initialise controllers.
 		SceneController sceneController = new SceneController(primaryStage);
@@ -43,13 +52,13 @@ public class Main extends Application {
 		HelpController helpController = new HelpController(sceneController);
 		
 		// Initialise views.
-		MenuView menuView = new MenuView(menuController, WIDTH, HEIGHT);
-		GameView gameView = new GameView(gameController, WIDTH, HEIGHT);
-		PracticeView practiceView = new PracticeView(practiceController, WIDTH, HEIGHT);
-		LeaderboardView leaderboardView = new LeaderboardView(leaderboardController, WIDTH, HEIGHT);
-		SettingsView settingsView = new SettingsView(settingsController, WIDTH, HEIGHT);
-		DatabaseView databaseView = new DatabaseView(databaseController, WIDTH, HEIGHT);
-		HelpView helpView = new HelpView(helpController, WIDTH, HEIGHT);
+		MenuView menuView = new MenuView(menuController, width, height);
+		GameView gameView = new GameView(gameController, width, height);
+		PracticeView practiceView = new PracticeView(practiceController, width, height);
+		LeaderboardView leaderboardView = new LeaderboardView(leaderboardController, width, height);
+		SettingsView settingsView = new SettingsView(settingsController, width, height);
+		DatabaseView databaseView = new DatabaseView(databaseController, width, height);
+		HelpView helpView = new HelpView(helpController, width, height);
 		
 		// Add scenes to scene controller.
 		sceneController.addScene("menu", menuView.getScene());

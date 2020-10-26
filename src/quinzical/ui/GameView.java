@@ -77,6 +77,9 @@ public class GameView {
 		File styleFile = new File("./src/quinzical/style.css");
 		main.getStylesheets().clear();
 		main.getStylesheets().add("file:///" + styleFile.getAbsolutePath().replace("\\", "/"));
+		internationalButton.setStyle("-fx-font-size:"+(width/20));
+		nzButton.setStyle("-fx-font-size:"+(width/20));
+		submitNameButton.setStyle("-fx-font-size:"+(width/20));
 	}
 	
 	private void setupSelectionPane(GameController controller, int width, int height) {
@@ -85,6 +88,7 @@ public class GameView {
 		selectionPane.setAlignment(Pos.CENTER);
 		selectionPane.setVgap(height/15);
 		selectionPane.setStyle("-fx-background-color: #edf4fc");
+		selectionPane.setId("grassbackground");
 		
 		// components.
 		gameSelectionLabel = new Label("Please select game mode");
@@ -341,6 +345,7 @@ public class GameView {
 		namePane.setAlignment(Pos.CENTER);
 		namePane.setVgap(height/15);
 		namePane.setStyle("-fx-background-color: #edf4fc");
+		namePane.setId("grassbackground");
 		
 		// initialise components.
 		nameLabel = new Label("Enter your name: ");
