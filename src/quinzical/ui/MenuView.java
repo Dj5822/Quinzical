@@ -36,6 +36,7 @@ public class MenuView {
 		final int TITLEFONTSIZE = height/9;
 		
 		GridPane mainPane = new GridPane();
+		mainPane.setId("grassbackground");
 		main = new Scene(mainPane, width, height);
 		File styleFile = new File("./src/quinzical/style.css");
 		main.getStylesheets().clear();

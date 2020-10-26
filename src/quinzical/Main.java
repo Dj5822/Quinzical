@@ -28,9 +28,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-		final int HEIGHT = (int) screenBounds.getHeight()- 60;
-		final int WIDTH = (int) screenBounds.getWidth() - 80;
+		Rectangle2D screenBounds = Screen.getPrimary().getBounds();		
+		final int HEIGHT = (int) (screenBounds.getHeight()/1.1);
+		final int WIDTH = (int) (screenBounds.getWidth()/1.1);
 		
 		// Initialise controllers.
 		SceneController sceneController = new SceneController(primaryStage);

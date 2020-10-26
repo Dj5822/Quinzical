@@ -1,3 +1,10 @@
+#grassbackground{
+	-fx-background-image: url("grass.png");
+	-fx-background-repeat: stretch;   
+	-fx-background-size: 1800 1200;
+	-fx-background-position: center center;
+}
+
 .label{
 	-fx-border-color: transparent;
 	-fx-border-width: 0;
