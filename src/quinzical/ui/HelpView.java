@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -28,12 +29,20 @@ public class HelpView {
 	
 	public HelpView(HelpController controller, int width, int height){
 		
+		// setup background.
+		BorderPane backgroundPane = new BorderPane();
+		backgroundPane.setId("grassbackground");
+		
 		// setup main pane
 		mainPane = new GridPane();
 		mainPane.setAlignment(Pos.CENTER);
 		mainPane.setVgap(height/15);
-		mainPane.setStyle("-fx-background-color: #edf4fc");
-		helpScene = new Scene(mainPane, width, height);
+		mainPane.setStyle("-fx-background-color: rgba(237, 244, 252, 0.8)");
+		mainPane.setMaxSize(width/1.1, height/1.1);
+		
+		backgroundPane.setCenter(mainPane);
+		
+		helpScene = new Scene(backgroundPane, width, height);
 		File styleFile = new File("./src/quinzical/style.css");
 		helpScene.getStylesheets().clear();
 		helpScene.getStylesheets().add("file:///" + styleFile.getAbsolutePath().replace("\\", "/"));
@@ -108,7 +117,7 @@ public class HelpView {
 		
 		// resize and align components.
 		title.setFont(new Font(height/9));
-		bodyPane.setPrefWidth(width/1.1);
+		bodyPane.setPrefWidth(width/1.15);
 		bodyPane.setPrefHeight(height/2);
 		returnToMenuButton.setPrefHeight(height/9);
 		returnToMenuButton.setPrefWidth(width/5);
