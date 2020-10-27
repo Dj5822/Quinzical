@@ -67,6 +67,7 @@ public class GameView {
 	
 	//category pane components.
 	private GridPane categoryPane;
+	private Label categoryLabel;
 	private ObservableList<String> categoryOptions;
 	private ComboBox<String>[] categoryCBs;
 	private Button confirmCategoryButton;
@@ -395,7 +396,8 @@ public class GameView {
 		categoryPane.setId("grassbackground");
 		
 		// initialise components.
-		confirmCategoryButton = new Button("Confirm category selction");
+		categoryLabel = new Label("You can choose any five categories below");
+		confirmCategoryButton = new Button("Confirm selction and start");
 		categoryCBs = new ComboBox[5];
 		categoryOptions = FXCollections.observableArrayList();
 		for(int i=0; i<5; i++) {
@@ -407,14 +409,16 @@ public class GameView {
 		}
 		
 		// add components to category pane.
-
+		categoryPane.add(categoryLabel, 0, 0);
 		categoryPane.add(confirmCategoryButton, 0, 6);
 		
 		// resize components.
-
+		categoryLabel.setFont(new Font(height/20));
+		confirmCategoryButton.setFont(new Font(height/20));
 		confirmCategoryButton.setPrefHeight(height/9);
 		confirmCategoryButton.setPrefWidth(width/3);
-
+		
+		GridPane.setHalignment(categoryLabel, HPos.CENTER);
 		GridPane.setHalignment(confirmCategoryButton, HPos.CENTER);
 				
 		confirmCategoryButton.setOnAction(new EventHandler<ActionEvent>() {

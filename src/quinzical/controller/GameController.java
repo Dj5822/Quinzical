@@ -261,7 +261,11 @@ public class GameController {
 		gameScene.setRoot(categoryPane);
 		
 	}
-	
+	/**
+	 * used to update categoriy combobox components in category
+	 * selection pane
+	 * @param categoryOptions
+	 */
 	public void updateCategoryCBs(ObservableList<String> categoryOptions) {
 		for(int i=0; i<5; i++) {
 			categoryOptions.clear();		
@@ -300,6 +304,10 @@ public class GameController {
 			
 		}
 	}
+	/**
+	 * used to submit which five categories the user has chosen
+	 * in category selection screen and start the game directly
+	 */
 	public void submitCategory() {
 		String[] selectedCategories = new String[5];
 		for(int i=0;i<5;i++) {
