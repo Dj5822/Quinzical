@@ -2,6 +2,8 @@ package quinzical.ui;
 
 import java.io.File;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -9,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -27,7 +30,7 @@ public class GameView {
 	
 	// main pane components.
 	private GridPane mainPane;
-	private Button startButton;
+	private Button restartButton;
 	private Button submitButton;
 	private Button dontKnowButton;
 	private Button returnToMenuButton;
@@ -62,15 +65,22 @@ public class GameView {
 	private TextField nameTextbox;
 	private Button submitNameButton;
 	
+	//category pane components.
+	private GridPane categoryPane;
+	private ObservableList<String> categoryOptions;
+	private ComboBox<String>[] categoryCBs;
+	private Button confirmCategoryButton;
+	
 	public GameView(GameController controller, int width, int height) {
 		
 		setupNamePane(controller, width, height);
 		setupMainPane(controller, width, height);
 		setupSelectionPane(controller, width, height);
+		setupCategoryPane(controller, width, height);
 		
 		main = new Scene(selectionPane, width, height);
 		
-		controller.setup(main, mainPane, selectionPane, namePane, nameTextbox, winningLabel, timerLabel, categoryLabels, clueButtons,
+		controller.setup(main, mainPane, selectionPane, namePane, categoryPane, nameTextbox, categoryCBs, winningLabel, timerLabel, categoryLabels, clueButtons,
 				reward, rewardUsername, rewardWinning, rewardCorrectNumber, hintLabel, inputField, submitButton, dontKnowButton, gameGrid);
 
 		// Makes everything look prettier.
@@ -81,7 +91,7 @@ public class GameView {
 		nzButton.setStyle("-fx-font-size:"+(width/20));
 		submitNameButton.setStyle("-fx-font-size:"+(width/20));
 	}
-	
+
 	private void setupSelectionPane(GameController controller, int width, int height) {
 		// selection pane.
 		selectionPane = new GridPane();
@@ -144,7 +154,7 @@ public class GameView {
 		menuGrid.setStyle("-fx-background-color: white");
 
 		// Initialize buttons and labels.
-		startButton = new Button("Start/Reset the game");
+		restartButton = new Button("Start a new game");
 		winningLabel = new Label("Current Worth: $0");
 		categoryLabels= new Label[5] ;
 		clueButtons = new Button[5][5];
@@ -182,14 +192,14 @@ public class GameView {
 		}
 		
 		// set component sizes
-		startButton.setPrefHeight(height/9);
+		restartButton.setPrefHeight(height/9);
 		submitButton.setPrefHeight(height/9);
 		dontKnowButton.setPrefHeight(height/9);
 		returnToMenuButton.setPrefHeight(height/9);
 		settingsButton.setPrefHeight(height/9);
 		ToLeaderBoardButton.setPrefHeight(height/9);
 
-		startButton.setPrefWidth(width/3);
+		restartButton.setPrefWidth(width/3);
 		submitButton.setPrefWidth(width/3);
 		dontKnowButton.setPrefWidth(width/3);
 		returnToMenuButton.setPrefWidth(width/3);
@@ -244,7 +254,7 @@ public class GameView {
 		submitButton.setVisible(false);
 		dontKnowButton.setVisible(false);
 		timerLabel.setVisible(false);
-		startButton.setFocusTraversable(false);
+		restartButton.setFocusTraversable(false);
 		submitButton.setFocusTraversable(false);
 		dontKnowButton.setFocusTraversable(false);
 		returnToMenuButton.setFocusTraversable(false);
@@ -265,7 +275,7 @@ public class GameView {
 		reward.getChildren().add(rewardCorrectNumber);
 		reward.getChildren().add(ToLeaderBoardButton);
 
-		menuGrid.add(startButton, 0, 0);
+		menuGrid.add(restartButton, 0, 0);
 		menuGrid.add(settingsButton, 1, 0);
 		menuGrid.add(returnToMenuButton, 2, 0);
 
@@ -286,10 +296,10 @@ public class GameView {
 		mainPane.add(menuGrid, 0, 6, 3, 1);
 
 		// Button functionality
-		startButton.setOnAction(new EventHandler<ActionEvent>() {
+		restartButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.startButtonPressed();
+				controller.restartButtonPressed();
 			}
 		});
 
@@ -372,7 +382,45 @@ public class GameView {
 		submitNameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
+				controller.updateCategoryCBs(categoryOptions);
 				controller.submitName();
+			}
+		});
+	}
+	private void setupCategoryPane(GameController controller, int width, int height) {
+		categoryPane = new GridPane();
+		categoryPane.setAlignment(Pos.CENTER);
+		categoryPane.setVgap(height/15);
+		categoryPane.setStyle("-fx-background-color: #edf4fc");
+		categoryPane.setId("grassbackground");
+		
+		// initialise components.
+		confirmCategoryButton = new Button("Confirm category selction");
+		categoryCBs = new ComboBox[5];
+		categoryOptions = FXCollections.observableArrayList();
+		for(int i=0; i<5; i++) {
+			categoryCBs[i] = new ComboBox<String>(categoryOptions);
+			categoryPane.add(categoryCBs[i], 0, i+1);
+			categoryCBs[i].setPrefHeight(height/20);
+			categoryCBs[i].setPrefWidth(width/4);
+			GridPane.setHalignment(categoryCBs[i], HPos.CENTER);
+		}
+		
+		// add components to category pane.
+
+		categoryPane.add(confirmCategoryButton, 0, 6);
+		
+		// resize components.
+
+		confirmCategoryButton.setPrefHeight(height/9);
+		confirmCategoryButton.setPrefWidth(width/3);
+
+		GridPane.setHalignment(confirmCategoryButton, HPos.CENTER);
+				
+		confirmCategoryButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.submitCategory();
 			}
 		});
 	}

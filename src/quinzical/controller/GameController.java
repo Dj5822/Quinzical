@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -72,9 +74,13 @@ public class GameController {
 	private GridPane gamePane;
 	private GridPane selectionPane;
 	private GridPane namePane;
+	private GridPane categoryPane;
 	
 	// Used in the name screen.
 	private TextField nameTextbox;
+	
+	//category selection screen
+	private ComboBox<String>[] categoryCBs;
 	
 	// Information required for gamemode.
 	private String username;
@@ -125,13 +131,16 @@ public class GameController {
 	
 	/**
 	 * Used to link game view components to the controller.
+	 * @param categoryPane 
 	 */
 	public void setup(
 			Scene gameScene,
 			GridPane gamePane,
 			GridPane selectionPane,
 			GridPane namePane,
+			GridPane categoryPane, 
 			TextField nameTextbox,
+			ComboBox<String>[] categoryCBs,
 			Label winningLabel,
 			Label timerLabel,
 			Label[] categoryLabels,
@@ -146,7 +155,9 @@ public class GameController {
 		this.gamePane = gamePane;
 		this.selectionPane = selectionPane;
 		this.namePane = namePane;
+		this.categoryPane = categoryPane;
 		this.nameTextbox = nameTextbox;
+		this.categoryCBs = categoryCBs;
 		this.winningLabel = winningLabel;
 		this.timerLabel = timerLabel;
 		this.categoryLabels = categoryLabels;
@@ -169,8 +180,7 @@ public class GameController {
 		Alert errorAlert = new Alert(AlertType.ERROR);
 		errorAlert.setTitle("Error encountered");
 		errorAlert.setHeaderText(headerMessage);
-		errorAlert.setContentText(contentMessage);
-		
+		errorAlert.setContentText(contentMessage);		
 		errorAlert.showAndWait();
 	}
 	
@@ -247,37 +257,96 @@ public class GameController {
 	 */
 	public void submitName() {
 		username = nameTextbox.getText().replace(" ", "");
-		gameScene.setRoot(gamePane);
+		nameTextbox.setText("");
+		gameScene.setRoot(categoryPane);
+		
 	}
 	
-	/**
-	 * This method is used to regenerate all the components and send notice
-	 * for the game controller to to initialize the game data.
-	 */
-	public void startButtonPressed() {		
-		ButtonType yes = new ButtonType("Yes", ButtonData.YES);
-		ButtonType no = new ButtonType("No", ButtonData.CANCEL_CLOSE);
-		Alert confirmationAlert = new Alert(AlertType.CONFIRMATION, "WARNING: All your progress will be lost.", yes, no);
-		confirmationAlert.setTitle("WARNING");
-		confirmationAlert.setHeaderText("Are you sure you want to start/restart the game?");
-		confirmationAlert.setContentText("If you restart, your progress will be deleted.");
-		Optional<ButtonType> result = confirmationAlert.showAndWait();
-		
-		if (result.orElse(no) == yes) {
+	public void updateCategoryCBs(ObservableList<String> categoryOptions) {
+		for(int i=0; i<5; i++) {
+			categoryOptions.clear();		
+			
+			try {
+				ProcessBuilder builder = new ProcessBuilder();
+				if(gameMode.equals("nz")) {
+					builder.command("bash", "-c", "./scripts/getCategories.sh");
+				}else {
+					builder.command("bash", "-c", "./scripts/getInternationalCategories.sh");
+				}			
+				Process process = builder.start();
+				InputStream inputStream = process.getInputStream();
+				InputStream errorStream = process.getErrorStream();
+				BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));
+				BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
+				int exitStatus = process.waitFor();
+				
+				// If there is no error in the command, then output the result.
+				if (exitStatus == 0) {
+					String line;
+					
+					while ((line = inputReader.readLine()) != null) {
+				        categoryOptions.add(line);
+					}
+				} 
+				else {
+					showErrorMessage("Failed to get categories", errorReader.readLine());
+				}
+				
+				process.destroy();
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	public void submitCategory() {
+		String[] selectedCategories = new String[5];
+		for(int i=0;i<5;i++) {
+			selectedCategories[i] = categoryCBs[i].getValue();
+		}
+		if(selectedCategories[0]==null ||selectedCategories[1]==null
+				||selectedCategories[2]==null || selectedCategories[3]==null
+				||selectedCategories[4]==null) {
+			showErrorMessage("Failed to start game", "You must select 5 categories!");
+		}else {
 			resetTime();
-			generateData();
+			generateData(selectedCategories[0],selectedCategories[1],selectedCategories[2],selectedCategories[3],selectedCategories[4]);
 			generateView();
 			for(int i=0;i<5;i++) {
 				categoryLabels[i].setText(categories[i].getName());
 				clueButtons[i][0].setDisable(false);
 			}
 			reward.setVisible(false);
-			timerLabel.setVisible(true);
 			gameGrid.setVisible(true);
 			hintLabel.setVisible(true);
-			inputField.setVisible(true);
-			submitButton.setVisible(true);
-			dontKnowButton.setVisible(true);
+		
+			timerLabel.setVisible(false);
+			inputField.setVisible(false);
+			submitButton.setVisible(false);
+			dontKnowButton.setVisible(false);
+		
+			gameScene.setRoot(gamePane);
+		}
+		
+	}
+		
+
+	/**
+	 * This method is used to regenerate all the components and send notice
+	 * for the game controller to to initialize the game data.
+	 */
+	public void restartButtonPressed() {		
+		ButtonType yes = new ButtonType("Yes", ButtonData.YES);
+		ButtonType no = new ButtonType("No", ButtonData.CANCEL_CLOSE);
+		Alert confirmationAlert = new Alert(AlertType.CONFIRMATION, "WARNING: All your progress will be lost.", yes, no);
+		confirmationAlert.setTitle("WARNING");
+		confirmationAlert.setHeaderText("Are you sure you want to restart the game mode?");
+		confirmationAlert.setContentText("If you restart, your progress will be deleted.");
+		Optional<ButtonType> result = confirmationAlert.showAndWait();
+		
+		if (result.orElse(no) == yes) {
+			gameScene.setRoot(selectionPane);
 		}
 	}
 	
@@ -300,6 +369,10 @@ public class GameController {
 		
 		hintLabel.setText(text);
 		
+		timerLabel.setVisible(false);
+		inputField.setVisible(false);
+		submitButton.setVisible(false);
+		dontKnowButton.setVisible(false);
 		
 		playVoice(text);
 		
@@ -316,6 +389,10 @@ public class GameController {
 	public void dontKnowButtonPressed() {		
 		String text = "The correct answer was: "+ currentQuestion.getAnswerBack();
 		hintLabel.setText(text);
+		timerLabel.setVisible(false);
+		inputField.setVisible(false);
+		submitButton.setVisible(false);
+		dontKnowButton.setVisible(false);
 		
 		resetTime();
 		
@@ -372,7 +449,7 @@ public class GameController {
 			gameTimer.play();
 			timerStart = true;
 		}
-		
+		timerLabel.setVisible(true);
 		inputField.setVisible(true);
 		submitButton.setVisible(true);
 		dontKnowButton.setVisible(true);
@@ -407,7 +484,6 @@ public class GameController {
 
 	public void goToLeaderBoard() {
 		gameScene.setRoot(selectionPane);
-		generateView();
 		sceneController.changeScene("leaderboard");		
 	}
 	
@@ -499,8 +575,13 @@ public class GameController {
 	/**
 	 * This method is used to generate game data
 	 * and get questions from text files.
+	 * @param category5 
+	 * @param scategory4 
+	 * @param category3 
+	 * @param category2 
+	 * @param category1 
 	 */
-	private void generateData() {
+	private void generateData(String category0, String category1, String category2, String category3, String category4) {
 		categories = new Category[5];
 		enabledButtons = new int[5];
 		for (int i=0; i<5; i++) {
@@ -509,38 +590,18 @@ public class GameController {
 		
 		completedCategories = 0;
 		currentWinnings = 0;
-		try {
-			//select 5 random categories
-			ProcessBuilder builder = new ProcessBuilder("bash", "-c", "ls categories/" + gameMode + " | shuf -n 5");			
-			Process process = builder.start();
-			InputStream inputStream = process.getInputStream();
-			InputStream errorStream = process.getErrorStream();
-			BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));
-			BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
-			int exitStatus = process.waitFor();
+		
+		categories[0]= new Category(category0);
+		categories[1]= new Category(category1);
+		categories[2]= new Category(category2);
+		categories[3]= new Category(category3);
+		categories[4]= new Category(category4);
 			
-			if (exitStatus == 0) {
-				String line;
-				int i = 0;
-				while ((line = inputReader.readLine()) != null) {
-					String[] categoryName = line.split("\\.",2);
-			        categories[i] = new Category(categoryName[0]);
-			        i++;
-				}
-			} 
-			else {
-				showErrorMessage("Failed to get categories", errorReader.readLine());
-			}
-			process.destroy();
-			
-			//for each categories select 5 random questions
-			for(Category category: categories) {
-				category.selectQuestions(this, gameMode);
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+		//for each categories select 5 random questions
+		for(Category category: categories) {
+			category.selectQuestions(this, gameMode);
 		}
+			
 	}
 	
 	/**
@@ -560,4 +621,5 @@ public class GameController {
 		Thread voiceThread = new Thread(currentVoiceTask);
 		voiceThread.start();
 	}
+
 }
