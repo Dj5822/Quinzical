@@ -23,6 +23,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import quinzical.controller.DatabaseController;
 
+/**
+ * This class manages the view of question database of the app.
+ * @author se2062020
+ *
+ */
 public class DatabaseView {
 	
 	private Scene main;

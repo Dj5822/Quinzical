@@ -1,6 +1,7 @@
 package quinzical.controller;
 
 import java.io.BufferedReader;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Optional;
@@ -16,6 +17,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+
+/**
+ * This class is used to manage the operation in the Question
+ * database management functionality in the app. The user should
+ * be able to view the category and questions in a list and add,
+ * modify or delete the questions.
+ * @author se2062020
+ *
+ */
 
 public class DatabaseController {
 	private SceneController sceneController;
@@ -36,6 +46,23 @@ public class DatabaseController {
 	public DatabaseController(SceneController sceneController) {
 		this.sceneController = sceneController;
 	}
+	/**
+	 * Link the components in database view and controller.
+	 * 
+	 * @param main
+	 * @param mainPane
+	 * @param modifyPane
+	 * @param sectionCB
+	 * @param categoryCB
+	 * @param listView
+	 * @param addButton
+	 * @param modifyButton
+	 * @param deleteButton
+	 * @param typeInput
+	 * @param clueInput
+	 * @param answerFrontInput
+	 * @param answerBackInput
+	 */
 	public void setup(Scene main, GridPane mainPane, GridPane modifyPane, ComboBox<String> sectionCB,
 			ComboBox<String> categoryCB, ListView listView, Button addButton, Button modifyButton,
 			Button deleteButton, Label typeInput, TextField clueInput, TextField answerFrontInput, 
@@ -55,6 +82,14 @@ public class DatabaseController {
 		this.answerFrontInput = answerFrontInput;
 		this.answerBackInput = answerBackInput;
 	}
+	/** 
+	 * This method is used to show a confirmation dialog with
+	 * input header and content.
+	 * 
+	 * @param headerMessage
+	 * @param contentMessage
+	 * @return
+	 */
 	public Optional<ButtonType> showConfirmationDialog(String headerMessage, String contentMessage){
 		Alert confirmAlert = new Alert(AlertType.CONFIRMATION);
 		confirmAlert.setTitle("Confirmation Dialog");
@@ -62,6 +97,12 @@ public class DatabaseController {
 		confirmAlert.setContentText(contentMessage);
 		return confirmAlert.showAndWait();
 	}
+	/**
+	 * This method is used to show a error message dialog with input
+	 * header and content.
+	 * @param headerMessage
+	 * @param contentMessage
+	 */
 	public void showErrorMessage(String headerMessage, String contentMessage) {
 		Alert errorAlert = new Alert(AlertType.ERROR);
 		errorAlert.setTitle("Error encountered");
@@ -70,15 +111,25 @@ public class DatabaseController {
 		
 		errorAlert.showAndWait();
 	}
+	/**
+	 * This method is used to update the list of elements in the section
+	 * combbox component
+	 * @param sectionOptions
+	 */
 	public void updateSectionOptions(ObservableList<String> sectionOptions) {
 		sectionOptions.clear();
 		sectionOptions.add("nz");
 		sectionOptions.add("international");	
 	}
-	public ObservableList<String> updateCategoryOptions(ObservableList<String> categoryOptions, String section) {
-		
-		categoryOptions.clear();		
-		
+	/**
+	 * THis method is used to update the list of elements in the 
+	 * category combbox component
+	 * @param categoryOptions
+	 * @param section
+	 * @return
+	 */
+	public ObservableList<String> updateCategoryOptions(ObservableList<String> categoryOptions, String section) {		
+		categoryOptions.clear();				
 		try {
 			ProcessBuilder builder = new ProcessBuilder();
 			if(section.equals("nz")) {
@@ -113,6 +164,10 @@ public class DatabaseController {
 		
 		return categoryOptions;
 	}
+	/**
+	 * This mothod is used to update the list view component so that it correctly
+	 * shows all the question in a category
+	 */
 	public void updateListView() {
 		try {
 			String section = sectionCB.getValue().toString();
@@ -129,8 +184,7 @@ public class DatabaseController {
 			
 			// If there is no error in the command, then output the result.
 			if (exitStatus == 0) {
-				String line;
-				
+				String line;				
 				listView.getItems().clear();
 				while ((line = inputReader.readLine()) != null) {
 					listView.getItems().add(line);
@@ -149,13 +203,24 @@ public class DatabaseController {
 			e.printStackTrace();
 		}	
 	}	
+	
 	public void returnToLastScene() {
 		sceneController.returnToPreviousScene();
 	}
+	
+	/**
+	 * This method is used to handle add operation and
+	 * switch the scene to question modify pane.
+	 */
 	public void addQuestion() {
 		typeInput.setText("Add");
 		main.setRoot(modifyPane);	
 	}
+	
+	/**
+	 * This method is used to handle modify operation and
+	 * switch the scene to question modify pane.
+	 */
 	public void modifyQuestion() {
 		typeInput.setText("Modify");
 		String question = (String)listView.getSelectionModel().getSelectedItem();
@@ -165,6 +230,11 @@ public class DatabaseController {
 		answerBackInput.setText(output[2].strip());
 		main.setRoot(modifyPane);
 	}
+	
+	/**
+	 * This method is used to handle delete operation and
+	 * switch the scene to question modify pane.
+	 */
 	public void deleteQuestion() {
 		int index = listView.getSelectionModel().getSelectedIndex();
 		String lineNumber = Integer.toString(index+1);	
@@ -195,6 +265,12 @@ public class DatabaseController {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * This method is used to confirm the modification
+	 * of a user operation that could be add, delete or
+	 * modify.
+	 */
 	public void confirmModification() {
 		try {
 			String clue = clueInput.getText();
@@ -234,18 +310,28 @@ public class DatabaseController {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * This method is called when the user clicks cancel in
+	 * question modify pane and go back to main pane.
+	 */
 	public void cancelModification() {
 		typeInput.setText("");
 		clueInput.setText("");
 		answerFrontInput.setText("");
 		answerBackInput.setText("");
-		main.setRoot(mainPane);
-		
+		main.setRoot(mainPane);		
 	}
+	
 	public void clearListView() {
 		listView.getItems().clear();
 		
 	}
+	/**
+	 * This method is used to activate the modify and delete
+	 * button when the user actually choose a question in the
+	 * list.
+	 */
 	public void questionSelected() {
 		int i = listView.getSelectionModel().getSelectedIndex();
 		if(i != -1) {
