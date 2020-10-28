@@ -99,6 +99,7 @@ public class GameView {
 		selectionPane.setAlignment(Pos.CENTER);
 		selectionPane.setVgap(height/15);
 		selectionPane.setStyle("-fx-background-color: #edf4fc");
+		selectionPane.setId("grassbackground");
 		
 		// components.
 		gameSelectionLabel = new Label("Please select game mode");
@@ -137,7 +138,87 @@ public class GameView {
 			}
 		});
 	}
-
+	
+	private void setupNamePane(GameController controller, int width, int height) {
+		
+		// setup the name pane.
+		namePane = new GridPane();
+		namePane.setAlignment(Pos.CENTER);
+		namePane.setVgap(height/15);
+		namePane.setStyle("-fx-background-color: #edf4fc");
+		namePane.setId("grassbackground");
+		
+		// initialise components.
+		nameLabel = new Label("Enter your name: ");
+		nameTextbox = new TextField();
+		submitNameButton = new Button("Submit");
+		
+		// add components to name pane.
+		namePane.add(nameLabel, 0, 0);
+		namePane.add(nameTextbox, 0, 1);
+		namePane.add(submitNameButton, 0, 2);
+		
+		// resize components.
+		nameLabel.setFont(new Font(height/9));
+		nameTextbox.setPrefHeight(height/9);
+		nameTextbox.setPrefWidth(width/1.1);
+		nameTextbox.setFont(new Font(height/9));
+		submitNameButton.setPrefHeight(height/9);
+		submitNameButton.setPrefWidth(width/3);
+		GridPane.setHalignment(nameLabel, HPos.CENTER);
+		GridPane.setHalignment(nameTextbox, HPos.CENTER);
+		GridPane.setHalignment(submitNameButton, HPos.CENTER);
+		
+		
+		submitNameButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.updateCategoryCBs(categoryOptions);
+				controller.submitName();
+			}
+		});
+	}
+	
+	private void setupCategoryPane(GameController controller, int width, int height) {
+		categoryPane = new GridPane();
+		categoryPane.setAlignment(Pos.CENTER);
+		categoryPane.setVgap(height/15);
+		categoryPane.setStyle("-fx-background-color: #edf4fc");
+		categoryPane.setId("grassbackground");
+		
+		// initialise components.
+		categoryLabel = new Label("You can choose any five categories below");
+		confirmCategoryButton = new Button("Confirm selction and start");
+		categoryCBs = new ComboBox[5];
+		categoryOptions = FXCollections.observableArrayList();
+		for(int i=0; i<5; i++) {
+			categoryCBs[i] = new ComboBox<String>(categoryOptions);
+			categoryPane.add(categoryCBs[i], 0, i+1);
+			categoryCBs[i].setPrefHeight(height/20);
+			categoryCBs[i].setPrefWidth(width/4);
+			GridPane.setHalignment(categoryCBs[i], HPos.CENTER);
+		}
+		
+		// add components to category pane.
+		categoryPane.add(categoryLabel, 0, 0);
+		categoryPane.add(confirmCategoryButton, 0, 6);
+		
+		// resize components.
+		categoryLabel.setFont(new Font(height/20));
+		confirmCategoryButton.setFont(new Font(height/20));
+		confirmCategoryButton.setPrefHeight(height/9);
+		confirmCategoryButton.setPrefWidth(width/3);
+		
+		GridPane.setHalignment(categoryLabel, HPos.CENTER);
+		GridPane.setHalignment(confirmCategoryButton, HPos.CENTER);
+				
+		confirmCategoryButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.submitCategory();
+			}
+		});
+	}
 	
 	private void setupMainPane(GameController controller, int width, int height) {
 		// Setup main pane.		
@@ -145,7 +226,6 @@ public class GameView {
 		mainPane.setAlignment(Pos.BOTTOM_CENTER);
 		mainPane.setVgap(height/30);
 		mainPane.setStyle("-fx-background-color: #edf4fc");
-		mainPane.setId("grassbackground");
 		gameGrid = new GridPane();
 		gameGrid.setHgap(width/15);
 		gameGrid.setVgap(height/30);
@@ -346,87 +426,6 @@ public class GameView {
 				});		
 			}
 		}
-	}
-	
-	
-	private void setupNamePane(GameController controller, int width, int height) {
-		
-		// setup the name pane.
-		namePane = new GridPane();
-		namePane.setAlignment(Pos.CENTER);
-		namePane.setVgap(height/15);
-		namePane.setStyle("-fx-background-color: #edf4fc");
-		namePane.setId("grassbackground");
-		
-		// initialise components.
-		nameLabel = new Label("Enter your name: ");
-		nameTextbox = new TextField();
-		submitNameButton = new Button("Submit");
-		
-		// add components to name pane.
-		namePane.add(nameLabel, 0, 0);
-		namePane.add(nameTextbox, 0, 1);
-		namePane.add(submitNameButton, 0, 2);
-		
-		// resize components.
-		nameLabel.setFont(new Font(height/9));
-		nameTextbox.setPrefHeight(height/9);
-		nameTextbox.setPrefWidth(width/1.1);
-		nameTextbox.setFont(new Font(height/9));
-		submitNameButton.setPrefHeight(height/9);
-		submitNameButton.setPrefWidth(width/3);
-		GridPane.setHalignment(nameLabel, HPos.CENTER);
-		GridPane.setHalignment(nameTextbox, HPos.CENTER);
-		GridPane.setHalignment(submitNameButton, HPos.CENTER);
-		
-		
-		submitNameButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				controller.updateCategoryCBs(categoryOptions);
-				controller.submitName();
-			}
-		});
-	}
-	private void setupCategoryPane(GameController controller, int width, int height) {
-		categoryPane = new GridPane();
-		categoryPane.setAlignment(Pos.CENTER);
-		categoryPane.setVgap(height/15);
-		categoryPane.setStyle("-fx-background-color: #edf4fc");
-		categoryPane.setId("grassbackground");
-		
-		// initialise components.
-		categoryLabel = new Label("You can choose any five categories below");
-		confirmCategoryButton = new Button("Confirm selction and start");
-		categoryCBs = new ComboBox[5];
-		categoryOptions = FXCollections.observableArrayList();
-		for(int i=0; i<5; i++) {
-			categoryCBs[i] = new ComboBox<String>(categoryOptions);
-			categoryPane.add(categoryCBs[i], 0, i+1);
-			categoryCBs[i].setPrefHeight(height/20);
-			categoryCBs[i].setPrefWidth(width/4);
-			GridPane.setHalignment(categoryCBs[i], HPos.CENTER);
-		}
-		
-		// add components to category pane.
-		categoryPane.add(categoryLabel, 0, 0);
-		categoryPane.add(confirmCategoryButton, 0, 6);
-		
-		// resize components.
-		categoryLabel.setFont(new Font(height/20));
-		confirmCategoryButton.setFont(new Font(height/20));
-		confirmCategoryButton.setPrefHeight(height/9);
-		confirmCategoryButton.setPrefWidth(width/3);
-		
-		GridPane.setHalignment(categoryLabel, HPos.CENTER);
-		GridPane.setHalignment(confirmCategoryButton, HPos.CENTER);
-				
-		confirmCategoryButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				controller.submitCategory();
-			}
-		});
 	}
 	
 	public Scene getScene() {

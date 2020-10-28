@@ -103,33 +103,6 @@ public class GameController {
 	}
 	
 	/**
-	 * Used to set up the timer for the questions.
-	 */
-	private void setupGameTimer() {
-		gameTimer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				timeLeft --;
-				timerLabel.setText("Time Left: " + timeLeft + " sec");
-				
-				if (timeLeft <= 0) {
-					dontKnowButtonPressed();
-				}
-			}
-		}));
-		gameTimer.setCycleCount(Timeline.INDEFINITE);
-	}
-	
-	/**
-	 * Used to reset the timer.
-	 */
-	private void resetTime() {
-		gameTimer.stop();
-		timeLeft = INITIALTIME;
-		timerStart = false;
-	}
-	
-	/**
 	 * Used to link game view components to the controller.
 	 * @param categoryPane 
 	 */
@@ -171,17 +144,6 @@ public class GameController {
 		this.submitButton = submitButton;
 		this.dontKnowButton = dontKnowButton;
 		this.gameGrid = gameGrid;
-	}
-	
-	/**
-	 * Used to show error message.
-	 */
-	public void showErrorMessage(String headerMessage, String contentMessage) {
-		Alert errorAlert = new Alert(AlertType.ERROR);
-		errorAlert.setTitle("Error encountered");
-		errorAlert.setHeaderText(headerMessage);
-		errorAlert.setContentText(contentMessage);		
-		errorAlert.showAndWait();
 	}
 	
 	/**
@@ -304,6 +266,7 @@ public class GameController {
 			
 		}
 	}
+	
 	/**
 	 * used to submit which five categories the user has chosen
 	 * in category selection screen and start the game directly
@@ -353,7 +316,6 @@ public class GameController {
 		
 	}
 		
-
 	/**
 	 * This method is used to regenerate all the components and send notice
 	 * for the game controller to to initialize the game data.
@@ -370,6 +332,42 @@ public class GameController {
 		if (result.orElse(no) == yes) {
 			gameScene.setRoot(selectionPane);
 		}
+	}
+	
+	/**
+	 * This method deals with the event when one of the clue
+	 * buttons are clicked. Storing the data of that question
+	 * into states.
+	 */
+	public void clueButtonPressed(ActionEvent arg0) {
+	
+		hintLabel.setText("To listen to the clue again, click the clue button.");
+		
+		// used to get the position of the clicked clue.
+		Button x =(Button) arg0.getSource();
+		colnum = (Integer.parseInt(x.getId())/10);
+		rownum = (Integer.parseInt(x.getId())%10);
+		
+		// set current question.
+		currentQuestion = categories[colnum].getQuestion(rownum);
+		
+		playVoice(currentQuestion.getClue());
+		
+		// set component visibility.
+		for(int i=0;i<5;i++) {
+			if(i != colnum) {
+				clueButtons[i][enabledButtons[i]].setDisable(true);
+			}
+		}
+		
+		if (!timerStart) {
+			gameTimer.play();
+			timerStart = true;
+		}
+		timerLabel.setVisible(true);
+		inputField.setVisible(true);
+		submitButton.setVisible(true);
+		dontKnowButton.setVisible(true);
 	}
 	
 	/**
@@ -442,42 +440,6 @@ public class GameController {
 	}
 	
 	/**
-	 * This method deals with the event when one of the clue
-	 * buttons are clicked. Storing the data of that question
-	 * into states.
-	 */
-	public void clueButtonPressed(ActionEvent arg0) {
-	
-		hintLabel.setText("To listen to the clue again, click the clue button.");
-		
-		// used to get the position of the clicked clue.
-		Button x =(Button) arg0.getSource();
-		colnum = (Integer.parseInt(x.getId())/10);
-		rownum = (Integer.parseInt(x.getId())%10);
-		
-		// set current question.
-		currentQuestion = categories[colnum].getQuestion(rownum);
-		
-		playVoice(currentQuestion.getClue());
-		
-		// set component visibility.
-		for(int i=0;i<5;i++) {
-			if(i != colnum) {
-				clueButtons[i][enabledButtons[i]].setDisable(true);
-			}
-		}
-		
-		if (!timerStart) {
-			gameTimer.play();
-			timerStart = true;
-		}
-		timerLabel.setVisible(true);
-		inputField.setVisible(true);
-		submitButton.setVisible(true);
-		dontKnowButton.setVisible(true);
-	}
-	
-	/**
 	 * Used to go back to the menu scene.
 	 * Resets the game view.
 	 */
@@ -497,13 +459,10 @@ public class GameController {
 		}
 	}
 	
-	/**
-	 * Used to go to setting scene.
-	 */
 	public void goToSettings() {
 		sceneController.changeScene("settings");
 	}
-
+	
 	public void goToLeaderBoard() {
 		gameScene.setRoot(selectionPane);
 		sceneController.changeScene("leaderboard");		
@@ -643,5 +602,42 @@ public class GameController {
 		Thread voiceThread = new Thread(currentVoiceTask);
 		voiceThread.start();
 	}
-
+	
+	/**
+	 * Used to show error message.
+	 */
+	public void showErrorMessage(String headerMessage, String contentMessage) {
+		Alert errorAlert = new Alert(AlertType.ERROR);
+		errorAlert.setTitle("Error encountered");
+		errorAlert.setHeaderText(headerMessage);
+		errorAlert.setContentText(contentMessage);		
+		errorAlert.showAndWait();
+	}
+	
+	/**
+	 * Used to set up the timer for the questions.
+	 */
+	private void setupGameTimer() {
+		gameTimer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				timeLeft --;
+				timerLabel.setText("Time Left: " + timeLeft + " sec");
+				
+				if (timeLeft <= 0) {
+					dontKnowButtonPressed();
+				}
+			}
+		}));
+		gameTimer.setCycleCount(Timeline.INDEFINITE);
+	}
+	
+	/**
+	 * Used to reset the timer.
+	 */
+	private void resetTime() {
+		gameTimer.stop();
+		timeLeft = INITIALTIME;
+		timerStart = false;
+	}
 }
