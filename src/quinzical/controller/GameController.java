@@ -325,7 +325,7 @@ public class GameController {
 		ButtonType no = new ButtonType("No", ButtonData.CANCEL_CLOSE);
 		Alert confirmationAlert = new Alert(AlertType.CONFIRMATION, "WARNING: All your progress will be lost.", yes, no);
 		confirmationAlert.setTitle("WARNING");
-		confirmationAlert.setHeaderText("Are you sure you want to restart the game mode?");
+		confirmationAlert.setHeaderText("Are you sure you want to start/restart the game mode?");
 		confirmationAlert.setContentText("If you restart, your progress will be deleted.");
 		Optional<ButtonType> result = confirmationAlert.showAndWait();
 		

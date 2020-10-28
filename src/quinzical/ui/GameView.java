@@ -226,13 +226,14 @@ public class GameView {
 		mainPane.setAlignment(Pos.BOTTOM_CENTER);
 		mainPane.setVgap(height/30);
 		mainPane.setStyle("-fx-background-color: #edf4fc");
+		mainPane.setId("grassbackground");
 		gameGrid = new GridPane();
 		gameGrid.setHgap(width/15);
 		gameGrid.setVgap(height/30);
 		reward = new VBox();
 		reward.setSpacing(height/12);
 		menuGrid = new GridPane();
-		menuGrid.setStyle("-fx-background-color: white");
+		menuGrid.setStyle("-fx-background-color: rgba(255, 255, 255, 0.7)");
 
 		// Initialize buttons and labels.
 		restartButton = new Button("Start a new game");
