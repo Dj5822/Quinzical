@@ -246,7 +246,7 @@ public class GameView {
 		rewardWinning = new Label();
 		rewardCorrectNumberLabel = new Label("Number of correct answers:");
 		rewardCorrectNumber = new Label();
-		ToLeaderBoardButton = new Button("Click to go to Leader board");
+		ToLeaderBoardButton = new Button("Click to go to Leaderboard");
 
 		hintLabel = new Label("Click one of the available buttons above to hear a clue."); // instruction label set up
 		inputField = new TextField();
