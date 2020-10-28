@@ -236,7 +236,7 @@ public class GameView {
 		menuGrid.setStyle("-fx-background-color: rgba(255, 255, 255, 0.7)");
 
 		// Initialize buttons and labels.
-		restartButton = new Button("Start a new game");
+		restartButton = new Button("Restart game");
 		winningLabel = new Label("Current Worth: $0");
 		categoryLabels= new Label[5] ;
 		clueButtons = new Button[5][5];
