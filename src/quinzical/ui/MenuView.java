@@ -56,6 +56,15 @@ public class MenuView {
 		helpButton = new Button("Help");
 		quitButton = new Button("Quit");
 		
+		practiceButton.setId("transparentButton");
+		gameButton.setId("transparentButton");
+		leaderboardButton.setId("transparentButton");
+		settingsButton.setId("transparentButton");
+		databaseButton.setId("transparentButton");
+		resetButton.setId("transparentButton");
+		helpButton.setId("transparentButton");
+		quitButton.setId("transparentButton");
+		
 		// Mainpane settings.
 		mainPane.setVgap(height/15);
 		mainPane.setAlignment(Pos.CENTER);
@@ -92,15 +101,6 @@ public class MenuView {
 		resetButton.setFocusTraversable(false);
 		helpButton.setFocusTraversable(false);
 		quitButton.setFocusTraversable(false);
-		
-		practiceButton.setStyle("-fx-background-color: transparent");
-		gameButton.setStyle("-fx-background-color: transparent");
-		leaderboardButton.setStyle("-fx-background-color: transparent");
-		settingsButton.setStyle("-fx-background-color: transparent");
-		databaseButton.setStyle("-fx-background-color: transparent");
-		resetButton.setStyle("-fx-background-color: transparent");
-		helpButton.setStyle("-fx-background-color: transparent");
-		quitButton.setStyle("-fx-background-color: transparent");
 		
 		// Add buttons and labels to the menubar.
 		menuBar.add(practiceButton, 0, 0);
