@@ -93,6 +93,15 @@ public class MenuView {
 		helpButton.setFocusTraversable(false);
 		quitButton.setFocusTraversable(false);
 		
+		practiceButton.setStyle("-fx-background-color: transparent");
+		gameButton.setStyle("-fx-background-color: transparent");
+		leaderboardButton.setStyle("-fx-background-color: transparent");
+		settingsButton.setStyle("-fx-background-color: transparent");
+		databaseButton.setStyle("-fx-background-color: transparent");
+		resetButton.setStyle("-fx-background-color: transparent");
+		helpButton.setStyle("-fx-background-color: transparent");
+		quitButton.setStyle("-fx-background-color: transparent");
+		
 		// Add buttons and labels to the menubar.
 		menuBar.add(practiceButton, 0, 0);
 		menuBar.add(gameButton, 1, 0);
