@@ -310,31 +310,45 @@ public class GameController {
 	 */
 	public void submitCategory() {
 		String[] selectedCategories = new String[5];
+		boolean hasSameCategory = false;
 		for(int i=0;i<5;i++) {
+			if(categoryCBs[i].getValue()==null) {
+				break;
+			}
 			selectedCategories[i] = categoryCBs[i].getValue();
+			for(int j=0; j<i; j++) {
+				if(selectedCategories[i].equals(selectedCategories[j])) {
+					hasSameCategory = true;
+				}
+			}
 		}
 		if(selectedCategories[0]==null ||selectedCategories[1]==null
 				||selectedCategories[2]==null || selectedCategories[3]==null
 				||selectedCategories[4]==null) {
 			showErrorMessage("Failed to start game", "You must select 5 categories!");
 		}else {
-			resetTime();
-			generateData(selectedCategories[0],selectedCategories[1],selectedCategories[2],selectedCategories[3],selectedCategories[4]);
-			generateView();
-			for(int i=0;i<5;i++) {
-				categoryLabels[i].setText(categories[i].getName());
-				clueButtons[i][0].setDisable(false);
+			if(hasSameCategory) {
+				showErrorMessage("Failed to start game", "You must select 5 different categories!"
+						+ "\nPlease check whether there are same categories.");
+			}else {
+				resetTime();
+				generateData(selectedCategories[0],selectedCategories[1],selectedCategories[2],selectedCategories[3],selectedCategories[4]);
+				generateView();
+				for(int i=0;i<5;i++) {
+					categoryLabels[i].setText(categories[i].getName());
+					clueButtons[i][0].setDisable(false);
+				}
+				reward.setVisible(false);
+				gameGrid.setVisible(true);
+				hintLabel.setVisible(true);
+		
+				timerLabel.setVisible(false);
+				inputField.setVisible(false);
+				submitButton.setVisible(false);
+				dontKnowButton.setVisible(false);
+		
+				gameScene.setRoot(gamePane);
 			}
-			reward.setVisible(false);
-			gameGrid.setVisible(true);
-			hintLabel.setVisible(true);
-		
-			timerLabel.setVisible(false);
-			inputField.setVisible(false);
-			submitButton.setVisible(false);
-			dontKnowButton.setVisible(false);
-		
-			gameScene.setRoot(gamePane);
 		}
 		
 	}
