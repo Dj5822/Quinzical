@@ -60,6 +60,7 @@ public class DatabaseView {
 		mainPane.setVgap(height/20);
 		mainPane.setAlignment(Pos.CENTER);
 		mainPane.setStyle("-fx-background-color: #edf4fc");
+		mainPane.setId("grassbackground");
 		main = new Scene(mainPane, width, height);
 		
 		File styleFile = new File("./src/quinzical/style.css");

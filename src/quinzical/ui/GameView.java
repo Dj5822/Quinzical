@@ -99,7 +99,6 @@ public class GameView {
 		selectionPane.setAlignment(Pos.CENTER);
 		selectionPane.setVgap(height/15);
 		selectionPane.setStyle("-fx-background-color: #edf4fc");
-		selectionPane.setId("grassbackground");
 		
 		// components.
 		gameSelectionLabel = new Label("Please select game mode");
@@ -146,11 +145,12 @@ public class GameView {
 		mainPane.setAlignment(Pos.BOTTOM_CENTER);
 		mainPane.setVgap(height/30);
 		mainPane.setStyle("-fx-background-color: #edf4fc");
+		mainPane.setId("grassbackground");
 		gameGrid = new GridPane();
 		gameGrid.setHgap(width/15);
 		gameGrid.setVgap(height/30);
 		reward = new VBox();
-		reward.setSpacing(height/10);
+		reward.setSpacing(height/12);
 		menuGrid = new GridPane();
 		menuGrid.setStyle("-fx-background-color: white");
 
