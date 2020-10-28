@@ -188,7 +188,7 @@ public class GameView {
 		
 		// initialise components.
 		categoryLabel = new Label("You can choose any five categories below");
-		confirmCategoryButton = new Button("Confirm selction and start");
+		confirmCategoryButton = new Button("Confirm selection and start");
 		categoryCBs = new ComboBox[5];
 		categoryOptions = FXCollections.observableArrayList();
 		for(int i=0; i<5; i++) {
