@@ -383,7 +383,7 @@ public class GameController {
 		
 		if(checkAnswer(inputField.getText())) {
 			text = "Correct!";
-			currentWinnings = Integer.parseInt(clueButtons[colnum][rownum].getText());
+			currentWinnings += Integer.parseInt(clueButtons[colnum][rownum].getText());
 			correctcount++;
 		}else {
 			text = "Wrong. The correct answer was: "+ currentQuestion.getAnswerBack();
