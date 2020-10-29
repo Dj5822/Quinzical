@@ -116,3 +116,8 @@
 .list-cell{
 	-fx-font: 18pt "Arial";
 }
+
+.table-row-cell {
+	-fx-cell-size: 50px;
+	-fx-font: 18pt "Arial";
+}
