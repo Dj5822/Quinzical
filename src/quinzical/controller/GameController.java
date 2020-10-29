@@ -229,42 +229,66 @@ public class GameController {
 	 * @param categoryOptions
 	 */
 	public void updateCategoryCBs(ObservableList<String> categoryOptions) {
-		for(int i=0; i<5; i++) {
-			categoryOptions.clear();		
-			
-			try {
-				ProcessBuilder builder = new ProcessBuilder();
-				if(gameMode.equals("nz")) {
-					builder.command("bash", "-c", "./scripts/getCategories.sh");
-				}else {
-					builder.command("bash", "-c", "./scripts/getInternationalCategories.sh");
-				}			
-				Process process = builder.start();
-				InputStream inputStream = process.getInputStream();
-				InputStream errorStream = process.getErrorStream();
-				BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));
-				BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
-				int exitStatus = process.waitFor();
+		categoryOptions.clear();					
+		try {
+			ProcessBuilder builder = new ProcessBuilder();
+			if(gameMode.equals("nz")) {
+				builder.command("bash", "-c", "./scripts/getCategories.sh");
+			}else {
+				builder.command("bash", "-c", "./scripts/getInternationalCategories.sh");
+			}			
+			Process process = builder.start();
+			InputStream inputStream = process.getInputStream();
+			InputStream errorStream = process.getErrorStream();
+			BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));
+			BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));
+			int exitStatus = process.waitFor();
 				
-				// If there is no error in the command, then output the result.
-				if (exitStatus == 0) {
-					String line;
+			// If there is no error in the command, then output the result.
+			if (exitStatus == 0) {
+				String line;
 					
-					while ((line = inputReader.readLine()) != null) {
-				        categoryOptions.add(line);
-					}
-				} 
-				else {
-					showErrorMessage("Failed to get categories", errorReader.readLine());
+				while ((line = inputReader.readLine()) != null) {
+				    	categoryOptions.add(line);
 				}
+			} 
+			else {
+				showErrorMessage("Failed to get categories", errorReader.readLine());
+			}				
+			process.destroy();	
+			
+			String[] randomCategories = new String[5];
+			int index = 0;
+			builder.command("bash", "-c", "ls categories/" + gameMode + " | shuf -n 5");
+			Process randomCategoryProcess = builder.start();
+			InputStream randomCategoryinputStream = randomCategoryProcess.getInputStream();
+			InputStream randomCategoryerrorStream = randomCategoryProcess.getErrorStream();
+			BufferedReader randomCategoryinputReader = new BufferedReader(new InputStreamReader(randomCategoryinputStream));
+			BufferedReader randomCategoryerrorReader = new BufferedReader(new InputStreamReader(randomCategoryerrorStream));
+			int randomexitStatus = process.waitFor();
 				
-				process.destroy();
-				
-			} catch (Exception e) {
-				e.printStackTrace();
+			// If there is no error in the command, then output the result.
+			if (randomexitStatus == 0) {
+				String line;
+					
+				while ((line = randomCategoryinputReader.readLine()) != null) {
+					String[] categoryName = line.split("\\.");
+				    	randomCategories[index] = categoryName[0];
+				    	index++;
+				}
+			} 
+			else {
+				showErrorMessage("Failed to get categories", randomCategoryerrorReader.readLine());
+			}				
+			randomCategoryProcess.destroy();	
+			for(int i=0;i<5;i++) {
+				categoryCBs[i].setValue(randomCategories[i]);
 			}
 			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		
 	}
 	
 	/**
