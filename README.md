@@ -1,4 +1,4 @@
-# Software Engineering 206 Assignment 4
+# Software Engineering 206 Project
 
 TO START THE QUINZICAL GAME:
 ==========================================

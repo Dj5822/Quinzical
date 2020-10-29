@@ -1,6 +1,0 @@
-c1, ( ans1) ans11
-c2, ( ans2) ans22
-c3, ( ans3) ans33
-c4, ( ans4) ans44
-c5, ( ans5) ans55
-c6, ( ans6) ans66

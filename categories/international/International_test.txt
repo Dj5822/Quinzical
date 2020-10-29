@@ -1,6 +1,0 @@
-Clue_1, ( Front answer_1) Back answer_1
-Clue_2, ( Front answer_2) Back answer_2
-Clue_4, ( Front answer_4) Back answer_4
-Clue_5, ( Front answer_5) Back answer_5
-Clue_3, ( Front answer_3) Back answer_3
-Clue_6, ( Front answer_6) Back answer_6
