@@ -1,4 +1,5 @@
 # Software Engineering 206 Project
+Note that this application is designed to run on Linux.
 
 TO START THE QUINZICAL GAME:
 ==========================================
